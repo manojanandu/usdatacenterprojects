@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>US Data Center Project Tracker - National Intelligence</title>
+    <title>US Data Center Project Tracker | Construction & Infrastructure Database</title>
     <meta name="description"
-        content="A minimalist, real-time dashboard for US data center construction, expansions, capacity insights, and power infrastructure across America.">
+        content="Track US data center construction projects, capacity expansions, and power infrastructure. Comprehensive database covering data center developments across all 50 states.">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -55,6 +55,25 @@
             --font-main: 'Inter', sans-serif;
         }
 
+        /* Dark Mode Colors */
+        [data-theme="dark"] {
+            --bg-white: #0F172A;
+            --bg-soft: #1E293B;
+            --bg-muted: #334155;
+            --bg-card: #1E293B;
+
+            --border-light: #334155;
+            --border-soft: #475569;
+
+            --text-main: #F1F5F9;
+            --text-muted: #CBD5E1;
+            --text-light: #94A3B8;
+
+            --accent-charcoal: #E2E8F0;
+            --accent-blue-muted: #94A3B8;
+            --accent-blue-soft: #334155;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -67,6 +86,7 @@
             color: var(--text-main);
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         a {
@@ -161,16 +181,20 @@
             background-color: var(--bg-soft);
         }
 
-        /* Header/Nav */
         header {
             padding: var(--space-sm) 0;
-            border-bottom: 1px solid var(--bg-white);
-            /* Invisible initially */
+            border-bottom: 1px solid var(--border-light);
             position: sticky;
             top: 0;
-            background: rgba(255, 255, 255, 0.9);
+            background: var(--bg-white);
             backdrop-filter: blur(10px);
             z-index: 100;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        [data-theme="dark"] header {
+            background: rgba(15, 23, 42, 0.95);
+            border-bottom: 1px solid var(--border-soft);
         }
 
         .nav-content {
@@ -193,6 +217,31 @@
 
         .logo svg {
             display: block;
+        }
+
+        /* Dark Mode Toggle */
+        .theme-toggle {
+            background: none;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-pill);
+            padding: 0.5rem 0.75rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+
+        .theme-toggle:hover {
+            background: var(--bg-soft);
+            border-color: var(--text-main);
+            color: var(--text-main);
+        }
+
+        .theme-toggle i {
+            font-size: 1.1rem;
         }
 
         /* Logo Animation */
@@ -271,8 +320,8 @@
             padding: var(--space-xl) 0 var(--space-lg);
             position: relative;
             overflow: hidden;
-            background-color: #f0f2f5;
-            /* Slightly darker base for contrast */
+            background-color: var(--bg-soft);
+            transition: background-color 0.3s ease;
         }
 
         /* Grid Scan Effect */
@@ -533,17 +582,18 @@
 
         /* Footer */
         footer {
-            background: #F8F8F8;
+            background: var(--bg-soft);
             padding: var(--space-lg) 0;
             border-top: 1px solid var(--border-light);
             font-size: 0.9rem;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
         }
 
         .footer-grid {
             display: grid;
-            grid-template-columns: 1fr;
+            grid-template-columns: 1fr 1fr;
             gap: var(--space-lg);
-            max-width: 600px;
+            align-items: start;
         }
 
         .footer-col h4 {
@@ -705,6 +755,87 @@
         .form-submit:hover {
             background: var(--accent-charcoal);
         }
+
+        /* Address Card */
+        .address-card {
+            background: var(--bg-white);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            padding: var(--space-md);
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .address-card:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-2px);
+            border-color: var(--accent-blue-muted);
+        }
+
+        .address-card h4 {
+            font-size: 0.9rem;
+            margin-bottom: var(--space-sm);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .address-card .address-text {
+            color: var(--text-muted);
+            line-height: 1.7;
+            margin-bottom: var(--space-sm);
+        }
+
+        .btn-contact {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.65rem 1.25rem;
+            background: var(--text-main);
+            color: var(--bg-white);
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+            margin-top: var(--space-xs);
+        }
+
+        /* Info Card */
+        .info-card {
+            background: var(--bg-white);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            padding: var(--space-md);
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .info-card:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-2px);
+            border-color: var(--accent-blue-muted);
+        }
+
+        [data-theme="dark"] .info-card,
+        [data-theme="dark"] .address-card {
+            background: var(--bg-muted);
+            border-color: var(--border-soft);
+        }
+
+        [data-theme="dark"] .info-card:hover,
+        [data-theme="dark"] .address-card:hover {
+            background: #475569;
+            border-color: var(--text-light);
+        }
+
+        .btn-contact:hover {
+            background: var(--accent-charcoal);
+            transform: translateY(-1px);
+        }
     </style>
 </head>
 
@@ -755,6 +886,9 @@
                 <a href="#features">Features</a>
                 <a href="#projects">Projects</a>
                 <a href="#" class="open-modal-btn">Contact Us</a>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                    <i class="ph ph-moon" id="themeIcon"></i>
+                </button>
             </nav>
         </div>
     </header>
@@ -768,8 +902,8 @@
         <div class="container hero-content">
             <h1>Get the Latest Data Center Projects<br><span style="color: var(--accent-charcoal);">Across the United
                     States</span></h1>
-            <p class="hero-subtext">Access real-time intelligence on US construction, capacity, and power
-                infrastructure. The national standard for data center project tracking.</p>
+            <p class="hero-subtext">Track data center construction projects, capacity planning, and power infrastructure
+                developments across the United States with our comprehensive project database.</p>
             <div class="hero-actions">
                 <button class="btn btn-primary open-modal-btn">Get Access Now</button>
                 <button class="btn btn-outline open-modal-btn">Contact Sales</button>
@@ -920,50 +1054,70 @@
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-col">
-                    <div class="logo" style="margin-bottom: 1rem;">
-                        <svg width="36" height="36" viewBox="0 0 100 100" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <!-- Main symmetrical data center structure -->
-                            <rect x="20" y="25" width="60" height="50" rx="4" fill="none" stroke="#1C2A3A"
-                                stroke-width="2.5" stroke-linecap="round" />
+                    <div class="info-card">
+                        <div class="logo" style="margin-bottom: 1rem;">
+                            <svg width="36" height="36" viewBox="0 0 100 100" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <!-- Main symmetrical data center structure -->
+                                <rect x="20" y="25" width="60" height="50" rx="4" fill="none" stroke="#1C2A3A"
+                                    stroke-width="2.5" stroke-linecap="round" />
 
-                            <!-- Horizontal server rack lines (symmetrical) -->
-                            <line x1="25" y1="35" x2="75" y2="35" stroke="#64748B" stroke-width="1.5"
-                                stroke-linecap="round" class="data-line" />
-                            <line x1="25" y1="45" x2="75" y2="45" stroke="#64748B" stroke-width="1.5"
-                                stroke-linecap="round" class="data-line" />
-                            <line x1="25" y1="55" x2="75" y2="55" stroke="#64748B" stroke-width="1.5"
-                                stroke-linecap="round" class="data-line" />
-                            <line x1="25" y1="65" x2="75" y2="65" stroke="#64748B" stroke-width="1.5"
-                                stroke-linecap="round" class="data-line" />
+                                <!-- Horizontal server rack lines (symmetrical) -->
+                                <line x1="25" y1="35" x2="75" y2="35" stroke="#64748B" stroke-width="1.5"
+                                    stroke-linecap="round" class="data-line" />
+                                <line x1="25" y1="45" x2="75" y2="45" stroke="#64748B" stroke-width="1.5"
+                                    stroke-linecap="round" class="data-line" />
+                                <line x1="25" y1="55" x2="75" y2="55" stroke="#64748B" stroke-width="1.5"
+                                    stroke-linecap="round" class="data-line" />
+                                <line x1="25" y1="65" x2="75" y2="65" stroke="#64748B" stroke-width="1.5"
+                                    stroke-linecap="round" class="data-line" />
 
-                            <!-- Vertical center divider (symmetrical) -->
-                            <line x1="50" y1="30" x2="50" y2="70" stroke="#E2E8F0" stroke-width="1"
-                                stroke-linecap="round" />
+                                <!-- Vertical center divider (symmetrical) -->
+                                <line x1="50" y1="30" x2="50" y2="70" stroke="#E2E8F0" stroke-width="1"
+                                    stroke-linecap="round" />
 
-                            <!-- Status indicators (symmetrical on both sides) -->
-                            <circle cx="35" cy="40" r="2" fill="#64748B" opacity="0.8" />
-                            <circle cx="65" cy="40" r="2" fill="#64748B" opacity="0.8" />
-                            <circle cx="35" cy="50" r="2" fill="#64748B" opacity="0.8" />
-                            <circle cx="65" cy="50" r="2" fill="#64748B" opacity="0.8" />
-                            <circle cx="35" cy="60" r="2" fill="#64748B" opacity="0.8" />
-                            <circle cx="65" cy="60" r="2" fill="#64748B" opacity="0.8" />
+                                <!-- Status indicators (symmetrical on both sides) -->
+                                <circle cx="35" cy="40" r="2" fill="#64748B" opacity="0.8" />
+                                <circle cx="65" cy="40" r="2" fill="#64748B" opacity="0.8" />
+                                <circle cx="35" cy="50" r="2" fill="#64748B" opacity="0.8" />
+                                <circle cx="65" cy="50" r="2" fill="#64748B" opacity="0.8" />
+                                <circle cx="35" cy="60" r="2" fill="#64748B" opacity="0.8" />
+                                <circle cx="65" cy="60" r="2" fill="#64748B" opacity="0.8" />
 
-                            <!-- Top connection points (symmetrical) -->
-                            <circle cx="30" cy="25" r="2.5" fill="#1C2A3A" />
-                            <circle cx="50" cy="25" r="2.5" fill="#1C2A3A" />
-                            <circle cx="70" cy="25" r="2.5" fill="#1C2A3A" />
+                                <!-- Top connection points (symmetrical) -->
+                                <circle cx="30" cy="25" r="2.5" fill="#1C2A3A" />
+                                <circle cx="50" cy="25" r="2.5" fill="#1C2A3A" />
+                                <circle cx="70" cy="25" r="2.5" fill="#1C2A3A" />
 
-                            <!-- Bottom base (symmetrical) -->
-                            <rect x="30" y="75" width="40" height="4" rx="2" fill="#1C2A3A" />
-                        </svg>
-                        <span style="margin-left: 10px; font-weight: 600; font-size: 1rem;">US DCPT</span>
+                                <!-- Bottom base (symmetrical) -->
+                                <rect x="30" y="75" width="40" height="4" rx="2" fill="#1C2A3A" />
+                            </svg>
+                            <span style="margin-left: 10px; font-weight: 600; font-size: 1rem;">US DCPT</span>
+                        </div>
+                        <p class="text-small" style="max-width: 300px;">
+                            Comprehensive database for tracking US data center construction projects, capacity planning,
+                            and infrastructure developments.
+                        </p>
                     </div>
-                    <p class="text-small" style="max-width: 300px;">
-                        The national standard for US data center project intelligence. Tracking construction, capacity,
-                        and
-                        power infrastructure across America.
-                    </p>
+                </div>
+                <div class="footer-col" style="display: flex; justify-content: flex-end;">
+                    <div class="address-card" style="max-width: 350px; width: 100%;">
+                        <h4>
+                            <i class="ph ph-map-pin" style="color: var(--text-light);"></i>
+                            <span>Our Address</span>
+                        </h4>
+                        <p class="text-small address-text">
+                            <strong>T-Hub</strong><br>
+                            Plot No 1/C, Sy No 83/1,<br>
+                            Raidurgam panmaktha Hyderabad Knowledge City,<br>
+                            Serilingampally, Hyderabad,<br>
+                            Telangana 500081
+                        </p>
+                        <button class="btn-contact open-modal-btn">
+                            <i class="ph ph-envelope"></i>
+                            <span>Contact Us</span>
+                        </button>
+                    </div>
                 </div>
             </div>
             <div class="text-center text-small" style="margin-top: var(--space-lg); color: var(--text-light);">
@@ -1007,6 +1161,35 @@
     </div>
 
     <script>
+        // Dark Mode Toggle
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeToggle = document.getElementById('themeToggle');
+            const themeIcon = document.getElementById('themeIcon');
+            const html = document.documentElement;
+
+            // Check for saved theme preference or default to light mode
+            const currentTheme = localStorage.getItem('theme') || 'light';
+            html.setAttribute('data-theme', currentTheme);
+            updateIcon(currentTheme);
+
+            themeToggle.addEventListener('click', () => {
+                const currentTheme = html.getAttribute('data-theme');
+                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+
+                html.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                updateIcon(newTheme);
+            });
+
+            function updateIcon(theme) {
+                if (theme === 'dark') {
+                    themeIcon.className = 'ph ph-sun';
+                } else {
+                    themeIcon.className = 'ph ph-moon';
+                }
+            }
+        });
+
         // Modal Logic
         document.addEventListener('DOMContentLoaded', () => {
             const modal = document.getElementById('contactModal');
