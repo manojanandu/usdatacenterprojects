@@ -26,15 +26,17 @@ function safeJson(obj) {
 }
 
 async function fetchArticles(env) {
+  const apiUrl = env.API_URL;
+  if (!apiUrl) throw new Error('API_URL environment variable is not set in Cloudflare');
+
   const cache = caches.default;
-  const apiUrl = `${env.API_BASE}/api/us-data-center-projects/all-news?apikey=${env.API_KEY}`;
   const cacheReq = new Request(apiUrl);
 
   const hit = await cache.match(cacheReq);
   if (hit) return hit.json();
 
   const res = await fetch(apiUrl);
-  if (!res.ok) throw new Error(`API responded ${res.status}`);
+  if (!res.ok) throw new Error(`Railway API responded ${res.status}`);
   const data = await res.json();
 
   await cache.put(cacheReq, new Response(JSON.stringify(data), {
