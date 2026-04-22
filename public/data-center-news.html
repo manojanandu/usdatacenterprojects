@@ -170,13 +170,31 @@
             class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-red-600 text-white text-xs font-bold rounded-sm hover:bg-red-500 transition-colors tracking-wide uppercase">
             Subscribe <i class="ph ph-arrow-right text-xs"></i>
           </a>
-          <button class="md:hidden p-2 text-slate-400 hover:text-white" aria-label="Menu">
+          <button class="md:hidden p-3 text-slate-400 hover:text-white transition-colors" aria-label="Menu" aria-expanded="false" aria-controls="mobile-nav">
             <i class="ph ph-list text-xl"></i>
           </button>
         </div>
 
       </div>
     </div>
+
+    <!-- Mobile nav panel -->
+    <div id="mobile-nav" class="hidden border-t border-slate-800 md:hidden">
+      <nav class="max-w-7xl mx-auto px-4 sm:px-6 py-2 flex flex-col">
+        <a href="/united-states-data-center-news" class="flex items-center gap-3 px-2 py-3 text-sm font-medium text-slate-300 hover:text-white transition-colors" style="min-height:44px">
+          <i class="ph ph-newspaper text-base text-slate-500"></i>News
+        </a>
+        <a href="/" class="flex items-center gap-3 px-2 py-3 text-sm font-medium text-slate-300 hover:text-white transition-colors" style="min-height:44px">
+          <i class="ph ph-database text-base text-slate-500"></i>Projects
+        </a>
+        <div class="pt-2 pb-3">
+          <button class="open-trial-modal w-full flex items-center justify-center gap-2 px-4 py-3 bg-red-600 text-white text-xs font-bold rounded-sm hover:bg-red-500 transition-colors tracking-wide uppercase">
+            Request Free Trial <i class="ph ph-arrow-right text-xs"></i>
+          </button>
+        </div>
+      </nav>
+    </div>
+
   </header>
 
   <!-- ================================================================
