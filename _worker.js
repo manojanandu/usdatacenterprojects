@@ -163,7 +163,7 @@ async function handleSitemap(request, env) {
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>${origin}/</loc><changefreq>daily</changefreq><priority>1.0</priority></url>
-  <url><loc>${origin}/news</loc><changefreq>daily</changefreq><priority>0.9</priority></url>
+  <url><loc>${origin}/united-states-data-center-news</loc><changefreq>daily</changefreq><priority>0.9</priority></url>
 ${stateUrls.join('\n')}
 ${articleUrls.join('\n')}
 </urlset>`;
@@ -198,9 +198,14 @@ export default {
       return env.ASSETS.fetch(new Request(new URL('/us-data-center-project-tracker.html', request.url).toString()));
     }
 
-    // News feed
-    if (url.pathname === '/news') {
+    // News hub
+    if (url.pathname === '/united-states-data-center-news') {
       return env.ASSETS.fetch(new Request(new URL('/data-center-news.html', request.url).toString()));
+    }
+
+    // Legacy /news → redirect to new URL
+    if (url.pathname === '/news') {
+      return Response.redirect(new URL('/united-states-data-center-news', request.url).toString(), 301);
     }
 
     // Legacy alias → redirect to root
