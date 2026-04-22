@@ -85,6 +85,15 @@
     .article-body p { margin: 0 0 1.35rem; }
     .article-body p:last-child { margin-bottom: 0; }
 
+    .modal-overlay { position:fixed;inset:0;background:rgba(0,0,0,0.55);backdrop-filter:blur(4px);z-index:1000;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity 0.25s ease,visibility 0.25s ease; }
+    .modal-overlay.active { opacity:1;visibility:visible; }
+    .modal-container { background:#fff;width:90%;max-width:580px;max-height:90vh;border-radius:8px;box-shadow:0 20px 60px rgba(0,0,0,0.2);transform:translateY(16px);transition:transform 0.25s ease;overflow:hidden;display:flex;flex-direction:column; }
+    .modal-overlay.active .modal-container { transform:translateY(0); }
+    .modal-header { padding:1.25rem 1.5rem;border-bottom:1px solid #e5e4e0;display:flex;justify-content:space-between;align-items:center; }
+    .modal-close { background:none;border:none;font-size:1.25rem;color:#9ca3af;cursor:pointer;padding:0.25rem;border-radius:4px;transition:color 0.15s;display:flex;align-items:center; }
+    .modal-close:hover { color:#374151; }
+    .modal-body { padding:1.5rem;overflow-y:auto;flex:1; }
+
     /* Skeleton shimmer */
     @keyframes shimmer {
       0%   { background-position: -600px 0; }
@@ -260,123 +269,26 @@
       <aside class="space-y-4 lg:sticky lg:top-[80px]">
 
         <!-- Live Projects -->
-        <div class="widget bg-white rounded-lg overflow-hidden reveal" style="animation-delay:0.1s">
-          <div class="flex items-center justify-between px-4 py-3 border-b border-gray-100">
-            <h3 class="text-[11px] font-bold uppercase tracking-widest text-gray-700 flex items-center gap-1.5">
-              <span class="w-1.5 h-1.5 rounded-full bg-red-600 pulse-dot inline-block"></span>
-              Live Projects
-            </h3>
-            <a href="index.html" class="text-[11px] font-semibold text-red-600 hover:underline">View all &rarr;</a>
+        <!-- Project Intelligence CTA -->
+        <div class="bg-[#0f1923] rounded-lg overflow-hidden reveal" style="animation-delay:0.1s">
+          <div class="h-[3px] bg-red-600"></div>
+          <div class="p-5">
+            <div class="flex items-center gap-1.5 mb-3">
+              <i class="ph ph-database text-red-400 text-sm"></i>
+              <span class="text-[10px] font-bold uppercase tracking-widest text-red-400">Project Intelligence</span>
+            </div>
+            <h3 class="font-serif text-[1.05rem] text-white leading-snug mb-2">More Than Headlines — Full Project Data</h3>
+            <p class="text-[11px] text-slate-400 leading-relaxed mb-4">Permit filings, contractor bids, MW capacity, and company contacts for every project we cover.</p>
+            <div class="space-y-2 mb-5">
+              <div class="flex items-center gap-2 text-[11px] text-slate-400"><span class="w-1 h-1 rounded-full bg-red-500 shrink-0"></span>Permit filings &amp; contractor bids</div>
+              <div class="flex items-center gap-2 text-[11px] text-slate-400"><span class="w-1 h-1 rounded-full bg-red-500 shrink-0"></span>MW capacity &amp; stage tracking</div>
+              <div class="flex items-center gap-2 text-[11px] text-slate-400"><span class="w-1 h-1 rounded-full bg-red-500 shrink-0"></span>Company contacts &amp; developer profiles</div>
+              <div class="flex items-center gap-2 text-[11px] text-slate-400"><span class="w-1 h-1 rounded-full bg-red-500 shrink-0"></span>CSV export &amp; API access</div>
+            </div>
+            <button class="open-trial-modal flex items-center justify-center gap-1.5 w-full px-3 py-2.5 bg-red-600 text-white text-xs font-bold rounded-sm hover:bg-red-500 transition-colors tracking-wide uppercase">
+              Request a Free Trial <i class="ph ph-arrow-right text-xs"></i>
+            </button>
           </div>
-          <div class="divide-y divide-gray-100">
-            <div class="flex items-center justify-between gap-3 px-4 py-3 hover:bg-gray-50 transition-colors cursor-pointer">
-              <div class="min-w-0">
-                <p class="text-xs font-bold text-gray-900 truncate">Amazon Web Services</p>
-                <p class="text-[11px] text-gray-500">Ashburn, Virginia</p>
-              </div>
-              <span class="shrink-0 text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200 px-2 py-0.5 rounded-full tracking-wide">Construction</span>
-            </div>
-            <div class="flex items-center justify-between gap-3 px-4 py-3 hover:bg-gray-50 transition-colors cursor-pointer">
-              <div class="min-w-0">
-                <p class="text-xs font-bold text-gray-900 truncate">Microsoft Azure</p>
-                <p class="text-[11px] text-gray-500">Goodyear, Arizona</p>
-              </div>
-              <span class="shrink-0 text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200 px-2 py-0.5 rounded-full tracking-wide">Permitting</span>
-            </div>
-            <div class="flex items-center justify-between gap-3 px-4 py-3 hover:bg-gray-50 transition-colors cursor-pointer">
-              <div class="min-w-0">
-                <p class="text-xs font-bold text-gray-900 truncate">Google Cloud</p>
-                <p class="text-[11px] text-gray-500">Columbus, Ohio</p>
-              </div>
-              <span class="shrink-0 text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-full tracking-wide">Approved</span>
-            </div>
-            <div class="flex items-center justify-between gap-3 px-4 py-3 hover:bg-gray-50 transition-colors cursor-pointer">
-              <div class="min-w-0">
-                <p class="text-xs font-bold text-gray-900 truncate">Meta Platforms</p>
-                <p class="text-[11px] text-gray-500">New Albany, Ohio</p>
-              </div>
-              <span class="shrink-0 text-[10px] font-bold bg-gray-100 text-gray-600 border border-gray-200 px-2 py-0.5 rounded-full tracking-wide">Planning</span>
-            </div>
-            <div class="flex items-center justify-between gap-3 px-4 py-3 hover:bg-gray-50 transition-colors cursor-pointer">
-              <div class="min-w-0">
-                <p class="text-xs font-bold text-gray-900 truncate">Apple</p>
-                <p class="text-[11px] text-gray-500">Mesa, Arizona</p>
-              </div>
-              <span class="shrink-0 text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200 px-2 py-0.5 rounded-full tracking-wide">Construction</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- By the Numbers -->
-        <div class="widget bg-white rounded-lg overflow-hidden reveal" style="animation-delay:0.15s">
-          <div class="px-4 py-3 border-b border-gray-100">
-            <h3 class="text-[11px] font-bold uppercase tracking-widest text-gray-700">By the Numbers</h3>
-          </div>
-          <div class="grid grid-cols-3 divide-x divide-gray-100 py-4 px-2">
-            <div class="text-center px-2">
-              <p class="stat-num text-2xl font-bold text-gray-900 leading-none">2,847</p>
-              <p class="text-[10px] text-gray-400 mt-1.5 leading-tight uppercase tracking-wider">Projects<br>Tracked</p>
-            </div>
-            <div class="text-center px-2">
-              <p class="stat-num text-2xl font-bold text-gray-900 leading-none">50</p>
-              <p class="text-[10px] text-gray-400 mt-1.5 leading-tight uppercase tracking-wider">States<br>Covered</p>
-            </div>
-            <div class="text-center px-2">
-              <p class="stat-num text-2xl font-bold text-gray-900 leading-none">3.2K</p>
-              <p class="text-[10px] text-gray-400 mt-1.5 leading-tight uppercase tracking-wider">Companies<br>Tracked</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Top States This Week -->
-        <div class="widget bg-white rounded-lg overflow-hidden reveal" style="animation-delay:0.2s">
-          <div class="px-4 py-3 border-b border-gray-100">
-            <h3 class="text-[11px] font-bold uppercase tracking-widest text-gray-700">Top States This Week</h3>
-          </div>
-          <div class="p-4 space-y-3">
-            <div class="flex items-center gap-3">
-              <span class="stat-num text-[10px] font-bold text-gray-400 w-3 shrink-0 text-center">1</span>
-              <span class="text-xs font-semibold text-gray-800 w-[72px] shrink-0">Virginia</span>
-              <div class="flex-1 bg-gray-100 rounded-full h-2 overflow-hidden"><div class="bar-anim bg-red-600 h-2 rounded-full" style="--w:100%"></div></div>
-              <span class="stat-num text-[11px] text-gray-500 w-5 text-right shrink-0">12</span>
-            </div>
-            <div class="flex items-center gap-3">
-              <span class="stat-num text-[10px] font-bold text-gray-400 w-3 shrink-0 text-center">2</span>
-              <span class="text-xs font-semibold text-gray-800 w-[72px] shrink-0">Texas</span>
-              <div class="flex-1 bg-gray-100 rounded-full h-2 overflow-hidden"><div class="bar-anim bg-red-500 h-2 rounded-full" style="--w:75%"></div></div>
-              <span class="stat-num text-[11px] text-gray-500 w-5 text-right shrink-0">9</span>
-            </div>
-            <div class="flex items-center gap-3">
-              <span class="stat-num text-[10px] font-bold text-gray-400 w-3 shrink-0 text-center">3</span>
-              <span class="text-xs font-semibold text-gray-800 w-[72px] shrink-0">Arizona</span>
-              <div class="flex-1 bg-gray-100 rounded-full h-2 overflow-hidden"><div class="bar-anim bg-red-400 h-2 rounded-full" style="--w:58%"></div></div>
-              <span class="stat-num text-[11px] text-gray-500 w-5 text-right shrink-0">7</span>
-            </div>
-            <div class="flex items-center gap-3">
-              <span class="stat-num text-[10px] font-bold text-gray-400 w-3 shrink-0 text-center">4</span>
-              <span class="text-xs font-semibold text-gray-800 w-[72px] shrink-0">Ohio</span>
-              <div class="flex-1 bg-gray-100 rounded-full h-2 overflow-hidden"><div class="bar-anim bg-red-300 h-2 rounded-full" style="--w:50%"></div></div>
-              <span class="stat-num text-[11px] text-gray-500 w-5 text-right shrink-0">6</span>
-            </div>
-            <div class="flex items-center gap-3">
-              <span class="stat-num text-[10px] font-bold text-gray-400 w-3 shrink-0 text-center">5</span>
-              <span class="text-xs font-semibold text-gray-800 w-[72px] shrink-0">California</span>
-              <div class="flex-1 bg-gray-100 rounded-full h-2 overflow-hidden"><div class="bar-anim bg-red-200 h-2 rounded-full" style="--w:42%"></div></div>
-              <span class="stat-num text-[11px] text-gray-500 w-5 text-right shrink-0">5</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Newsletter CTA -->
-        <div class="bg-[#0f1923] rounded-lg p-4 reveal" style="animation-delay:0.25s">
-          <h3 class="text-xs font-bold text-white mb-1">Daily Intelligence Brief</h3>
-          <p class="text-[11px] text-slate-400 mb-3 leading-relaxed">Top US data center developments, delivered every morning.</p>
-          <div class="flex gap-2">
-            <input type="email" placeholder="your@email.com"
-              class="flex-1 min-w-0 px-2.5 py-2 text-xs border border-slate-700 rounded-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent bg-slate-800 text-white placeholder-slate-500">
-            <button class="shrink-0 px-3 py-2 bg-red-600 text-white text-xs font-bold rounded-sm hover:bg-red-500 transition-colors">Join</button>
-          </div>
-          <p class="text-[10px] text-slate-600 mt-2">No spam. Unsubscribe anytime.</p>
         </div>
 
       </aside>
@@ -415,75 +327,67 @@
         <div>
           <h4 class="text-[11px] font-bold uppercase tracking-widest text-slate-500 mb-3">Browse by State</h4>
           <div class="grid grid-cols-3 gap-x-3 gap-y-1.5">
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Alabama</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Alaska</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Arizona</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Arkansas</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">California</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Colorado</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Connecticut</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Delaware</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Florida</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Georgia</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Hawaii</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Idaho</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Illinois</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Indiana</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Iowa</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Kansas</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Kentucky</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Louisiana</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Maine</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Maryland</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Mass.</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Michigan</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Minnesota</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Mississippi</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Missouri</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Montana</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Nebraska</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Nevada</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">N. Hampshire</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">New Jersey</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">New Mexico</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">New York</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">N. Carolina</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">N. Dakota</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Ohio</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Oklahoma</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Oregon</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Pennsylvania</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Rhode Island</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">S. Carolina</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">S. Dakota</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Tennessee</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Texas</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Utah</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Vermont</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Virginia</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Washington</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">W. Virginia</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Wisconsin</a>
-            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Wyoming</a>
+            <a href="/alabama" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Alabama</a>
+            <a href="/alaska" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Alaska</a>
+            <a href="/arizona" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Arizona</a>
+            <a href="/arkansas" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Arkansas</a>
+            <a href="/california" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">California</a>
+            <a href="/colorado" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Colorado</a>
+            <a href="/connecticut" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Connecticut</a>
+            <a href="/delaware" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Delaware</a>
+            <a href="/florida" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Florida</a>
+            <a href="/georgia" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Georgia</a>
+            <a href="/hawaii" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Hawaii</a>
+            <a href="/idaho" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Idaho</a>
+            <a href="/illinois" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Illinois</a>
+            <a href="/indiana" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Indiana</a>
+            <a href="/iowa" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Iowa</a>
+            <a href="/kansas" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Kansas</a>
+            <a href="/kentucky" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Kentucky</a>
+            <a href="/louisiana" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Louisiana</a>
+            <a href="/maine" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Maine</a>
+            <a href="/maryland" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Maryland</a>
+            <a href="/massachusetts" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Mass.</a>
+            <a href="/michigan" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Michigan</a>
+            <a href="/minnesota" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Minnesota</a>
+            <a href="/mississippi" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Mississippi</a>
+            <a href="/missouri" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Missouri</a>
+            <a href="/montana" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Montana</a>
+            <a href="/nebraska" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Nebraska</a>
+            <a href="/nevada" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Nevada</a>
+            <a href="/new-hampshire" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">N. Hampshire</a>
+            <a href="/new-jersey" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">New Jersey</a>
+            <a href="/new-mexico" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">New Mexico</a>
+            <a href="/new-york" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">New York</a>
+            <a href="/north-carolina" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">N. Carolina</a>
+            <a href="/north-dakota" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">N. Dakota</a>
+            <a href="/ohio" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Ohio</a>
+            <a href="/oklahoma" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Oklahoma</a>
+            <a href="/oregon" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Oregon</a>
+            <a href="/pennsylvania" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Pennsylvania</a>
+            <a href="/rhode-island" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Rhode Island</a>
+            <a href="/south-carolina" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">S. Carolina</a>
+            <a href="/south-dakota" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">S. Dakota</a>
+            <a href="/tennessee" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Tennessee</a>
+            <a href="/texas" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Texas</a>
+            <a href="/utah" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Utah</a>
+            <a href="/vermont" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Vermont</a>
+            <a href="/virginia" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Virginia</a>
+            <a href="/washington" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Washington</a>
+            <a href="/west-virginia" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">W. Virginia</a>
+            <a href="/wisconsin" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Wisconsin</a>
+            <a href="/wyoming" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Wyoming</a>
           </div>
         </div>
 
         <div>
-          <h4 class="text-[11px] font-bold uppercase tracking-widest text-slate-500 mb-1">Daily Intelligence Brief</h4>
-          <p class="text-xs text-slate-400 mb-3 leading-relaxed">Top data center developments across all 50 states, every morning.</p>
-          <div class="flex gap-2 mb-2">
-            <input type="email" placeholder="your@email.com"
-              class="flex-1 min-w-0 px-3 py-2 text-xs border border-slate-700 rounded-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent bg-slate-800 text-white placeholder-slate-500">
-            <button class="shrink-0 px-4 py-2 bg-red-600 text-white text-xs font-bold rounded-sm hover:bg-red-500 transition-colors">Subscribe</button>
-          </div>
-          <p class="text-[10px] text-slate-600 mb-6">No spam. Unsubscribe anytime.</p>
-          <div class="grid grid-cols-2 gap-x-6 gap-y-1.5">
+          <h4 class="text-[11px] font-bold uppercase tracking-widest text-slate-500 mb-4">Quick Links</h4>
+          <div class="grid grid-cols-2 gap-x-6 gap-y-2">
             <a href="#" class="text-xs text-slate-500 hover:text-white transition-colors">About</a>
             <a href="#" class="text-xs text-slate-500 hover:text-white transition-colors">Advertise</a>
             <a href="#" class="text-xs text-slate-500 hover:text-white transition-colors">Contact</a>
-            <a href="#" class="text-xs text-slate-500 hover:text-white transition-colors">RSS Feed</a>
-            <a href="index.html" class="text-xs text-slate-500 hover:text-white transition-colors">Project Tracker</a>
-            <a href="#" class="text-xs text-slate-500 hover:text-white transition-colors">Sitemap</a>
+            <a href="/sitemap.xml" class="text-xs text-slate-500 hover:text-white transition-colors">Sitemap</a>
+            <a href="/index.html" class="text-xs text-slate-500 hover:text-white transition-colors">Project Tracker</a>
           </div>
         </div>
 
@@ -676,6 +580,31 @@
     }
 
     document.addEventListener('DOMContentLoaded', loadArticle);
+  </script>
+
+  <!-- Trial Modal -->
+  <div class="modal-overlay" id="trialModal">
+    <div class="modal-container">
+      <div class="modal-header">
+        <span style="font-family:'Bricolage Grotesque',sans-serif;font-size:1rem;font-weight:700;color:#111">Request a Free Trial</span>
+        <button class="modal-close" id="closeTrialModal"><i class="ph ph-x"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="deftform" data-form-id="8bf3ee99-b3c2-466e-a2aa-c09f0fbd64bb" data-form-width="100%" data-form-align="center" data-form-auto-height="1"></div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.deftform.com/embed.js"></script>
+  <script>
+    (function() {
+      const modal = document.getElementById('trialModal');
+      const close = () => { modal.classList.remove('active'); document.body.style.overflow = ''; };
+      document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.open-trial-modal').forEach(b => b.addEventListener('click', e => { e.preventDefault(); modal.classList.add('active'); document.body.style.overflow = 'hidden'; }));
+        document.getElementById('closeTrialModal').addEventListener('click', close);
+        modal.addEventListener('click', e => { if (e.target === modal) close(); });
+      });
+    })();
   </script>
 
 </body>
