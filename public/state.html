@@ -7,7 +7,7 @@
   <meta name="description" content="Data center construction news and project updates by state.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Onest:wght@400;500;600;700&family=Martian+Mono:wght@400;500&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <script>
@@ -15,9 +15,9 @@
       theme: {
         extend: {
           fontFamily: {
-            sans: ['IBM Plex Sans', 'sans-serif'],
-            serif: ['DM Serif Display', 'serif'],
-            mono: ['IBM Plex Mono', 'monospace']
+            sans: ['Onest', 'sans-serif'],
+            serif: ['Bricolage Grotesque', 'sans-serif'],
+            mono: ['Martian Mono', 'monospace']
           }
         }
       }
@@ -25,7 +25,7 @@
   </script>
   <style>
     * { box-sizing: border-box; }
-    body { font-family: 'IBM Plex Sans', sans-serif; background: #f8f7f4; }
+    body { font-family: 'Onest', sans-serif; background: #f5f4f1; }
 
     .pills-scroll { scrollbar-width: none; }
     .pills-scroll::-webkit-scrollbar { display: none; }
@@ -33,31 +33,32 @@
     body::before {
       content: '';
       position: fixed; inset: 0;
-      background-image: radial-gradient(circle, #ccc9c0 1px, transparent 1px);
-      background-size: 24px 24px;
-      opacity: 0.22;
+      background-image: radial-gradient(circle, #c8c5bc 1px, transparent 1px);
+      background-size: 28px 28px;
+      opacity: 0.18;
       pointer-events: none;
       z-index: -1;
     }
 
-    .story-row { transition: background 0.15s ease, box-shadow 0.15s ease; }
-    .story-row:hover { box-shadow: inset 3px 0 0 #dc2626; }
+    .story-row { transition: background 0.12s ease; }
+    .story-row:hover { background: #f0ede8; }
 
-    .hero-card { border: 1px solid #e5e7eb; border-left: 4px solid #dc2626; }
+    .hero-card { border: 1px solid #e2e0db; transition: box-shadow 0.2s ease, border-color 0.2s ease; }
+    .hero-card:hover { border-color: #cac8c2; box-shadow: 0 8px 32px rgba(0,0,0,0.09); }
 
-    .widget { box-shadow: 0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04); }
+    .widget { box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04); }
 
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
-    ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+    ::-webkit-scrollbar-thumb { background: #d1cec8; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #a8a49d; }
 
-    @keyframes slideUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
-    .reveal { opacity:0; animation: slideUp 0.5s cubic-bezier(0.22,1,0.36,1) both; }
+    @keyframes slideUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+    .reveal { opacity:0; animation: slideUp 0.45s cubic-bezier(0.22,1,0.36,1) both; }
 
     @keyframes shimmer { 0%{background-position:-600px 0} 100%{background-position:600px 0} }
     .skel {
-      background: linear-gradient(90deg,#f0f0f0 25%,#e8e8e8 50%,#f0f0f0 75%);
+      background: linear-gradient(90deg,#eceae5 25%,#e4e2dc 50%,#eceae5 75%);
       background-size: 600px 100%;
       animation: shimmer 1.4s infinite linear;
       border-radius: 4px;
@@ -102,7 +103,7 @@
         </a>
         <nav class="hidden md:flex items-center gap-6">
           <a href="/homepage.html" class="text-sm font-medium text-slate-400 hover:text-white transition-colors">News</a>
-          <a href="/index.html" class="text-sm font-medium text-slate-400 hover:text-white transition-colors">Projects</a>
+          <a href="/us-data-center-project-tracker" class="text-sm font-medium text-slate-400 hover:text-white transition-colors">Projects</a>
           <a href="#" class="text-sm font-medium text-slate-400 hover:text-white transition-colors">Markets</a>
           <a href="#" class="text-sm font-medium text-slate-400 hover:text-white transition-colors">About</a>
         </nav>
@@ -203,7 +204,7 @@
         <p class="text-[11px] text-slate-600">&copy; 2026 US Data Center Projects. All rights reserved.</p>
         <div class="flex gap-5">
           <a href="/homepage.html" class="text-[11px] text-slate-600 hover:text-white transition-colors">News</a>
-          <a href="/index.html" class="text-[11px] text-slate-600 hover:text-white transition-colors">Projects</a>
+          <a href="/us-data-center-project-tracker" class="text-[11px] text-slate-600 hover:text-white transition-colors">Projects</a>
           <a href="/sitemap.xml" class="text-[11px] text-slate-600 hover:text-white transition-colors">Sitemap</a>
         </div>
       </div>

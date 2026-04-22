@@ -198,6 +198,11 @@ export default {
       return env.ASSETS.fetch(new Request(new URL('/homepage.html', request.url).toString()));
     }
 
+    // Project tracker page
+    if (url.pathname === '/us-data-center-project-tracker') {
+      return env.ASSETS.fetch(new Request(new URL('/us-data-center-project-tracker.html', request.url).toString()));
+    }
+
     // Static assets first
     try {
       const asset = await env.ASSETS.fetch(request);
