@@ -179,6 +179,18 @@ export default {
       return handleSitemap(request, env);
     }
 
+    // Proxy news API — keeps credentials server-side
+    if (url.pathname === '/api/news') {
+      try {
+        const data = await fetchArticles(env);
+        return new Response(JSON.stringify(data), {
+          headers: { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=300' }
+        });
+      } catch (err) {
+        return new Response(JSON.stringify({ error: err.message }), { status: 502, headers: { 'Content-Type': 'application/json' } });
+      }
+    }
+
     // Root → serve homepage.html content directly
     if (url.pathname === '/' || url.pathname === '') {
       return env.ASSETS.fetch(new Request(new URL('/homepage.html', request.url).toString()));

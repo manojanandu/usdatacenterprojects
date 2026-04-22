@@ -508,10 +508,7 @@
        SCRIPTS
   ================================================================ -->
   <script>
-    // ── CONFIG ───────────────────────────────────────────────────────────────
-    const USDC_API_URL = 'https://blackridge-seo-suite-production.up.railway.app/api/us-data-center-projects/all-news';
-    const USDC_API_KEY = 'XnhGEoTqHK5HDTINTKH1howgDYcAmwS15Q3TvHZFDAA';
-    // ────────────────────────────────────────────────────────────────────────
+    const USDC_API_URL = '/api/news';
 
     function esc(s) {
       return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -659,7 +656,7 @@
       }
 
       try {
-        const res = await fetch(`${USDC_API_URL}?apikey=${encodeURIComponent(USDC_API_KEY)}`);
+        const res = await fetch(USDC_API_URL);
         if (!res.ok) {
           const err = await res.json().catch(() => ({}));
           throw new Error(err.detail || `Error ${res.status}`);

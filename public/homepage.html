@@ -461,8 +461,7 @@
        SCRIPTS
   ================================================================ -->
   <script>
-    const USDC_API_URL = 'https://blackridge-seo-suite-production.up.railway.app/api/us-data-center-projects/all-news';
-    const USDC_API_KEY = 'XnhGEoTqHK5HDTINTKH1howgDYcAmwS15Q3TvHZFDAA';
+    const USDC_API_URL = '/api/news';
 
     const REGIONS = {
       ALL:       ['Virginia','Texas','Arizona','California','Ohio','Georgia','Illinois','Nevada','Florida','Washington'],
@@ -617,7 +616,7 @@
 
     async function loadNews() {
       try {
-        const res = await fetch(`${USDC_API_URL}?apikey=${encodeURIComponent(USDC_API_KEY)}`);
+        const res = await fetch(USDC_API_URL);
         if (!res.ok) throw new Error(`Error ${res.status}`);
         const data = await res.json();
         allArticles = data.articles || [];
