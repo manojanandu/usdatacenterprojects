@@ -177,6 +177,14 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
+    if (url.pathname === '/robots.txt') {
+      const isStaging = url.hostname.includes('workers.dev');
+      const body = isStaging
+        ? 'User-agent: *\nDisallow: /'
+        : `User-agent: *\nAllow: /\nSitemap: ${url.origin}/sitemap.xml`;
+      return new Response(body, { headers: { 'Content-Type': 'text/plain' } });
+    }
+
     if (url.pathname === '/sitemap.xml') {
       return handleSitemap(request, env);
     }
