@@ -193,14 +193,19 @@ export default {
       }
     }
 
-    // Root → serve homepage.html content directly
+    // Root → project tracker (homepage)
     if (url.pathname === '/' || url.pathname === '') {
+      return env.ASSETS.fetch(new Request(new URL('/us-data-center-project-tracker.html', request.url).toString()));
+    }
+
+    // News feed
+    if (url.pathname === '/news') {
       return env.ASSETS.fetch(new Request(new URL('/homepage.html', request.url).toString()));
     }
 
-    // Project tracker page
+    // Legacy alias → redirect to root
     if (url.pathname === '/us-data-center-project-tracker') {
-      return env.ASSETS.fetch(new Request(new URL('/us-data-center-project-tracker.html', request.url).toString()));
+      return Response.redirect(new URL('/', request.url).toString(), 301);
     }
 
     // Static assets first
