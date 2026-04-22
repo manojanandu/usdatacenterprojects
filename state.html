@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>State Data Center News | US Data Center Projects</title>
+  <meta name="description" content="Data center construction news and project updates by state.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['IBM Plex Sans', 'sans-serif'],
+            serif: ['DM Serif Display', 'serif'],
+            mono: ['IBM Plex Mono', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: 'IBM Plex Sans', sans-serif; background: #f8f7f4; }
+
+    .pills-scroll { scrollbar-width: none; }
+    .pills-scroll::-webkit-scrollbar { display: none; }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: radial-gradient(circle, #ccc9c0 1px, transparent 1px);
+      background-size: 24px 24px;
+      opacity: 0.22;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .story-row { transition: background 0.15s ease, box-shadow 0.15s ease; }
+    .story-row:hover { box-shadow: inset 3px 0 0 #dc2626; }
+
+    .hero-card { border: 1px solid #e5e7eb; border-left: 4px solid #dc2626; }
+
+    .widget { box-shadow: 0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04); }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+
+    @keyframes slideUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+    .reveal { opacity:0; animation: slideUp 0.5s cubic-bezier(0.22,1,0.36,1) both; }
+
+    @keyframes shimmer { 0%{background-position:-600px 0} 100%{background-position:600px 0} }
+    .skel {
+      background: linear-gradient(90deg,#f0f0f0 25%,#e8e8e8 50%,#f0f0f0 75%);
+      background-size: 600px 100%;
+      animation: shimmer 1.4s infinite linear;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="text-gray-900 antialiased">
+
+  <!-- HEADER -->
+  <header class="sticky top-0 z-50 bg-[#0f1923] border-b-[3px] border-red-600">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="flex items-center justify-between h-14 gap-4">
+        <a href="/homepage.html" class="flex items-center gap-2.5 shrink-0">
+          <svg width="26" height="26" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="20" y="25" width="60" height="50" rx="4" fill="none" stroke="#e2e8f0" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="25" y1="35" x2="75" y2="35" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="25" y1="45" x2="75" y2="45" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="25" y1="55" x2="75" y2="55" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="25" y1="65" x2="75" y2="65" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="50" y1="30" x2="50" y2="70" stroke="#475569" stroke-width="1" stroke-linecap="round"/>
+            <circle cx="35" cy="40" r="2" fill="#94a3b8" opacity="0.8"/>
+            <circle cx="65" cy="40" r="2" fill="#94a3b8" opacity="0.8"/>
+            <circle cx="35" cy="50" r="2" fill="#94a3b8" opacity="0.8"/>
+            <circle cx="65" cy="50" r="2" fill="#94a3b8" opacity="0.8"/>
+            <circle cx="30" cy="25" r="2.5" fill="#e2e8f0"/>
+            <circle cx="50" cy="25" r="2.5" fill="#e2e8f0"/>
+            <circle cx="70" cy="25" r="2.5" fill="#e2e8f0"/>
+            <rect x="30" y="75" width="40" height="4" rx="2" fill="#e2e8f0"/>
+          </svg>
+          <div class="leading-none">
+            <span class="block text-sm font-bold text-white tracking-tight">US Data Center Projects</span>
+            <span class="block text-[10px] text-slate-400 uppercase tracking-widest font-medium mt-0.5">News & Intelligence</span>
+          </div>
+        </a>
+        <nav class="hidden md:flex items-center gap-6">
+          <a href="/homepage.html" class="text-sm font-medium text-slate-400 hover:text-white transition-colors">News</a>
+          <a href="/index.html" class="text-sm font-medium text-slate-400 hover:text-white transition-colors">Projects</a>
+          <a href="#" class="text-sm font-medium text-slate-400 hover:text-white transition-colors">Markets</a>
+          <a href="#" class="text-sm font-medium text-slate-400 hover:text-white transition-colors">About</a>
+        </nav>
+        <div class="flex items-center gap-2 shrink-0">
+          <a href="#newsletter"
+            class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-red-600 text-white text-xs font-bold rounded-sm hover:bg-red-500 transition-colors tracking-wide uppercase">
+            Subscribe <i class="ph ph-arrow-right text-xs"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- STATE HEADER -->
+  <div class="bg-white border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-5">
+      <!-- Breadcrumb -->
+      <div class="flex items-center gap-1.5 text-[11px] text-gray-400 mb-3">
+        <a href="/homepage.html" class="hover:text-red-600 transition-colors">News</a>
+        <i class="ph ph-caret-right text-xs"></i>
+        <span id="breadcrumb-state" class="text-gray-600 font-medium">State</span>
+      </div>
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-2.5 mb-1">
+            <i class="ph ph-map-pin text-red-600 text-lg"></i>
+            <h1 id="state-heading" class="font-serif text-2xl sm:text-3xl text-gray-900">Loading…</h1>
+          </div>
+          <p class="text-sm text-gray-500">Data center construction news and project updates</p>
+        </div>
+        <div class="text-right shrink-0">
+          <div id="article-count" class="text-2xl font-mono font-bold text-gray-900">—</div>
+          <div class="text-[10px] uppercase tracking-widest text-gray-400 mt-0.5">Stories</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-7">
+    <div class="grid grid-cols-1 lg:grid-cols-[1fr_352px] gap-8 items-start">
+
+      <!-- LEFT: FEED -->
+      <div>
+        <!-- Hero skeleton -->
+        <div id="state-hero-skeleton" class="hero-card bg-white rounded-lg p-5 mb-5 reveal">
+          <div class="skel h-3 w-40 rounded mb-3"></div>
+          <div class="skel h-7 w-full rounded mb-2"></div>
+          <div class="skel h-7 w-4/5 rounded mb-4"></div>
+          <div class="skel h-4 w-full rounded mb-1.5"></div>
+          <div class="skel h-4 w-5/6 rounded"></div>
+        </div>
+        <div id="state-hero"></div>
+
+        <!-- Rows skeleton -->
+        <div id="state-rows-skeleton" class="widget bg-white rounded-lg overflow-hidden divide-y divide-gray-100 reveal">
+          <div class="py-4 px-4"><div class="skel h-4 w-full rounded mb-2"></div><div class="skel h-4 w-3/4 rounded"></div></div>
+          <div class="py-4 px-4"><div class="skel h-4 w-full rounded mb-2"></div><div class="skel h-4 w-3/4 rounded"></div></div>
+          <div class="py-4 px-4"><div class="skel h-4 w-full rounded mb-2"></div><div class="skel h-4 w-3/4 rounded"></div></div>
+        </div>
+        <div id="state-rows" class="widget bg-white rounded-lg overflow-hidden divide-y divide-gray-100 hidden"></div>
+
+        <div id="state-empty" class="hidden text-center py-16 text-gray-400 text-sm">
+          No stories published for this state yet.
+        </div>
+      </div>
+
+      <!-- RIGHT: SIDEBAR -->
+      <aside class="space-y-4 lg:sticky lg:top-[106px]">
+        <div class="bg-[#0f1923] rounded-lg overflow-hidden reveal" style="animation-delay:0.1s">
+          <div class="h-[3px] bg-red-600"></div>
+          <div class="p-4">
+            <div class="flex items-center gap-1.5 mb-3">
+              <i class="ph ph-database text-red-400 text-sm"></i>
+              <span class="text-[10px] font-bold uppercase tracking-widest text-red-400">Project Intelligence</span>
+            </div>
+            <h3 class="font-serif text-[1.05rem] text-white leading-snug mb-2">
+              More Than Headlines — Full Project Data
+            </h3>
+            <p class="text-[11px] text-slate-400 leading-relaxed mb-4">
+              Permit filings, contractor bids, MW capacity, and company contacts for every project we cover.
+            </p>
+            <a href="/index.html"
+              class="flex items-center justify-center gap-1.5 w-full px-3 py-2.5 bg-red-600 text-white text-xs font-bold rounded-sm hover:bg-red-500 transition-colors tracking-wide uppercase mb-2">
+              Start Free Trial <i class="ph ph-arrow-right text-xs"></i>
+            </a>
+            <a href="/index.html"
+              class="flex items-center justify-center w-full px-3 py-2 border border-slate-700 text-xs font-semibold text-slate-400 rounded-sm hover:border-red-600 hover:text-white transition-all">
+              Browse All Projects
+            </a>
+          </div>
+        </div>
+
+        <div class="bg-[#0f1923] rounded-lg p-4 reveal" style="animation-delay:0.2s">
+          <h3 class="text-xs font-bold text-white mb-1">Daily Intelligence Brief</h3>
+          <p class="text-[11px] text-slate-400 mb-3 leading-relaxed">Top US data center developments, delivered every morning.</p>
+          <div class="flex gap-2">
+            <input type="email" placeholder="your@email.com"
+              class="flex-1 min-w-0 px-2.5 py-2 text-xs border border-slate-700 rounded-sm focus:outline-none focus:ring-2 focus:ring-red-500 bg-slate-800 text-white placeholder-slate-500">
+            <button class="shrink-0 px-3 py-2 bg-red-600 text-white text-xs font-bold rounded-sm hover:bg-red-500 transition-colors">Join</button>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer id="newsletter" class="mt-12 bg-[#0f1923]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+      <div class="mt-8 pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <p class="text-[11px] text-slate-600">&copy; 2026 US Data Center Projects. All rights reserved.</p>
+        <div class="flex gap-5">
+          <a href="/homepage.html" class="text-[11px] text-slate-600 hover:text-white transition-colors">News</a>
+          <a href="/index.html" class="text-[11px] text-slate-600 hover:text-white transition-colors">Projects</a>
+          <a href="/sitemap.xml" class="text-[11px] text-slate-600 hover:text-white transition-colors">Sitemap</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+    function stateToSlug(s) { return s.toLowerCase().replace(/\.\s*/g,'').replace(/\s+/g,'-'); }
+
+    function timeAgo(iso) {
+      try {
+        const diff = Date.now() - new Date(iso).getTime();
+        const h = Math.floor(diff/3600000);
+        if (h < 1) return 'just now';
+        if (h < 24) return h + 'h ago';
+        return Math.floor(h/24) + 'd ago';
+      } catch { return ''; }
+    }
+
+    function minRead(wc) { return Math.max(1,Math.round((wc||600)/200)) + ' min read'; }
+
+    function formatDate(iso) {
+      try { return new Date(iso).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); } catch { return ''; }
+    }
+
+    function badgeHtml(subCat) {
+      if (subCat === 'Project_News') return `<span class="border border-red-500 text-red-600 text-[9px] font-bold px-1.5 py-0.5 rounded-sm uppercase tracking-wide">Project Update</span>`;
+      if (subCat === 'Industry_News') return `<span class="bg-gray-900 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-sm uppercase tracking-wide">Editorial</span>`;
+      return `<span class="bg-gray-100 text-gray-700 text-[9px] font-bold px-1.5 py-0.5 rounded-sm uppercase tracking-wide">News</span>`;
+    }
+
+    function excerpt(description) {
+      const raw = (description||'').trim();
+      const firstBreak = raw.indexOf('\n');
+      const body = firstBreak >= 0 ? raw.slice(firstBreak+1).trim() : raw;
+      return body.replace(/<[^>]+>/g,'').slice(0,180).trim() + '…';
+    }
+
+    function renderState(state, articles) {
+      document.getElementById('state-hero-skeleton').classList.add('hidden');
+      document.getElementById('state-rows-skeleton').classList.add('hidden');
+      document.getElementById('state-rows').classList.remove('hidden');
+
+      document.getElementById('breadcrumb-state').textContent = state;
+      document.getElementById('state-heading').textContent = state;
+      document.getElementById('article-count').textContent = articles.length;
+      document.title = `${state} Data Center News | US Data Center Projects`;
+
+      if (!articles.length) {
+        document.getElementById('state-empty').classList.remove('hidden');
+        return;
+      }
+
+      const stateSlug = stateToSlug(state);
+      const hero = articles[0];
+      const heroUrl = `/${stateSlug}/${hero.pageURL}`;
+
+      document.getElementById('state-hero').innerHTML = `
+        <a href="${heroUrl}" class="hero-card bg-white rounded-lg p-5 mb-5 cursor-pointer group hover:shadow-lg transition-all reveal block no-underline" style="animation-delay:0.05s">
+          <div class="flex flex-wrap items-center gap-2 mb-3">
+            ${badgeHtml(hero.subCategory)}
+            ${hero.trending ? '<span class="bg-amber-50 text-amber-700 border border-amber-200 text-[9px] font-bold px-1.5 py-0.5 rounded-sm uppercase">Trending</span>' : ''}
+            <span class="text-xs text-gray-400">${minRead(hero.wordCount)} &middot; <span class="text-gray-600 font-medium">${timeAgo(hero.createdAt)}</span></span>
+          </div>
+          <h2 class="font-serif text-xl sm:text-[1.6rem] text-gray-900 leading-tight mb-2.5 group-hover:text-red-700 transition-colors">${esc(hero.title)}</h2>
+          <p class="text-sm text-gray-500 leading-relaxed">${esc(excerpt(hero.description))}</p>
+          <div class="flex flex-wrap items-center gap-4 mt-4 pt-4 border-t border-gray-100">
+            <span class="text-xs text-gray-400 flex items-center gap-1.5"><i class="ph ph-map-pin text-red-400"></i> ${esc(state)}</span>
+            <span class="text-xs text-gray-400 flex items-center gap-1.5"><i class="ph ph-calendar text-blue-400"></i> ${formatDate(hero.createdAt)}</span>
+          </div>
+        </a>`;
+
+      let rowsHtml = '';
+      articles.slice(1).forEach(a => {
+        const url = `/${stateSlug}/${a.pageURL}`;
+        rowsHtml += `<a href="${url}" class="story-row py-4 px-4 hover:bg-gray-50 cursor-pointer group flex items-start gap-3 no-underline block">
+          <div class="flex-1 min-w-0">
+            <div class="flex flex-wrap items-center gap-2 mb-1.5">
+              ${badgeHtml(a.subCategory)}
+              <span class="text-[11px] text-gray-400">${timeAgo(a.createdAt)}</span>
+            </div>
+            <h4 class="text-sm font-semibold text-gray-900 leading-snug group-hover:text-red-700 transition-colors">${esc(a.title)}</h4>
+            <p class="text-[12px] text-gray-500 mt-1 leading-relaxed hidden sm:block">${esc(excerpt(a.description))}</p>
+          </div>
+          <i class="ph ph-arrow-up-right text-base text-gray-300 group-hover:text-red-400 transition-colors shrink-0 mt-0.5"></i>
+        </a>`;
+      });
+
+      document.getElementById('state-rows').innerHTML = rowsHtml;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.__STATE__) {
+        renderState(window.__STATE__.state, window.__STATE__.articles);
+      }
+    });
+  </script>
+
+</body>
+</html>

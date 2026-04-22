@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>US Data Center Projects — News & Intelligence</title>
+  <meta name="description" content="Breaking news, project updates, and intelligence on US data center construction across all 50 states.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['IBM Plex Sans', 'sans-serif'],
+            serif: ['DM Serif Display', 'serif'],
+            mono: ['IBM Plex Mono', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: 'IBM Plex Sans', sans-serif; background: #f8f7f4; }
+
+    .pills-scroll { scrollbar-width: none; }
+    .pills-scroll::-webkit-scrollbar { display: none; }
+
+    @keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:.3} }
+    .pulse-dot { animation: pulse-dot 1.8s ease-in-out infinite; }
+
+    /* Page-load stagger reveal */
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .reveal { opacity: 0; animation: slideUp 0.5s cubic-bezier(0.22,1,0.36,1) both; }
+
+    /* Dot-grid background */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: radial-gradient(circle, #ccc9c0 1px, transparent 1px);
+      background-size: 24px 24px;
+      opacity: 0.22;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* Progress bar animation */
+    @keyframes barFill { from { width: 0 } to { width: var(--w) } }
+    .bar-anim {
+      width: 0;
+      animation: barFill 1s cubic-bezier(0.22,1,0.36,1) 0.5s both;
+    }
+
+    /* Hero article: left red accent + full border */
+    .hero-card {
+      border: 1px solid #e5e7eb;
+      border-left: 4px solid #dc2626;
+    }
+
+    /* Story row: inset left flash on hover */
+    .story-row {
+      transition: background 0.15s ease, box-shadow 0.15s ease;
+    }
+    .story-row:hover {
+      box-shadow: inset 3px 0 0 #dc2626;
+    }
+
+    /* Sidebar widget elevation */
+    .widget {
+      box-shadow: 0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
+    }
+
+    /* Nav active underline (header) */
+    .nav-link-active {
+      position: relative;
+      color: #ffffff;
+    }
+    .nav-link-active::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0; right: 0;
+      height: 2px;
+      background: #dc2626;
+      border-radius: 1px;
+    }
+
+    /* Scrollbar global */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+
+    /* Stat number mono */
+    .stat-num { font-family: 'IBM Plex Mono', monospace; }
+
+    /* Breaking badge flash */
+    @keyframes breakingPulse { 0%,100%{opacity:1} 50%{opacity:0.7} }
+    .breaking-badge { animation: breakingPulse 2s ease-in-out infinite; }
+
+    /* Skeleton shimmer */
+    @keyframes shimmer { 0%{background-position:-600px 0} 100%{background-position:600px 0} }
+    .skel {
+      background: linear-gradient(90deg,#f0f0f0 25%,#e8e8e8 50%,#f0f0f0 75%);
+      background-size: 600px 100%;
+      animation: shimmer 1.4s infinite linear;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="text-gray-900 antialiased">
+
+  <!-- ================================================================
+       HEADER
+  ================================================================ -->
+  <header class="sticky top-0 z-50 bg-[#0f1923] border-b-[3px] border-red-600">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="flex items-center justify-between h-14 gap-4">
+
+        <!-- Logo -->
+        <a href="index.html" class="flex items-center gap-2.5 shrink-0">
+          <svg width="26" height="26" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="20" y="25" width="60" height="50" rx="4" fill="none" stroke="#e2e8f0" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="25" y1="35" x2="75" y2="35" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="25" y1="45" x2="75" y2="45" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="25" y1="55" x2="75" y2="55" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="25" y1="65" x2="75" y2="65" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="50" y1="30" x2="50" y2="70" stroke="#475569" stroke-width="1" stroke-linecap="round"/>
+            <circle cx="35" cy="40" r="2" fill="#94a3b8" opacity="0.8"/>
+            <circle cx="65" cy="40" r="2" fill="#94a3b8" opacity="0.8"/>
+            <circle cx="35" cy="50" r="2" fill="#94a3b8" opacity="0.8"/>
+            <circle cx="65" cy="50" r="2" fill="#94a3b8" opacity="0.8"/>
+            <circle cx="35" cy="60" r="2" fill="#94a3b8" opacity="0.8"/>
+            <circle cx="65" cy="60" r="2" fill="#94a3b8" opacity="0.8"/>
+            <circle cx="30" cy="25" r="2.5" fill="#e2e8f0"/>
+            <circle cx="50" cy="25" r="2.5" fill="#e2e8f0"/>
+            <circle cx="70" cy="25" r="2.5" fill="#e2e8f0"/>
+            <rect x="30" y="75" width="40" height="4" rx="2" fill="#e2e8f0"/>
+          </svg>
+          <div class="leading-none">
+            <span class="block text-sm font-bold text-white tracking-tight">US Data Center Projects</span>
+            <span class="block text-[10px] text-slate-400 uppercase tracking-widest font-medium mt-0.5">News & Intelligence</span>
+          </div>
+        </a>
+
+        <!-- Nav -->
+        <nav class="hidden md:flex items-center gap-6">
+          <a href="#" class="nav-link-active text-sm font-semibold pb-0.5">News</a>
+          <a href="index.html" class="text-sm font-medium text-slate-400 hover:text-white transition-colors">Projects</a>
+          <a href="#" class="text-sm font-medium text-slate-400 hover:text-white transition-colors">Markets</a>
+          <a href="#" class="text-sm font-medium text-slate-400 hover:text-white transition-colors">About</a>
+        </nav>
+
+        <!-- Right actions -->
+        <div class="flex items-center gap-2 shrink-0">
+          <button class="p-2 text-slate-400 hover:text-white transition-colors rounded" aria-label="Search">
+            <i class="ph ph-magnifying-glass text-lg"></i>
+          </button>
+          <a href="#newsletter"
+            class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-red-600 text-white text-xs font-bold rounded-sm hover:bg-red-500 transition-colors tracking-wide uppercase">
+            Subscribe <i class="ph ph-arrow-right text-xs"></i>
+          </a>
+          <button class="md:hidden p-2 text-slate-400 hover:text-white" aria-label="Menu">
+            <i class="ph ph-list text-xl"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- ================================================================
+       STATE NAVIGATION BAR
+  ================================================================ -->
+  <div class="sticky top-14 z-40 bg-white/96 backdrop-blur-sm border-b border-gray-200 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+
+      <!-- Region Tabs -->
+      <div class="flex items-center overflow-x-auto pills-scroll border-b border-gray-100">
+        <button data-region="ALL" onclick="setRegion('ALL', this)"
+          class="region-tab shrink-0 px-4 py-3 text-xs font-bold uppercase tracking-wider border-b-2 border-transparent -mb-px transition-colors whitespace-nowrap text-gray-400">
+          All States
+        </button>
+        <button data-region="NORTHEAST" onclick="setRegion('NORTHEAST', this)"
+          class="region-tab shrink-0 px-4 py-3 text-xs font-semibold uppercase tracking-wider border-b-2 border-transparent -mb-px transition-colors whitespace-nowrap text-gray-400">
+          Northeast
+        </button>
+        <button data-region="SOUTH" onclick="setRegion('SOUTH', this)"
+          class="region-tab shrink-0 px-4 py-3 text-xs font-semibold uppercase tracking-wider border-b-2 border-transparent -mb-px transition-colors whitespace-nowrap text-gray-400">
+          South
+        </button>
+        <button data-region="MIDWEST" onclick="setRegion('MIDWEST', this)"
+          class="region-tab shrink-0 px-4 py-3 text-xs font-semibold uppercase tracking-wider border-b-2 border-transparent -mb-px transition-colors whitespace-nowrap text-gray-400">
+          Midwest
+        </button>
+        <button data-region="WEST" onclick="setRegion('WEST', this)"
+          class="region-tab shrink-0 px-4 py-3 text-xs font-semibold uppercase tracking-wider border-b-2 border-transparent -mb-px transition-colors whitespace-nowrap text-gray-400">
+          West
+        </button>
+      </div>
+
+      <!-- State Pills -->
+      <div id="state-pills" class="flex items-center gap-2 py-2.5 overflow-x-auto pills-scroll min-h-[44px]">
+        <!-- Populated by JS -->
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================================================================
+       MAIN CONTENT
+  ================================================================ -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-7">
+    <div class="grid grid-cols-1 lg:grid-cols-[1fr_352px] gap-8 items-start">
+
+      <!-- ========================
+           LEFT: NEWS FEED
+      ======================== -->
+      <div>
+
+        <!-- Top Story Banner (dynamic) -->
+        <div id="news-hero-skeleton" class="hero-card bg-white rounded-lg p-5 mb-5 reveal" style="animation-delay:0.05s">
+          <div class="skel h-3 w-40 rounded mb-3"></div>
+          <div class="skel h-7 w-full rounded mb-2"></div>
+          <div class="skel h-7 w-4/5 rounded mb-4"></div>
+          <div class="skel h-4 w-full rounded mb-1.5"></div>
+          <div class="skel h-4 w-5/6 rounded"></div>
+        </div>
+        <div id="news-hero"></div>
+
+        <!-- Feed header -->
+        <div class="flex items-center justify-between mb-3 reveal" style="animation-delay:0.1s">
+          <h3 class="text-[11px] font-bold uppercase tracking-widest text-gray-400">Latest Stories</h3>
+          <span id="stories-count" class="text-[11px] text-gray-400 font-mono"></span>
+        </div>
+
+        <!-- News Rows (dynamic) -->
+        <div id="news-rows-skeleton" class="widget bg-white rounded-lg overflow-hidden divide-y divide-gray-100 reveal" style="animation-delay:0.15s">
+          <div class="py-4 px-4"><div class="skel h-4 w-full rounded mb-2"></div><div class="skel h-4 w-3/4 rounded"></div></div>
+          <div class="py-4 px-4"><div class="skel h-4 w-full rounded mb-2"></div><div class="skel h-4 w-3/4 rounded"></div></div>
+          <div class="py-4 px-4"><div class="skel h-4 w-full rounded mb-2"></div><div class="skel h-4 w-3/4 rounded"></div></div>
+          <div class="py-4 px-4"><div class="skel h-4 w-full rounded mb-2"></div><div class="skel h-4 w-3/4 rounded"></div></div>
+          <div class="py-4 px-4"><div class="skel h-4 w-full rounded mb-2"></div><div class="skel h-4 w-3/4 rounded"></div></div>
+        </div>
+        <div id="news-rows" class="widget bg-white rounded-lg overflow-hidden divide-y divide-gray-100 hidden"></div>
+
+        <!-- Load More -->
+        <div id="load-more-wrap" class="mt-6 text-center hidden">
+          <button id="load-more-btn" onclick="loadMore()"
+            class="px-6 py-2.5 border border-gray-300 text-sm font-semibold text-gray-600 rounded-sm hover:border-red-600 hover:text-red-600 hover:bg-red-50 transition-all">
+            Load more stories
+          </button>
+        </div>
+
+      </div><!-- /left -->
+
+      <!-- ========================
+           RIGHT: SIDEBAR
+      ======================== -->
+      <aside class="space-y-4 lg:sticky lg:top-[152px]">
+
+        <!-- Project Intelligence CTA -->
+        <div class="bg-[#0f1923] rounded-lg overflow-hidden reveal" style="animation-delay:0.1s">
+          <div class="h-[3px] bg-red-600"></div>
+          <div class="p-4">
+            <div class="flex items-center gap-1.5 mb-3">
+              <i class="ph ph-database text-red-400 text-sm"></i>
+              <span class="text-[10px] font-bold uppercase tracking-widest text-red-400">Project Intelligence</span>
+            </div>
+            <h3 class="font-serif text-[1.05rem] text-white leading-snug mb-2">
+              More Than Headlines — Full Project Data
+            </h3>
+            <p class="text-[11px] text-slate-400 leading-relaxed mb-4">
+              Permit filings, contractor bids, MW capacity, and company contacts for every project we cover.
+            </p>
+            <div class="space-y-2 mb-4">
+              <div class="flex items-center gap-2 text-[11px] text-slate-400">
+                <span class="w-1 h-1 rounded-full bg-red-500 shrink-0"></span>
+                2,847 US projects tracked
+              </div>
+              <div class="flex items-center gap-2 text-[11px] text-slate-400">
+                <span class="w-1 h-1 rounded-full bg-red-500 shrink-0"></span>
+                Permit filings &amp; contractor bids
+              </div>
+              <div class="flex items-center gap-2 text-[11px] text-slate-400">
+                <span class="w-1 h-1 rounded-full bg-red-500 shrink-0"></span>
+                Real-time stage tracking
+              </div>
+              <div class="flex items-center gap-2 text-[11px] text-slate-400">
+                <span class="w-1 h-1 rounded-full bg-red-500 shrink-0"></span>
+                CSV export &amp; API access
+              </div>
+            </div>
+            <a href="index.html"
+              class="flex items-center justify-center gap-1.5 w-full px-3 py-2.5 bg-red-600 text-white text-xs font-bold rounded-sm hover:bg-red-500 transition-colors tracking-wide uppercase mb-2">
+              Start Free Trial <i class="ph ph-arrow-right text-xs"></i>
+            </a>
+            <a href="index.html"
+              class="flex items-center justify-center w-full px-3 py-2 border border-slate-700 text-xs font-semibold text-slate-400 rounded-sm hover:border-red-600 hover:text-white transition-all">
+              Browse All Projects
+            </a>
+            <p class="text-[10px] text-slate-600 mt-2 text-center">No credit card required &middot; Cancel anytime</p>
+          </div>
+        </div>
+
+        <!-- Newsletter CTA (sidebar) — dark -->
+        <div class="bg-[#0f1923] rounded-lg p-4 reveal" style="animation-delay:0.25s">
+          <h3 class="text-xs font-bold text-white mb-1">Daily Intelligence Brief</h3>
+          <p class="text-[11px] text-slate-400 mb-3 leading-relaxed">Top US data center developments, delivered every morning.</p>
+          <div class="flex gap-2">
+            <input type="email" placeholder="your@email.com"
+              class="flex-1 min-w-0 px-2.5 py-2 text-xs border border-slate-700 rounded-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent bg-slate-800 text-white placeholder-slate-500">
+            <button class="shrink-0 px-3 py-2 bg-red-600 text-white text-xs font-bold rounded-sm hover:bg-red-500 transition-colors">
+              Join
+            </button>
+          </div>
+          <p class="text-[10px] text-slate-600 mt-2">No spam. Unsubscribe anytime.</p>
+        </div>
+
+      </aside>
+
+    </div>
+  </main>
+
+  <!-- ================================================================
+       FOOTER
+  ================================================================ -->
+  <footer id="newsletter" class="mt-12 bg-[#0f1923]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+
+        <!-- About -->
+        <div>
+          <div class="flex items-center gap-2 mb-3">
+            <svg width="20" height="20" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="20" y="25" width="60" height="50" rx="4" fill="none" stroke="#e2e8f0" stroke-width="3" stroke-linecap="round"/>
+              <line x1="25" y1="38" x2="75" y2="38" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"/>
+              <line x1="25" y1="50" x2="75" y2="50" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"/>
+              <line x1="25" y1="62" x2="75" y2="62" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"/>
+              <rect x="30" y="75" width="40" height="4" rx="2" fill="#e2e8f0"/>
+            </svg>
+            <span class="text-sm font-bold text-white">US Data Center Projects</span>
+          </div>
+          <p class="text-xs text-slate-400 leading-relaxed mb-4">
+            The most comprehensive database of US data center construction projects — tracking 2,847 developments across all 50 states with daily verified updates.
+          </p>
+          <div class="flex items-center gap-3">
+            <a href="#" class="text-slate-500 hover:text-white transition-colors" aria-label="X / Twitter">
+              <i class="ph ph-x-logo text-lg"></i>
+            </a>
+            <a href="#" class="text-slate-500 hover:text-white transition-colors" aria-label="LinkedIn">
+              <i class="ph ph-linkedin-logo text-lg"></i>
+            </a>
+            <a href="#" class="text-slate-500 hover:text-white transition-colors" aria-label="RSS Feed">
+              <i class="ph ph-rss text-lg"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Browse by State -->
+        <div>
+          <h4 class="text-[11px] font-bold uppercase tracking-widest text-slate-500 mb-3">Browse by State</h4>
+          <div class="grid grid-cols-3 gap-x-3 gap-y-1.5">
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Alabama</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Alaska</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Arizona</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Arkansas</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">California</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Colorado</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Connecticut</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Delaware</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Florida</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Georgia</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Hawaii</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Idaho</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Illinois</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Indiana</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Iowa</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Kansas</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Kentucky</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Louisiana</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Maine</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Maryland</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Mass.</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Michigan</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Minnesota</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Mississippi</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Missouri</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Montana</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Nebraska</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Nevada</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">N. Hampshire</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">New Jersey</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">New Mexico</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">New York</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">N. Carolina</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">N. Dakota</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Ohio</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Oklahoma</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Oregon</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Pennsylvania</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Rhode Island</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">S. Carolina</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">S. Dakota</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Tennessee</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Texas</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Utah</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Vermont</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Virginia</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Washington</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">W. Virginia</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Wisconsin</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Wyoming</a>
+          </div>
+        </div>
+
+        <!-- Newsletter + Links -->
+        <div>
+          <h4 class="text-[11px] font-bold uppercase tracking-widest text-slate-500 mb-1">Daily Intelligence Brief</h4>
+          <p class="text-xs text-slate-400 mb-3 leading-relaxed">Top data center developments across all 50 states, every morning.</p>
+          <div class="flex gap-2 mb-2">
+            <input type="email" placeholder="your@email.com"
+              class="flex-1 min-w-0 px-3 py-2 text-xs border border-slate-700 rounded-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent bg-slate-800 text-white placeholder-slate-500">
+            <button class="shrink-0 px-4 py-2 bg-red-600 text-white text-xs font-bold rounded-sm hover:bg-red-500 transition-colors">
+              Subscribe
+            </button>
+          </div>
+          <p class="text-[10px] text-slate-600 mb-6">No spam. Unsubscribe anytime.</p>
+
+          <div class="grid grid-cols-2 gap-x-6 gap-y-1.5">
+            <a href="#" class="text-xs text-slate-500 hover:text-white transition-colors">About</a>
+            <a href="#" class="text-xs text-slate-500 hover:text-white transition-colors">Advertise</a>
+            <a href="#" class="text-xs text-slate-500 hover:text-white transition-colors">Contact</a>
+            <a href="#" class="text-xs text-slate-500 hover:text-white transition-colors">RSS Feed</a>
+            <a href="index.html" class="text-xs text-slate-500 hover:text-white transition-colors">Project Tracker</a>
+            <a href="#" class="text-xs text-slate-500 hover:text-white transition-colors">Sitemap</a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Bottom bar -->
+      <div class="mt-8 pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <p class="text-[11px] text-slate-600">&copy; 2026 US Data Center Projects. All rights reserved.</p>
+        <div class="flex gap-5">
+          <a href="#" class="text-[11px] text-slate-600 hover:text-white transition-colors">Privacy Policy</a>
+          <a href="#" class="text-[11px] text-slate-600 hover:text-white transition-colors">Terms of Use</a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- ================================================================
+       SCRIPTS
+  ================================================================ -->
+  <script>
+    const USDC_API_URL = 'https://blackridge-seo-suite-production.up.railway.app/api/us-data-center-projects/all-news';
+    const USDC_API_KEY = 'XnhGEoTqHK5HDTINTKH1howgDYcAmwS15Q3TvHZFDAA';
+
+    const REGIONS = {
+      ALL:       ['Virginia','Texas','Arizona','California','Ohio','Georgia','Illinois','Nevada','Florida','Washington'],
+      NORTHEAST: ['Virginia','New York','New Jersey','Pennsylvania','Massachusetts','Connecticut','Maryland','Delaware','New Hampshire','Rhode Island','Maine','Vermont'],
+      SOUTH:     ['Texas','Georgia','Florida','North Carolina','South Carolina','Tennessee','Alabama','Louisiana','Oklahoma','Kentucky','Mississippi','Arkansas','West Virginia'],
+      MIDWEST:   ['Ohio','Illinois','Iowa','Indiana','Michigan','Minnesota','Missouri','Nebraska','Wisconsin','Kansas','North Dakota','South Dakota'],
+      WEST:      ['Arizona','California','Nevada','Washington','Oregon','Colorado','Utah','Idaho','New Mexico','Montana','Wyoming','Alaska','Hawaii']
+    };
+
+    const REGION_STATES = {
+      ALL: null,
+      NORTHEAST: new Set(['Virginia','New York','New Jersey','Pennsylvania','Massachusetts','Connecticut','Maryland','Delaware','New Hampshire','Rhode Island','Maine','Vermont']),
+      SOUTH: new Set(['Texas','Georgia','Florida','North Carolina','South Carolina','Tennessee','Alabama','Louisiana','Oklahoma','Kentucky','Mississippi','Arkansas','West Virginia']),
+      MIDWEST: new Set(['Ohio','Illinois','Iowa','Indiana','Michigan','Minnesota','Missouri','Nebraska','Wisconsin','Kansas','North Dakota','South Dakota']),
+      WEST: new Set(['Arizona','California','Nevada','Washington','Oregon','Colorado','Utah','Idaho','New Mexico','Montana','Wyoming','Alaska','Hawaii'])
+    };
+
+    function stateToSlug(s) {
+      return s.toLowerCase().replace(/\.\s*/g, '').replace(/\s+/g, '-');
+    }
+
+    function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+    function formatDate(iso) {
+      try { return new Date(iso).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); } catch { return ''; }
+    }
+
+    function timeAgo(iso) {
+      try {
+        const diff = Date.now() - new Date(iso).getTime();
+        const h = Math.floor(diff / 3600000);
+        if (h < 1) return 'just now';
+        if (h < 24) return h + 'h ago';
+        const d = Math.floor(h / 24);
+        return d + 'd ago';
+      } catch { return ''; }
+    }
+
+    function minRead(wc) { return Math.max(1, Math.round((wc||600)/200)) + ' min read'; }
+
+    function badgeHtml(subCat) {
+      if (subCat === 'Project_News') return `<span class="border border-red-500 text-red-600 text-[9px] font-bold px-1.5 py-0.5 rounded-sm uppercase tracking-wide">Project Update</span>`;
+      if (subCat === 'Industry_News') return `<span class="bg-gray-900 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-sm uppercase tracking-wide">Editorial</span>`;
+      return `<span class="bg-gray-100 text-gray-700 text-[9px] font-bold px-1.5 py-0.5 rounded-sm uppercase tracking-wide">News</span>`;
+    }
+
+    function excerpt(description) {
+      const raw = (description||'').trim();
+      const firstBreak = raw.indexOf('\n');
+      const body = firstBreak >= 0 ? raw.slice(firstBreak+1).trim() : raw;
+      return body.replace(/<[^>]+>/g,'').slice(0,180).trim() + '…';
+    }
+
+    let allArticles = [];
+    let activeRegionKey = 'ALL';
+    let visibleCount = 10;
+
+    function filteredArticles() {
+      const states = REGION_STATES[activeRegionKey];
+      if (!states) return allArticles;
+      return allArticles.filter(a => states.has(a.region));
+    }
+
+    function renderFeed() {
+      const articles = filteredArticles();
+      const heroEl = document.getElementById('news-hero');
+      const rowsEl = document.getElementById('news-rows');
+
+      if (!articles.length) {
+        heroEl.innerHTML = '';
+        rowsEl.innerHTML = '<p class="py-8 text-center text-sm text-gray-400">No stories for this region yet.</p>';
+        document.getElementById('stories-count').textContent = '0 stories';
+        document.getElementById('load-more-wrap').classList.add('hidden');
+        return;
+      }
+
+      const hero = articles[0];
+      const heroSlug = `/${stateToSlug(hero.region||'')}/${hero.pageURL}`;
+      heroEl.innerHTML = `
+        <a href="${heroSlug}" class="hero-card bg-white rounded-lg p-5 mb-5 cursor-pointer group hover:shadow-lg transition-all reveal block no-underline" style="animation-delay:0.05s">
+          <div class="flex flex-wrap items-center gap-2 mb-3">
+            ${badgeHtml(hero.subCategory)}
+            ${hero.trending ? '<span class="bg-amber-50 text-amber-700 border border-amber-200 text-[9px] font-bold px-1.5 py-0.5 rounded-sm uppercase tracking-wide">Trending</span>' : ''}
+            <span class="text-xs text-gray-400">${esc(hero.region)} &middot; ${minRead(hero.wordCount)} &middot; <span class="text-gray-600 font-medium">${timeAgo(hero.createdAt)}</span></span>
+          </div>
+          <h2 class="font-serif text-xl sm:text-[1.6rem] text-gray-900 leading-tight mb-2.5 group-hover:text-red-700 transition-colors">${esc(hero.title)}</h2>
+          <p class="text-sm text-gray-500 leading-relaxed">${esc(excerpt(hero.description))}</p>
+          <div class="flex flex-wrap items-center gap-4 mt-4 pt-4 border-t border-gray-100">
+            <span class="text-xs text-gray-400 flex items-center gap-1.5"><i class="ph ph-map-pin text-red-400"></i> ${esc(hero.region)}</span>
+            <span class="text-xs text-gray-400 flex items-center gap-1.5"><i class="ph ph-calendar text-blue-400"></i> ${formatDate(hero.createdAt)}</span>
+          </div>
+        </a>`;
+
+      const rows = articles.slice(1, visibleCount);
+      const ctaIdx = 6;
+      let rowsHtml = '';
+      rows.forEach((a, i) => {
+        if (i === ctaIdx) {
+          rowsHtml += `<div class="px-4 py-3.5 bg-[#0f1923] flex items-center gap-3">
+            <div class="w-7 h-7 rounded bg-red-600 shrink-0 flex items-center justify-center"><i class="ph ph-database text-white text-xs"></i></div>
+            <p class="flex-1 text-[12px] text-slate-300 leading-snug"><span class="font-semibold text-white">Get the full project file behind these stories</span> — specs, permits, bids &amp; contacts for all projects we track.</p>
+            <a href="index.html" class="shrink-0 px-3 py-1.5 bg-red-600 text-white text-[10px] font-bold rounded-sm hover:bg-red-500 transition-colors uppercase tracking-wide whitespace-nowrap">Free Trial</a>
+          </div>`;
+        }
+        const slug = `/${stateToSlug(a.region||'')}/${a.pageURL}`;
+        rowsHtml += `<a href="${slug}" class="story-row py-4 px-4 hover:bg-gray-50 cursor-pointer group flex items-start gap-3 no-underline block">
+          <div class="flex-1 min-w-0">
+            <div class="flex flex-wrap items-center gap-2 mb-1.5">
+              ${badgeHtml(a.subCategory)}
+              <span class="text-[11px] text-gray-400">${esc(a.region)} &middot; ${timeAgo(a.createdAt)}</span>
+            </div>
+            <h4 class="text-sm font-semibold text-gray-900 leading-snug group-hover:text-red-700 transition-colors">${esc(a.title)}</h4>
+            <p class="text-[12px] text-gray-500 mt-1 leading-relaxed hidden sm:block">${esc(excerpt(a.description))}</p>
+          </div>
+          <i class="ph ph-arrow-up-right text-base text-gray-300 group-hover:text-red-400 transition-colors shrink-0 mt-0.5"></i>
+        </a>`;
+      });
+
+      rowsEl.innerHTML = rowsHtml;
+      document.getElementById('stories-count').textContent = articles.length + ' stories';
+
+      const hasMore = articles.length > visibleCount;
+      document.getElementById('load-more-wrap').classList.toggle('hidden', !hasMore);
+    }
+
+    function loadMore() {
+      visibleCount += 10;
+      renderFeed();
+    }
+
+    function setRegion(key, el) {
+      activeRegionKey = key;
+      visibleCount = 10;
+
+      document.querySelectorAll('.region-tab').forEach(tab => {
+        tab.classList.remove('text-red-600', 'border-red-600', 'font-bold');
+        tab.classList.add('text-gray-400', 'border-transparent', 'font-semibold');
+      });
+      el.classList.remove('text-gray-400', 'border-transparent', 'font-semibold');
+      el.classList.add('text-red-600', 'border-red-600', 'font-bold');
+
+      const pills = REGIONS[key];
+      document.getElementById('state-pills').innerHTML = pills.map(state =>
+        `<a href="/${stateToSlug(state)}"
+          class="state-pill shrink-0 px-3 py-1 text-[11px] font-medium border border-gray-200 text-gray-600 rounded-full hover:border-red-500 hover:text-red-600 transition-colors whitespace-nowrap no-underline">
+          ${state}
+        </a>`
+      ).join('');
+
+      if (allArticles.length) renderFeed();
+    }
+
+    async function loadNews() {
+      try {
+        const res = await fetch(`${USDC_API_URL}?apikey=${encodeURIComponent(USDC_API_KEY)}`);
+        if (!res.ok) throw new Error(`Error ${res.status}`);
+        const data = await res.json();
+        allArticles = data.articles || [];
+      } catch (err) {
+        console.error('News load error:', err);
+        allArticles = [];
+      }
+
+      document.getElementById('news-hero-skeleton').classList.add('hidden');
+      document.getElementById('news-rows-skeleton').classList.add('hidden');
+      document.getElementById('news-rows').classList.remove('hidden');
+      renderFeed();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const defaultTab = document.querySelector('[data-region="ALL"]');
+      setRegion('ALL', defaultTab);
+      loadNews();
+    });
+  </script>
+
+</body>
+</html>

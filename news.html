@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="page-title">News — US Data Center Projects</title>
+  <meta name="description" id="page-desc" content="News and intelligence on US data center construction.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['IBM Plex Sans', 'sans-serif'],
+            serif: ['DM Serif Display', 'serif'],
+            mono: ['IBM Plex Mono', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: 'IBM Plex Sans', sans-serif; background: #f8f7f4; }
+
+    .pills-scroll { scrollbar-width: none; }
+    .pills-scroll::-webkit-scrollbar { display: none; }
+
+    @keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:.3} }
+    .pulse-dot { animation: pulse-dot 1.8s ease-in-out infinite; }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .reveal { opacity: 0; animation: slideUp 0.5s cubic-bezier(0.22,1,0.36,1) both; }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: radial-gradient(circle, #ccc9c0 1px, transparent 1px);
+      background-size: 24px 24px;
+      opacity: 0.22;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    @keyframes barFill { from { width: 0 } to { width: var(--w) } }
+    .bar-anim {
+      width: 0;
+      animation: barFill 1s cubic-bezier(0.22,1,0.36,1) 0.5s both;
+    }
+
+    .widget {
+      box-shadow: 0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
+    }
+
+    .nav-link-active {
+      position: relative;
+      color: #ffffff;
+    }
+    .nav-link-active::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0; right: 0;
+      height: 2px;
+      background: #dc2626;
+      border-radius: 1px;
+    }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+
+    .stat-num { font-family: 'IBM Plex Mono', monospace; }
+
+    /* Article body typography */
+    .article-body { font-size: 0.9375rem; line-height: 1.8; color: #374151; }
+    .article-body h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.25rem;
+      color: #111827;
+      margin: 2rem 0 0.75rem;
+      line-height: 1.3;
+    }
+    .article-body p { margin: 0 0 1.25rem; }
+    .article-body p:last-child { margin-bottom: 0; }
+
+    /* Skeleton shimmer */
+    @keyframes shimmer {
+      0%   { background-position: -600px 0; }
+      100% { background-position: 600px 0; }
+    }
+    .skel {
+      background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+      background-size: 600px 100%;
+      animation: shimmer 1.4s infinite;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="text-gray-900 antialiased">
+
+  <!-- ================================================================
+       HEADER
+  ================================================================ -->
+  <header class="sticky top-0 z-50 bg-[#0f1923] border-b-[3px] border-red-600">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="flex items-center justify-between h-14 gap-4">
+
+        <a href="index.html" class="flex items-center gap-2.5 shrink-0">
+          <svg width="26" height="26" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="20" y="25" width="60" height="50" rx="4" fill="none" stroke="#e2e8f0" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="25" y1="35" x2="75" y2="35" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="25" y1="45" x2="75" y2="45" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="25" y1="55" x2="75" y2="55" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="25" y1="65" x2="75" y2="65" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="50" y1="30" x2="50" y2="70" stroke="#475569" stroke-width="1" stroke-linecap="round"/>
+            <circle cx="35" cy="40" r="2" fill="#94a3b8" opacity="0.8"/>
+            <circle cx="65" cy="40" r="2" fill="#94a3b8" opacity="0.8"/>
+            <circle cx="35" cy="50" r="2" fill="#94a3b8" opacity="0.8"/>
+            <circle cx="65" cy="50" r="2" fill="#94a3b8" opacity="0.8"/>
+            <circle cx="35" cy="60" r="2" fill="#94a3b8" opacity="0.8"/>
+            <circle cx="65" cy="60" r="2" fill="#94a3b8" opacity="0.8"/>
+            <circle cx="30" cy="25" r="2.5" fill="#e2e8f0"/>
+            <circle cx="50" cy="25" r="2.5" fill="#e2e8f0"/>
+            <circle cx="70" cy="25" r="2.5" fill="#e2e8f0"/>
+            <rect x="30" y="75" width="40" height="4" rx="2" fill="#e2e8f0"/>
+          </svg>
+          <div class="leading-none">
+            <span class="block text-sm font-bold text-white tracking-tight">US Data Center Projects</span>
+            <span class="block text-[10px] text-slate-400 uppercase tracking-widest font-medium mt-0.5">News & Intelligence</span>
+          </div>
+        </a>
+
+        <nav class="hidden md:flex items-center gap-6">
+          <a href="news.html" class="nav-link-active text-sm font-semibold pb-0.5">News</a>
+          <a href="index.html" class="text-sm font-medium text-slate-400 hover:text-white transition-colors">Projects</a>
+          <a href="#" class="text-sm font-medium text-slate-400 hover:text-white transition-colors">Markets</a>
+          <a href="#" class="text-sm font-medium text-slate-400 hover:text-white transition-colors">About</a>
+        </nav>
+
+        <div class="flex items-center gap-2 shrink-0">
+          <button class="p-2 text-slate-400 hover:text-white transition-colors rounded" aria-label="Search">
+            <i class="ph ph-magnifying-glass text-lg"></i>
+          </button>
+          <a href="#newsletter"
+            class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-red-600 text-white text-xs font-bold rounded-sm hover:bg-red-500 transition-colors tracking-wide uppercase">
+            Subscribe <i class="ph ph-arrow-right text-xs"></i>
+          </a>
+          <button class="md:hidden p-2 text-slate-400 hover:text-white" aria-label="Menu">
+            <i class="ph ph-list text-xl"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- ================================================================
+       MAIN CONTENT
+  ================================================================ -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-[1fr_352px] gap-8 items-start">
+
+      <!-- ========================
+           LEFT: ARTICLE
+      ======================== -->
+      <div>
+
+        <!-- Skeleton -->
+        <div id="article-skeleton" class="bg-white rounded-lg border border-gray-200 p-7">
+          <div class="skel h-4 w-32 mb-5"></div>
+          <div class="skel h-8 w-full mb-2"></div>
+          <div class="skel h-8 w-3/4 mb-6"></div>
+          <div class="flex gap-3 mb-6">
+            <div class="skel h-4 w-20"></div>
+            <div class="skel h-4 w-24"></div>
+            <div class="skel h-4 w-20"></div>
+          </div>
+          <div class="border-t border-gray-100 pt-6 space-y-3">
+            <div class="skel h-4 w-full"></div>
+            <div class="skel h-4 w-full"></div>
+            <div class="skel h-4 w-5/6"></div>
+            <div class="skel h-4 w-full"></div>
+            <div class="skel h-4 w-4/5"></div>
+            <div class="skel h-6 w-48 mt-6"></div>
+            <div class="skel h-4 w-full"></div>
+            <div class="skel h-4 w-full"></div>
+            <div class="skel h-4 w-3/4"></div>
+          </div>
+        </div>
+
+        <!-- Article content (populated by JS) -->
+        <article id="article-content" class="hidden reveal" style="animation-delay:0.05s">
+
+          <!-- Breadcrumb -->
+          <div class="flex items-center gap-2 text-[11px] text-gray-400 mb-5 font-medium uppercase tracking-wider">
+            <a href="index.html" class="hover:text-red-600 transition-colors">Home</a>
+            <i class="ph ph-caret-right text-gray-300"></i>
+            <span class="text-gray-500">News</span>
+          </div>
+
+          <!-- Article card -->
+          <div class="bg-white rounded-lg border border-l-[4px] border-gray-200 border-l-red-600 overflow-hidden">
+
+            <!-- Header -->
+            <div class="px-7 pt-7 pb-5 border-b border-gray-100">
+              <div class="flex flex-wrap items-center gap-2 mb-4" id="article-badges"></div>
+              <h1 id="article-headline" class="font-serif text-2xl sm:text-[2rem] text-gray-900 leading-tight mb-4"></h1>
+              <!-- Metadata strip -->
+              <div class="flex flex-wrap items-center gap-x-5 gap-y-2 text-[11px] text-gray-400">
+                <span id="meta-date" class="flex items-center gap-1.5"><i class="ph ph-calendar text-gray-300"></i></span>
+                <span id="meta-read" class="flex items-center gap-1.5"><i class="ph ph-clock text-gray-300"></i></span>
+                <span id="meta-region" class="flex items-center gap-1.5"><i class="ph ph-map-pin text-red-400"></i></span>
+                <span id="meta-industry" class="flex items-center gap-1.5"><i class="ph ph-buildings text-gray-300"></i></span>
+              </div>
+            </div>
+
+            <!-- Body -->
+            <div class="px-7 py-6">
+              <div id="article-body" class="article-body"></div>
+            </div>
+
+            <!-- Tags -->
+            <div id="tags-row" class="px-7 py-4 border-t border-gray-100 flex flex-wrap gap-2 hidden">
+              <span class="text-[10px] font-bold uppercase tracking-widest text-gray-400 mr-1 self-center">Tags</span>
+            </div>
+
+            <!-- Sources -->
+            <div id="sources-row" class="px-7 py-4 border-t border-gray-100 hidden">
+              <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-2">Sources</p>
+              <div id="sources-list" class="flex flex-wrap gap-2"></div>
+            </div>
+
+          </div>
+        </article>
+
+        <!-- Error state -->
+        <div id="article-error" class="hidden bg-white rounded-lg border border-red-100 p-10 text-center">
+          <i class="ph ph-warning-circle text-4xl text-red-300 mb-3 block"></i>
+          <p class="text-sm font-semibold text-gray-700 mb-1">Could not load article</p>
+          <p id="article-error-msg" class="text-xs text-gray-400 mb-5"></p>
+          <button onclick="loadArticle()" class="px-4 py-2 bg-red-600 text-white text-xs font-bold rounded-sm hover:bg-red-500 transition-colors">
+            Try Again
+          </button>
+        </div>
+
+        <!-- Empty state -->
+        <div id="article-empty" class="hidden bg-white rounded-lg border border-gray-200 p-10 text-center">
+          <i class="ph ph-newspaper text-4xl text-gray-200 mb-3 block"></i>
+          <p class="text-sm font-semibold text-gray-700 mb-1">No articles published yet</p>
+          <p class="text-xs text-gray-400">Check back soon — new stories are added regularly.</p>
+        </div>
+
+      </div><!-- /left -->
+
+      <!-- ========================
+           RIGHT: SIDEBAR
+      ======================== -->
+      <aside class="space-y-4 lg:sticky lg:top-[80px]">
+
+        <!-- Live Projects -->
+        <div class="widget bg-white rounded-lg overflow-hidden reveal" style="animation-delay:0.1s">
+          <div class="flex items-center justify-between px-4 py-3 border-b border-gray-100">
+            <h3 class="text-[11px] font-bold uppercase tracking-widest text-gray-700 flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-red-600 pulse-dot inline-block"></span>
+              Live Projects
+            </h3>
+            <a href="index.html" class="text-[11px] font-semibold text-red-600 hover:underline">View all &rarr;</a>
+          </div>
+          <div class="divide-y divide-gray-100">
+            <div class="flex items-center justify-between gap-3 px-4 py-3 hover:bg-gray-50 transition-colors cursor-pointer">
+              <div class="min-w-0">
+                <p class="text-xs font-bold text-gray-900 truncate">Amazon Web Services</p>
+                <p class="text-[11px] text-gray-500">Ashburn, Virginia</p>
+              </div>
+              <span class="shrink-0 text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200 px-2 py-0.5 rounded-full tracking-wide">Construction</span>
+            </div>
+            <div class="flex items-center justify-between gap-3 px-4 py-3 hover:bg-gray-50 transition-colors cursor-pointer">
+              <div class="min-w-0">
+                <p class="text-xs font-bold text-gray-900 truncate">Microsoft Azure</p>
+                <p class="text-[11px] text-gray-500">Goodyear, Arizona</p>
+              </div>
+              <span class="shrink-0 text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200 px-2 py-0.5 rounded-full tracking-wide">Permitting</span>
+            </div>
+            <div class="flex items-center justify-between gap-3 px-4 py-3 hover:bg-gray-50 transition-colors cursor-pointer">
+              <div class="min-w-0">
+                <p class="text-xs font-bold text-gray-900 truncate">Google Cloud</p>
+                <p class="text-[11px] text-gray-500">Columbus, Ohio</p>
+              </div>
+              <span class="shrink-0 text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-full tracking-wide">Approved</span>
+            </div>
+            <div class="flex items-center justify-between gap-3 px-4 py-3 hover:bg-gray-50 transition-colors cursor-pointer">
+              <div class="min-w-0">
+                <p class="text-xs font-bold text-gray-900 truncate">Meta Platforms</p>
+                <p class="text-[11px] text-gray-500">New Albany, Ohio</p>
+              </div>
+              <span class="shrink-0 text-[10px] font-bold bg-gray-100 text-gray-600 border border-gray-200 px-2 py-0.5 rounded-full tracking-wide">Planning</span>
+            </div>
+            <div class="flex items-center justify-between gap-3 px-4 py-3 hover:bg-gray-50 transition-colors cursor-pointer">
+              <div class="min-w-0">
+                <p class="text-xs font-bold text-gray-900 truncate">Apple</p>
+                <p class="text-[11px] text-gray-500">Mesa, Arizona</p>
+              </div>
+              <span class="shrink-0 text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200 px-2 py-0.5 rounded-full tracking-wide">Construction</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- By the Numbers -->
+        <div class="widget bg-white rounded-lg overflow-hidden reveal" style="animation-delay:0.15s">
+          <div class="px-4 py-3 border-b border-gray-100">
+            <h3 class="text-[11px] font-bold uppercase tracking-widest text-gray-700">By the Numbers</h3>
+          </div>
+          <div class="grid grid-cols-3 divide-x divide-gray-100 py-4 px-2">
+            <div class="text-center px-2">
+              <p class="stat-num text-2xl font-bold text-gray-900 leading-none">2,847</p>
+              <p class="text-[10px] text-gray-400 mt-1.5 leading-tight uppercase tracking-wider">Projects<br>Tracked</p>
+            </div>
+            <div class="text-center px-2">
+              <p class="stat-num text-2xl font-bold text-gray-900 leading-none">50</p>
+              <p class="text-[10px] text-gray-400 mt-1.5 leading-tight uppercase tracking-wider">States<br>Covered</p>
+            </div>
+            <div class="text-center px-2">
+              <p class="stat-num text-2xl font-bold text-gray-900 leading-none">3.2K</p>
+              <p class="text-[10px] text-gray-400 mt-1.5 leading-tight uppercase tracking-wider">Companies<br>Tracked</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Top States This Week -->
+        <div class="widget bg-white rounded-lg overflow-hidden reveal" style="animation-delay:0.2s">
+          <div class="px-4 py-3 border-b border-gray-100">
+            <h3 class="text-[11px] font-bold uppercase tracking-widest text-gray-700">Top States This Week</h3>
+          </div>
+          <div class="p-4 space-y-3">
+            <div class="flex items-center gap-3">
+              <span class="stat-num text-[10px] font-bold text-gray-400 w-3 shrink-0 text-center">1</span>
+              <span class="text-xs font-semibold text-gray-800 w-[72px] shrink-0">Virginia</span>
+              <div class="flex-1 bg-gray-100 rounded-full h-2 overflow-hidden"><div class="bar-anim bg-red-600 h-2 rounded-full" style="--w:100%"></div></div>
+              <span class="stat-num text-[11px] text-gray-500 w-5 text-right shrink-0">12</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="stat-num text-[10px] font-bold text-gray-400 w-3 shrink-0 text-center">2</span>
+              <span class="text-xs font-semibold text-gray-800 w-[72px] shrink-0">Texas</span>
+              <div class="flex-1 bg-gray-100 rounded-full h-2 overflow-hidden"><div class="bar-anim bg-red-500 h-2 rounded-full" style="--w:75%"></div></div>
+              <span class="stat-num text-[11px] text-gray-500 w-5 text-right shrink-0">9</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="stat-num text-[10px] font-bold text-gray-400 w-3 shrink-0 text-center">3</span>
+              <span class="text-xs font-semibold text-gray-800 w-[72px] shrink-0">Arizona</span>
+              <div class="flex-1 bg-gray-100 rounded-full h-2 overflow-hidden"><div class="bar-anim bg-red-400 h-2 rounded-full" style="--w:58%"></div></div>
+              <span class="stat-num text-[11px] text-gray-500 w-5 text-right shrink-0">7</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="stat-num text-[10px] font-bold text-gray-400 w-3 shrink-0 text-center">4</span>
+              <span class="text-xs font-semibold text-gray-800 w-[72px] shrink-0">Ohio</span>
+              <div class="flex-1 bg-gray-100 rounded-full h-2 overflow-hidden"><div class="bar-anim bg-red-300 h-2 rounded-full" style="--w:50%"></div></div>
+              <span class="stat-num text-[11px] text-gray-500 w-5 text-right shrink-0">6</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="stat-num text-[10px] font-bold text-gray-400 w-3 shrink-0 text-center">5</span>
+              <span class="text-xs font-semibold text-gray-800 w-[72px] shrink-0">California</span>
+              <div class="flex-1 bg-gray-100 rounded-full h-2 overflow-hidden"><div class="bar-anim bg-red-200 h-2 rounded-full" style="--w:42%"></div></div>
+              <span class="stat-num text-[11px] text-gray-500 w-5 text-right shrink-0">5</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Newsletter CTA -->
+        <div class="bg-[#0f1923] rounded-lg p-4 reveal" style="animation-delay:0.25s">
+          <h3 class="text-xs font-bold text-white mb-1">Daily Intelligence Brief</h3>
+          <p class="text-[11px] text-slate-400 mb-3 leading-relaxed">Top US data center developments, delivered every morning.</p>
+          <div class="flex gap-2">
+            <input type="email" placeholder="your@email.com"
+              class="flex-1 min-w-0 px-2.5 py-2 text-xs border border-slate-700 rounded-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent bg-slate-800 text-white placeholder-slate-500">
+            <button class="shrink-0 px-3 py-2 bg-red-600 text-white text-xs font-bold rounded-sm hover:bg-red-500 transition-colors">Join</button>
+          </div>
+          <p class="text-[10px] text-slate-600 mt-2">No spam. Unsubscribe anytime.</p>
+        </div>
+
+      </aside>
+
+    </div>
+  </main>
+
+  <!-- ================================================================
+       FOOTER
+  ================================================================ -->
+  <footer id="newsletter" class="mt-12 bg-[#0f1923]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+
+        <div>
+          <div class="flex items-center gap-2 mb-3">
+            <svg width="20" height="20" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="20" y="25" width="60" height="50" rx="4" fill="none" stroke="#e2e8f0" stroke-width="3" stroke-linecap="round"/>
+              <line x1="25" y1="38" x2="75" y2="38" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"/>
+              <line x1="25" y1="50" x2="75" y2="50" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"/>
+              <line x1="25" y1="62" x2="75" y2="62" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"/>
+              <rect x="30" y="75" width="40" height="4" rx="2" fill="#e2e8f0"/>
+            </svg>
+            <span class="text-sm font-bold text-white">US Data Center Projects</span>
+          </div>
+          <p class="text-xs text-slate-400 leading-relaxed mb-4">
+            The most comprehensive database of US data center construction projects — tracking 2,847 developments across all 50 states with daily verified updates.
+          </p>
+          <div class="flex items-center gap-3">
+            <a href="#" class="text-slate-500 hover:text-white transition-colors" aria-label="X / Twitter"><i class="ph ph-x-logo text-lg"></i></a>
+            <a href="#" class="text-slate-500 hover:text-white transition-colors" aria-label="LinkedIn"><i class="ph ph-linkedin-logo text-lg"></i></a>
+            <a href="#" class="text-slate-500 hover:text-white transition-colors" aria-label="RSS Feed"><i class="ph ph-rss text-lg"></i></a>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="text-[11px] font-bold uppercase tracking-widest text-slate-500 mb-3">Browse by State</h4>
+          <div class="grid grid-cols-3 gap-x-3 gap-y-1.5">
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Alabama</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Alaska</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Arizona</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Arkansas</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">California</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Colorado</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Connecticut</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Delaware</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Florida</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Georgia</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Hawaii</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Idaho</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Illinois</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Indiana</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Iowa</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Kansas</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Kentucky</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Louisiana</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Maine</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Maryland</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Mass.</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Michigan</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Minnesota</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Mississippi</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Missouri</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Montana</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Nebraska</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Nevada</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">N. Hampshire</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">New Jersey</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">New Mexico</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">New York</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">N. Carolina</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">N. Dakota</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Ohio</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Oklahoma</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Oregon</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Pennsylvania</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Rhode Island</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">S. Carolina</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">S. Dakota</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Tennessee</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Texas</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Utah</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Vermont</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Virginia</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Washington</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">W. Virginia</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Wisconsin</a>
+            <a href="#" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Wyoming</a>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="text-[11px] font-bold uppercase tracking-widest text-slate-500 mb-1">Daily Intelligence Brief</h4>
+          <p class="text-xs text-slate-400 mb-3 leading-relaxed">Top data center developments across all 50 states, every morning.</p>
+          <div class="flex gap-2 mb-2">
+            <input type="email" placeholder="your@email.com"
+              class="flex-1 min-w-0 px-3 py-2 text-xs border border-slate-700 rounded-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent bg-slate-800 text-white placeholder-slate-500">
+            <button class="shrink-0 px-4 py-2 bg-red-600 text-white text-xs font-bold rounded-sm hover:bg-red-500 transition-colors">Subscribe</button>
+          </div>
+          <p class="text-[10px] text-slate-600 mb-6">No spam. Unsubscribe anytime.</p>
+          <div class="grid grid-cols-2 gap-x-6 gap-y-1.5">
+            <a href="#" class="text-xs text-slate-500 hover:text-white transition-colors">About</a>
+            <a href="#" class="text-xs text-slate-500 hover:text-white transition-colors">Advertise</a>
+            <a href="#" class="text-xs text-slate-500 hover:text-white transition-colors">Contact</a>
+            <a href="#" class="text-xs text-slate-500 hover:text-white transition-colors">RSS Feed</a>
+            <a href="index.html" class="text-xs text-slate-500 hover:text-white transition-colors">Project Tracker</a>
+            <a href="#" class="text-xs text-slate-500 hover:text-white transition-colors">Sitemap</a>
+          </div>
+        </div>
+
+      </div>
+      <div class="mt-8 pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <p class="text-[11px] text-slate-600">&copy; 2026 US Data Center Projects. All rights reserved.</p>
+        <div class="flex gap-5">
+          <a href="#" class="text-[11px] text-slate-600 hover:text-white transition-colors">Privacy Policy</a>
+          <a href="#" class="text-[11px] text-slate-600 hover:text-white transition-colors">Terms of Use</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================================================================
+       SCRIPTS
+  ================================================================ -->
+  <script>
+    // ── CONFIG ───────────────────────────────────────────────────────────────
+    const USDC_API_URL = 'https://blackridge-seo-suite-production.up.railway.app/api/us-data-center-projects/all-news';
+    const USDC_API_KEY = 'XnhGEoTqHK5HDTINTKH1howgDYcAmwS15Q3TvHZFDAA';
+    // ────────────────────────────────────────────────────────────────────────
+
+    function esc(s) {
+      return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function formatDate(iso) {
+      try {
+        return new Date(iso).toLocaleDateString('en-US', {
+          year: 'numeric', month: 'long', day: 'numeric'
+        });
+      } catch { return ''; }
+    }
+
+    function minRead(wc) {
+      return Math.max(1, Math.round((wc || 600) / 200)) + ' min read';
+    }
+
+    function parseBody(description) {
+      // description format from API:
+      //   Line 1:  headline (skip it — already shown in <h1>)
+      //   Line 2+: article body — plain paragraphs + <h2> section headings
+      const raw = (description || '').trim();
+      const firstBreak = raw.indexOf('\n');
+      const body = firstBreak >= 0 ? raw.slice(firstBreak + 1).trim() : '';
+
+      // Walk line by line, collect paragraphs and headings
+      let html = '';
+      let para = [];
+
+      const flush = () => {
+        const text = para.join(' ').trim();
+        if (text) html += `<p>${text}</p>`;
+        para = [];
+      };
+
+      for (const line of body.split('\n')) {
+        const t = line.trim();
+        if (!t) {
+          flush();
+        } else if (t.startsWith('<h2>')) {
+          flush();
+          html += t; // already valid HTML
+        } else {
+          para.push(t);
+        }
+      }
+      flush();
+      return html;
+    }
+
+    function toArray(val) {
+      if (Array.isArray(val)) return val;
+      if (typeof val === 'string') { try { return JSON.parse(val); } catch { return []; } }
+      return [];
+    }
+
+    function renderArticle(a) {
+      // Normalise JSONB fields that may arrive as strings
+      a.tags    = toArray(a.tags);
+      a.sources = toArray(a.sources);
+
+      // ── Page <head> meta ──────────────────────────────────────────────────
+      document.getElementById('page-title').textContent =
+        (a.meta?.title || a.title) + ' — US Data Center Projects';
+      document.getElementById('page-desc')
+        .setAttribute('content', a.meta?.description || '');
+
+      // Inject <meta keywords> if present
+      if (a.meta?.keywords) {
+        let kw = document.querySelector('meta[name="keywords"]');
+        if (!kw) { kw = document.createElement('meta'); kw.name = 'keywords'; document.head.appendChild(kw); }
+        kw.setAttribute('content', a.meta.keywords);
+      }
+
+      // ── Headline ──────────────────────────────────────────────────────────
+      document.getElementById('article-headline').textContent = a.title;
+
+      // ── Category badge ────────────────────────────────────────────────────
+      const badgesEl = document.getElementById('article-badges');
+      const subCat = a.subCategory || '';
+      if (subCat === 'Project_News') {
+        badgesEl.innerHTML = `<span class="border border-red-500 text-red-600 text-[9px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-wide">Project Update</span>`;
+      } else if (subCat === 'Industry_News') {
+        badgesEl.innerHTML = `<span class="bg-gray-900 text-white text-[9px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-wide">Editorial</span>`;
+      } else {
+        badgesEl.innerHTML = `<span class="bg-gray-100 text-gray-700 text-[9px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-wide">News</span>`;
+      }
+      // Add trending badge if flagged
+      if (a.trending) {
+        badgesEl.innerHTML += `<span class="bg-amber-50 text-amber-700 border border-amber-200 text-[9px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-wide">Trending</span>`;
+      }
+
+      // ── Metadata strip ────────────────────────────────────────────────────
+      document.getElementById('meta-date').innerHTML =
+        `<i class="ph ph-calendar text-gray-300"></i> ${esc(formatDate(a.createdAt))}`;
+      document.getElementById('meta-read').innerHTML =
+        `<i class="ph ph-clock text-gray-300"></i> ${esc(minRead(a.wordCount))}`;
+      document.getElementById('meta-region').innerHTML =
+        `<i class="ph ph-map-pin text-red-400"></i> ${esc(a.region || 'United States')}`;
+      document.getElementById('meta-industry').innerHTML =
+        `<i class="ph ph-buildings text-gray-300"></i> ${esc(a.industry || 'Data Centers')}`;
+
+      // ── Article body ──────────────────────────────────────────────────────
+      document.getElementById('article-body').innerHTML = parseBody(a.description);
+
+      // ── Tags ──────────────────────────────────────────────────────────────
+      if (a.tags && a.tags.length) {
+        const tagsRow = document.getElementById('tags-row');
+        tagsRow.classList.remove('hidden');
+        tagsRow.innerHTML =
+          `<span class="text-[10px] font-bold uppercase tracking-widest text-gray-400 mr-1 self-center">Tags</span>` +
+          a.tags.map(t =>
+            `<span class="text-[11px] px-2.5 py-0.5 bg-gray-100 text-gray-600 border border-gray-200 rounded-full">${esc(t)}</span>`
+          ).join('');
+      }
+
+      // ── Sources ───────────────────────────────────────────────────────────
+      if (a.sources && a.sources.length) {
+        document.getElementById('sources-row').classList.remove('hidden');
+        document.getElementById('sources-list').innerHTML = a.sources.map(s => {
+          let domain = s.url;
+          try { domain = new URL(s.url).hostname.replace('www.', ''); } catch {}
+          return `<a href="${esc(s.url)}" target="_blank" rel="noopener"
+            class="inline-flex items-center gap-1.5 text-[11px] px-2.5 py-1 bg-gray-50 border border-gray-200 rounded-sm text-gray-600 hover:border-red-400 hover:text-red-600 transition-colors font-mono">
+            <i class="ph ph-arrow-square-out text-xs"></i>${esc(s.title || domain)}
+          </a>`;
+        }).join('');
+      }
+
+      // ── Show article ──────────────────────────────────────────────────────
+      document.getElementById('article-content').classList.remove('hidden');
+    }
+
+    async function loadArticle() {
+      document.getElementById('article-skeleton').classList.remove('hidden');
+      document.getElementById('article-content').classList.add('hidden');
+      document.getElementById('article-error').classList.add('hidden');
+      document.getElementById('article-empty').classList.add('hidden');
+
+      // Worker-injected article data — no API call needed
+      if (window.__ARTICLE__) {
+        document.getElementById('article-skeleton').classList.add('hidden');
+        renderArticle(window.__ARTICLE__);
+        return;
+      }
+
+      try {
+        const res = await fetch(`${USDC_API_URL}?apikey=${encodeURIComponent(USDC_API_KEY)}`);
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.detail || `Error ${res.status}`);
+        }
+        const data = await res.json();
+
+        document.getElementById('article-skeleton').classList.add('hidden');
+
+        if (!data.articles || data.articles.length === 0) {
+          document.getElementById('article-empty').classList.remove('hidden');
+          return;
+        }
+
+        // Show the most recent article (first in the array — API returns DESC order)
+        renderArticle(data.articles[0]);
+
+      } catch (err) {
+        document.getElementById('article-skeleton').classList.add('hidden');
+        document.getElementById('article-error').classList.remove('hidden');
+        document.getElementById('article-error-msg').textContent = err.message;
+        console.error('Article load error:', err);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadArticle);
+  </script>
+
+</body>
+</html>
