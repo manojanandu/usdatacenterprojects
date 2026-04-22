@@ -50,7 +50,7 @@ async function getTemplate(name, request, env) {
   return res.text();
 }
 
-function injectHead(html, { title, description, canonical, keywords, ogType, jsonLd }) {
+function injectHead(html, { title, description, canonical, keywords = '', ogType = 'website', jsonLd = '' }) {
   html = html.replace(/<title[^>]*>[\s\S]*?<\/title>/i, `<title>${escAttr(title)}</title>`);
   html = html.replace(/<meta\s+name="description"[^>]*>/i,
     `<meta name="description" content="${escAttr(description)}">`);
