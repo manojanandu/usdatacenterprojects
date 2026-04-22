@@ -179,9 +179,9 @@ export default {
       return handleSitemap(request, env);
     }
 
-    // Root → homepage
+    // Root → serve homepage.html content directly
     if (url.pathname === '/' || url.pathname === '') {
-      return Response.redirect(new URL('/homepage.html', request.url).toString(), 301);
+      return env.ASSETS.fetch(new Request(new URL('/homepage.html', request.url).toString()));
     }
 
     // Static assets first
