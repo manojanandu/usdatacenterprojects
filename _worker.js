@@ -163,7 +163,7 @@ async function handleSitemap(request, env) {
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>${origin}/</loc><changefreq>daily</changefreq><priority>1.0</priority></url>
-  <url><loc>${origin}/homepage.html</loc><changefreq>daily</changefreq><priority>0.9</priority></url>
+  <url><loc>${origin}/news</loc><changefreq>daily</changefreq><priority>0.9</priority></url>
 ${stateUrls.join('\n')}
 ${articleUrls.join('\n')}
 </urlset>`;
@@ -200,7 +200,7 @@ export default {
 
     // News feed
     if (url.pathname === '/news') {
-      return env.ASSETS.fetch(new Request(new URL('/homepage.html', request.url).toString()));
+      return env.ASSETS.fetch(new Request(new URL('/data-center-news.html', request.url).toString()));
     }
 
     // Legacy alias → redirect to root
