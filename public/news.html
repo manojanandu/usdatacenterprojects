@@ -7,7 +7,7 @@
   <meta name="description" id="page-desc" content="News and intelligence on US data center construction.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Onest:wght@400;500;600;700&family=Martian+Mono:wght@400;500&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <script>
@@ -15,9 +15,9 @@
       theme: {
         extend: {
           fontFamily: {
-            sans: ['IBM Plex Sans', 'sans-serif'],
-            serif: ['DM Serif Display', 'serif'],
-            mono: ['IBM Plex Mono', 'monospace']
+            sans: ['Onest', 'sans-serif'],
+            serif: ['Bricolage Grotesque', 'sans-serif'],
+            mono: ['Martian Mono', 'monospace']
           }
         }
       }
@@ -25,7 +25,7 @@
   </script>
   <style>
     * { box-sizing: border-box; }
-    body { font-family: 'IBM Plex Sans', sans-serif; background: #f8f7f4; }
+    body { font-family: 'Onest', sans-serif; background: #f5f4f1; }
 
     .pills-scroll { scrollbar-width: none; }
     .pills-scroll::-webkit-scrollbar { display: none; }
@@ -34,35 +34,27 @@
     .pulse-dot { animation: pulse-dot 1.8s ease-in-out infinite; }
 
     @keyframes slideUp {
-      from { opacity: 0; transform: translateY(16px); }
+      from { opacity: 0; transform: translateY(14px); }
       to   { opacity: 1; transform: translateY(0); }
     }
-    .reveal { opacity: 0; animation: slideUp 0.5s cubic-bezier(0.22,1,0.36,1) both; }
+    .reveal { opacity: 0; animation: slideUp 0.45s cubic-bezier(0.22,1,0.36,1) both; }
 
     body::before {
       content: '';
       position: fixed; inset: 0;
-      background-image: radial-gradient(circle, #ccc9c0 1px, transparent 1px);
-      background-size: 24px 24px;
-      opacity: 0.22;
+      background-image: radial-gradient(circle, #c8c5bc 1px, transparent 1px);
+      background-size: 28px 28px;
+      opacity: 0.18;
       pointer-events: none;
       z-index: -1;
     }
 
     @keyframes barFill { from { width: 0 } to { width: var(--w) } }
-    .bar-anim {
-      width: 0;
-      animation: barFill 1s cubic-bezier(0.22,1,0.36,1) 0.5s both;
-    }
+    .bar-anim { width: 0; animation: barFill 1s cubic-bezier(0.22,1,0.36,1) 0.5s both; }
 
-    .widget {
-      box-shadow: 0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
-    }
+    .widget { box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04); }
 
-    .nav-link-active {
-      position: relative;
-      color: #ffffff;
-    }
+    .nav-link-active { position: relative; color: #ffffff; }
     .nav-link-active::after {
       content: '';
       position: absolute;
@@ -74,21 +66,23 @@
 
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
-    ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+    ::-webkit-scrollbar-thumb { background: #d1cec8; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #a8a49d; }
 
-    .stat-num { font-family: 'IBM Plex Mono', monospace; }
+    .stat-num { font-family: 'Martian Mono', monospace; font-size: 0.8em; }
 
     /* Article body typography */
-    .article-body { font-size: 0.9375rem; line-height: 1.8; color: #374151; }
+    .article-body { font-size: 1rem; line-height: 1.85; color: #3a3733; max-width: 68ch; }
     .article-body h2 {
-      font-family: 'DM Serif Display', serif;
-      font-size: 1.25rem;
-      color: #111827;
-      margin: 2rem 0 0.75rem;
+      font-family: 'Bricolage Grotesque', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #111110;
+      margin: 2.25rem 0 0.75rem;
       line-height: 1.3;
+      letter-spacing: -0.01em;
     }
-    .article-body p { margin: 0 0 1.25rem; }
+    .article-body p { margin: 0 0 1.35rem; }
     .article-body p:last-child { margin-bottom: 0; }
 
     /* Skeleton shimmer */
@@ -207,12 +201,12 @@
           </div>
 
           <!-- Article card -->
-          <div class="bg-white rounded-lg border border-l-[4px] border-gray-200 border-l-red-600 overflow-hidden">
+          <div class="bg-white rounded-lg border border-gray-200 overflow-hidden" style="box-shadow:0 2px 12px rgba(0,0,0,0.06)">
 
             <!-- Header -->
             <div class="px-7 pt-7 pb-5 border-b border-gray-100">
               <div class="flex flex-wrap items-center gap-2 mb-4" id="article-badges"></div>
-              <h1 id="article-headline" class="font-serif text-2xl sm:text-[2rem] text-gray-900 leading-tight mb-4"></h1>
+              <h1 id="article-headline" class="font-serif text-[1.65rem] sm:text-[2.1rem] text-gray-900 leading-tight mb-4" style="letter-spacing:-0.02em;font-weight:700"></h1>
               <!-- Metadata strip -->
               <div class="flex flex-wrap items-center gap-x-5 gap-y-2 text-[11px] text-gray-400">
                 <span id="meta-date" class="flex items-center gap-1.5"><i class="ph ph-calendar text-gray-300"></i></span>
