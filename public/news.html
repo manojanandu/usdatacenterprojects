@@ -105,6 +105,9 @@
       animation: shimmer 1.4s infinite;
       border-radius: 4px;
     }
+
+    /* CF Images — static class for dynamically injected article hero */
+    .img-article-hero { width: 100%; max-height: 460px; object-fit: cover; display: block; }
   </style>
 </head>
 <body class="text-gray-900 antialiased">
@@ -529,7 +532,7 @@
       const heroImgEl = document.getElementById('article-hero-img');
       if (a.image?.full) {
         heroImgEl.classList.remove('hidden');
-        heroImgEl.innerHTML = `<img src="${esc(a.image.full)}" alt="${esc(a.title)}" class="w-full max-h-[480px] object-cover" loading="eager">`;
+        heroImgEl.innerHTML = `<img src="${esc(a.image.full)}" alt="${esc(a.title)}" class="img-article-hero" loading="eager">`;
       }
 
       // ── Article body ──────────────────────────────────────────────────────
