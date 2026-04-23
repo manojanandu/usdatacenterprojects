@@ -238,6 +238,9 @@
               </div>
             </div>
 
+            <!-- Hero image (populated by JS when image.full is available) -->
+            <div id="article-hero-img" class="hidden bg-gray-100 overflow-hidden"></div>
+
             <!-- Body -->
             <div class="px-7 py-6">
               <div id="article-body" class="article-body"></div>
@@ -521,6 +524,13 @@
         `<i class="ph ph-map-pin text-red-400"></i> ${esc(a.region || 'United States')}`;
       document.getElementById('meta-industry').innerHTML =
         `<i class="ph ph-buildings text-gray-300"></i> ${esc(a.industry || 'Data Centers')}`;
+
+      // ── Hero image ────────────────────────────────────────────────────────
+      const heroImgEl = document.getElementById('article-hero-img');
+      if (a.image?.full) {
+        heroImgEl.classList.remove('hidden');
+        heroImgEl.innerHTML = `<img src="${esc(a.image.full)}" alt="${esc(a.title)}" class="w-full max-h-[480px] object-cover" loading="eager">`;
+      }
 
       // ── Article body ──────────────────────────────────────────────────────
       document.getElementById('article-body').innerHTML = parseBody(a.description);

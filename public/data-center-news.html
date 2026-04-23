@@ -516,17 +516,20 @@
       const hero = articles[0];
       const heroSlug = `/${stateToSlug(hero.region||'')}/${hero.pageURL}`;
       heroEl.innerHTML = `
-        <a href="${heroSlug}" class="hero-card bg-white rounded-lg p-5 mb-5 cursor-pointer group hover:shadow-lg transition-all reveal block no-underline" style="animation-delay:0.05s">
-          <div class="flex flex-wrap items-center gap-2 mb-3">
-            ${badgeHtml(hero.subCategory)}
-            ${hero.trending ? '<span class="bg-amber-50 text-amber-700 border border-amber-200 text-[9px] font-bold px-1.5 py-0.5 rounded-sm uppercase tracking-wide">Trending</span>' : ''}
-            <span class="text-xs text-gray-400">${esc(hero.region)} &middot; ${minRead(hero.wordCount)} &middot; <span class="text-gray-600 font-medium">${timeAgo(hero.createdAt)}</span></span>
-          </div>
-          <h2 class="font-serif text-xl sm:text-[1.6rem] text-gray-900 leading-tight mb-2.5 group-hover:text-red-700 transition-colors">${esc(hero.title)}</h2>
-          <p class="text-sm text-gray-500 leading-relaxed">${esc(excerpt(hero.description))}</p>
-          <div class="flex flex-wrap items-center gap-4 mt-4 pt-4 border-t border-gray-100">
-            <span class="text-xs text-gray-400 flex items-center gap-1.5"><i class="ph ph-map-pin text-red-400"></i> ${esc(hero.region)}</span>
-            <span class="text-xs text-gray-400 flex items-center gap-1.5"><i class="ph ph-calendar text-blue-400"></i> ${formatDate(hero.createdAt)}</span>
+        <a href="${heroSlug}" class="hero-card bg-white rounded-lg overflow-hidden mb-5 cursor-pointer group hover:shadow-lg transition-all reveal block no-underline" style="animation-delay:0.05s">
+          ${hero.image?.full ? `<div class="overflow-hidden bg-gray-100"><img src="${esc(hero.image.full)}" alt="${esc(hero.title)}" class="w-full aspect-[8/5] object-cover group-hover:scale-[1.02] transition-transform duration-500" loading="eager"></div>` : ''}
+          <div class="p-5">
+            <div class="flex flex-wrap items-center gap-2 mb-3">
+              ${badgeHtml(hero.subCategory)}
+              ${hero.trending ? '<span class="bg-amber-50 text-amber-700 border border-amber-200 text-[9px] font-bold px-1.5 py-0.5 rounded-sm uppercase tracking-wide">Trending</span>' : ''}
+              <span class="text-xs text-gray-400">${esc(hero.region)} &middot; ${minRead(hero.wordCount)} &middot; <span class="text-gray-600 font-medium">${timeAgo(hero.createdAt)}</span></span>
+            </div>
+            <h2 class="font-serif text-xl sm:text-[1.6rem] text-gray-900 leading-tight mb-2.5 group-hover:text-red-700 transition-colors">${esc(hero.title)}</h2>
+            <p class="text-sm text-gray-500 leading-relaxed">${esc(excerpt(hero.description))}</p>
+            <div class="flex flex-wrap items-center gap-4 mt-4 pt-4 border-t border-gray-100">
+              <span class="text-xs text-gray-400 flex items-center gap-1.5"><i class="ph ph-map-pin text-red-400"></i> ${esc(hero.region)}</span>
+              <span class="text-xs text-gray-400 flex items-center gap-1.5"><i class="ph ph-calendar text-blue-400"></i> ${formatDate(hero.createdAt)}</span>
+            </div>
           </div>
         </a>`;
 
@@ -542,6 +545,9 @@
           </div>`;
         }
         const slug = `/${stateToSlug(a.region||'')}/${a.pageURL}`;
+        const thumbHtml = a.image?.thumbnail
+          ? `<img src="${esc(a.image.thumbnail)}" alt="" class="w-24 h-[60px] object-cover rounded shrink-0 bg-gray-100" loading="lazy">`
+          : `<i class="ph ph-arrow-up-right text-base text-gray-300 group-hover:text-red-400 transition-colors shrink-0 mt-0.5"></i>`;
         rowsHtml += `<a href="${slug}" class="story-row py-4 px-4 hover:bg-gray-50 cursor-pointer group flex items-start gap-3 no-underline block">
           <div class="flex-1 min-w-0">
             <div class="flex flex-wrap items-center gap-2 mb-1.5">
@@ -551,7 +557,7 @@
             <h4 class="text-sm font-semibold text-gray-900 leading-snug group-hover:text-red-700 transition-colors">${esc(a.title)}</h4>
             <p class="text-[12px] text-gray-500 mt-1 leading-relaxed hidden sm:block">${esc(excerpt(a.description))}</p>
           </div>
-          <i class="ph ph-arrow-up-right text-base text-gray-300 group-hover:text-red-400 transition-colors shrink-0 mt-0.5"></i>
+          ${thumbHtml}
         </a>`;
       });
 
