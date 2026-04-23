@@ -216,7 +216,7 @@
         </div>
 
         <!-- Article content (populated by JS) -->
-        <article id="article-content" class="hidden reveal" style="animation-delay:0.05s">
+        <article id="article-content" class="hidden" style="opacity:0;transition:opacity 0.35s ease">
 
           <!-- Breadcrumb -->
           <div class="flex items-center gap-2 text-[11px] text-gray-400 mb-5 font-medium uppercase tracking-wider">
@@ -443,15 +443,24 @@
       return Math.max(1, Math.round((wc || 600) / 200)) + ' min read';
     }
 
-    function parseBody(description) {
-      // description format from API:
-      //   Line 1:  headline (skip it — already shown in <h1>)
-      //   Line 2+: article body — plain paragraphs + <h2> section headings
+    function parseBody(description, title) {
       const raw = (description || '').trim();
-      const firstBreak = raw.indexOf('\n');
-      const body = firstBreak >= 0 ? raw.slice(firstBreak + 1).trim() : '';
+      if (!raw) return '';
 
-      // Walk line by line, collect paragraphs and headings
+      // API puts the article title as line 1 — skip it if present so it's not
+      // duplicated below the <h1>. Only skip when the first line is clearly the
+      // title (matches or is very long prose, not a <h2> or short intro line).
+      let body = raw;
+      const firstBreak = raw.indexOf('\n');
+      if (firstBreak > 0) {
+        const firstLine = raw.slice(0, firstBreak).trim();
+        const isTitle = title
+          ? firstLine === title.trim()
+          : firstLine.length > 60 && !firstLine.startsWith('<');
+        if (isTitle) body = raw.slice(firstBreak + 1).trimStart();
+      }
+      body = body.trim();
+
       let html = '';
       let para = [];
 
@@ -467,7 +476,7 @@
           flush();
         } else if (t.startsWith('<h2>')) {
           flush();
-          html += t; // already valid HTML
+          html += t;
         } else {
           para.push(t);
         }
@@ -536,7 +545,7 @@
       }
 
       // ── Article body ──────────────────────────────────────────────────────
-      document.getElementById('article-body').innerHTML = parseBody(a.description);
+      document.getElementById('article-body').innerHTML = parseBody(a.description, a.title);
 
       // ── Tags ──────────────────────────────────────────────────────────────
       if (a.tags && a.tags.length) {
@@ -562,8 +571,10 @@
         }).join('');
       }
 
-      // ── Show article ──────────────────────────────────────────────────────
-      document.getElementById('article-content').classList.remove('hidden');
+      // ── Show article — remove hidden then rAF-fade so opacity transition fires ──
+      const contentEl = document.getElementById('article-content');
+      contentEl.classList.remove('hidden');
+      requestAnimationFrame(() => requestAnimationFrame(() => { contentEl.style.opacity = '1'; }));
     }
 
     async function loadArticle() {
@@ -572,10 +583,21 @@
       document.getElementById('article-error').classList.add('hidden');
       document.getElementById('article-empty').classList.add('hidden');
 
+      const showError = (msg) => {
+        document.getElementById('article-skeleton').classList.add('hidden');
+        document.getElementById('article-error').classList.remove('hidden');
+        document.getElementById('article-error-msg').textContent = msg;
+      };
+
       // Worker-injected article data — no API call needed
       if (window.__ARTICLE__) {
         document.getElementById('article-skeleton').classList.add('hidden');
-        renderArticle(window.__ARTICLE__);
+        try {
+          renderArticle(window.__ARTICLE__);
+        } catch (err) {
+          console.error('Render error:', err);
+          showError(err.message);
+        }
         return;
       }
 
@@ -594,14 +616,11 @@
           return;
         }
 
-        // Show the most recent article (first in the array — API returns DESC order)
         renderArticle(data.articles[0]);
 
       } catch (err) {
-        document.getElementById('article-skeleton').classList.add('hidden');
-        document.getElementById('article-error').classList.remove('hidden');
-        document.getElementById('article-error-msg').textContent = err.message;
         console.error('Article load error:', err);
+        showError(err.message);
       }
     }
 
