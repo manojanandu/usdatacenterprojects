@@ -538,9 +538,19 @@
       let html = '';
       let para = [];
 
+      const splitLongPara = (text) => {
+        // Split at sentence boundaries: . ! ? followed by space + capital or quote
+        const sents = text.split(/(?<=[.!?])\s+(?=[A-Z"'“])/).filter(Boolean);
+        if (sents.length <= 3) return [text];
+        const chunks = [];
+        for (let i = 0; i < sents.length; i += 3)
+          chunks.push(sents.slice(i, i + 3).join(' ').trim());
+        return chunks;
+      };
+
       const flush = () => {
         const text = para.join(' ').trim();
-        if (text) html += `<p>${text}</p>`;
+        if (text) splitLongPara(text).forEach(chunk => { html += `<p>${chunk}</p>`; });
         para = [];
       };
 
