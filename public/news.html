@@ -2,6 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <link rel="icon" type="image/x-icon" href="/favicon/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+  <link rel="manifest" href="/favicon/site.webmanifest">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title id="page-title">News — US Data Center Projects</title>
   <meta name="description" id="page-desc" content="News and intelligence on US data center construction.">
@@ -162,10 +167,10 @@
   ================================================================ -->
   <header class="sticky top-0 z-50 bg-[#0f1923]" style="border-bottom:2px solid #dc2626">
     <div class="max-w-7xl mx-auto px-4 sm:px-6">
-      <div class="flex items-center justify-between" style="height:64px">
+      <div style="display:grid;grid-template-columns:1fr auto 1fr;height:64px;align-items:center">
 
-        <a href="/" class="shrink-0 group" style="display:block;position:relative;height:64px;width:260px;overflow:hidden" draggable="false">
-          <img src="/Logo.svg" alt="US Data Center Projects" class="group-hover:opacity-70" style="position:absolute;width:260px;height:146px;top:-41px;left:0;transition:opacity 0.15s" draggable="false">
+        <a href="/" class="group" style="display:block;position:relative;height:64px;width:260px;overflow:hidden" draggable="false">
+          <img src="/Logo.svg" alt="US Data Center Projects" class="group-hover:opacity-70" style="position:absolute;width:260px;height:146px;top:-30px;left:0;transition:opacity 0.15s" draggable="false">
         </a>
 
         <nav class="hidden md:flex items-center" style="gap:28px">
@@ -174,10 +179,10 @@
           <a href="/us-data-center-project-tracker" class="text-xs font-medium tracking-widest uppercase text-slate-500 hover:text-white transition-colors duration-150">Projects</a>
         </nav>
 
-        <div class="flex items-center shrink-0" style="gap:8px">
-          <a href="#newsletter" class="hidden sm:inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-white bg-red-600 hover:bg-red-500 transition-colors duration-150" style="padding:9px 16px">
-            Subscribe <i class="ph ph-arrow-right" style="font-size:11px"></i>
-          </a>
+        <div class="flex items-center justify-end" style="gap:8px">
+          <button class="open-trial-modal hidden sm:inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-white bg-red-600 hover:bg-red-500 transition-colors duration-150" style="padding:9px 16px">
+            Request a Trial <i class="ph ph-arrow-right" style="font-size:11px"></i>
+          </button>
           <button class="md:hidden text-slate-400 hover:text-white transition-colors" style="padding:10px" aria-label="Menu" aria-expanded="false" aria-controls="mobile-nav">
             <i class="ph ph-list" style="font-size:22px"></i>
           </button>
@@ -195,9 +200,9 @@
           <i class="ph ph-database" style="font-size:16px;color:#64748b"></i>Projects
         </a>
         <div style="padding-top:8px">
-          <a href="#newsletter" class="w-full flex items-center justify-center gap-2 text-xs font-bold tracking-widest uppercase text-white bg-red-600 hover:bg-red-500 transition-colors" style="padding:14px">
-            Subscribe <i class="ph ph-arrow-right" style="font-size:11px"></i>
-          </a>
+          <button class="open-trial-modal w-full flex items-center justify-center gap-2 text-xs font-bold tracking-widest uppercase text-white bg-red-600 hover:bg-red-500 transition-colors" style="padding:14px">
+            Request a Trial <i class="ph ph-arrow-right" style="font-size:11px"></i>
+          </button>
         </div>
       </nav>
     </div>
@@ -365,15 +370,8 @@
       <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
 
         <div>
-          <div class="flex items-center gap-2 mb-3">
-            <svg width="20" height="20" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="20" y="25" width="60" height="50" rx="4" fill="none" stroke="#e2e8f0" stroke-width="3" stroke-linecap="round"/>
-              <line x1="25" y1="38" x2="75" y2="38" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"/>
-              <line x1="25" y1="50" x2="75" y2="50" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"/>
-              <line x1="25" y1="62" x2="75" y2="62" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"/>
-              <rect x="30" y="75" width="40" height="4" rx="2" fill="#e2e8f0"/>
-            </svg>
-            <span class="text-sm font-bold text-white">US Data Center Projects</span>
+          <div class="mb-3" style="position:relative;height:59px;width:200px;overflow:hidden">
+            <img src="/Logo.svg" alt="US Data Center Projects" style="position:absolute;width:200px;height:113px;top:-27px;left:0" draggable="false">
           </div>
           <p class="text-xs text-slate-400 leading-relaxed mb-4">
             The most comprehensive database of US data center construction projects — tracking 2,847 developments across all 50 states with daily verified updates.
