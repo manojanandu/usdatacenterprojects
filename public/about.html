@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/svg+xml" href="/favico.svg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us | US Data Center Projects — Daily Intelligence on the US Data Center Boom</title>
+  <meta name="description" content="US Data Center Projects tracks daily news, construction activity, and project data across all 50 states. Built for developers, EPCs, investors, and vendors operating in the US data center industry.">
+  <meta name="keywords" content="about us data center projects, US data center intelligence, data center news tracker, data center construction database">
+  <link rel="canonical" href="https://usdatacenterprojects.com/about">
+  <meta property="og:title" content="About | US Data Center Projects">
+  <meta property="og:description" content="Daily intelligence on the US data center boom — tracking 2,800+ projects across all 50 states.">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Onest:wght@400;500;600;700&family=Martian+Mono:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Onest:wght@400;500;600;700&family=Martian+Mono:wght@400;500&display=swap"></noscript>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Onest', 'sans-serif'],
+            serif: ['Bricolage Grotesque', 'sans-serif'],
+            mono: ['Martian Mono', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: 'Onest', sans-serif; background: #f5f4f1; }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: radial-gradient(circle, #c8c5bc 1px, transparent 1px);
+      background-size: 28px 28px;
+      opacity: 0.18;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Scan beam */
+    @keyframes scan { 0%{transform:translateY(-100%)} 100%{transform:translateY(100%)} }
+    .scan-beam { animation: scan 5s linear infinite; pointer-events: none; }
+
+    /* Scroll-triggered reveal */
+    @keyframes slideUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+    .reveal { opacity: 0; }
+    .reveal.revealed { animation: slideUp 0.5s cubic-bezier(0.22,1,0.36,1) both; }
+
+    /* State chip stagger */
+    @keyframes chipIn { from{opacity:0;transform:scale(0.88) translateY(6px)} to{opacity:1;transform:scale(1) translateY(0)} }
+    .state-chip { opacity: 0; }
+    .state-chip.chipped { animation: chipIn 0.35s cubic-bezier(0.22,1,0.36,1) both; }
+
+    /* Process step connector */
+    .step-connector { position:relative; }
+    .step-connector::before {
+      content:'';
+      position:absolute;
+      top:20px; left:calc(50% + 28px);
+      width:calc(100% - 56px);
+      height:1px;
+      background:linear-gradient(to right,#dc2626,#374151);
+      opacity:0.3;
+    }
+
+    .feature-card { transition: box-shadow 0.2s ease, border-color 0.2s ease; }
+    .feature-card:hover { box-shadow: 0 8px 28px rgba(0,0,0,0.08); border-color: #cac8c2; }
+
+    .modal-overlay { position:fixed;inset:0;background:rgba(0,0,0,0.55);backdrop-filter:blur(4px);z-index:1000;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity 0.25s ease,visibility 0.25s ease; }
+    .modal-overlay.active { opacity:1;visibility:visible; }
+    .modal-container { background:#fff;width:90%;max-width:580px;max-height:90vh;border-radius:8px;box-shadow:0 20px 60px rgba(0,0,0,0.2);transform:translateY(16px);transition:transform 0.25s ease;overflow:hidden;display:flex;flex-direction:column; }
+    .modal-overlay.active .modal-container { transform:translateY(0); }
+    .modal-header { padding:1.25rem 1.5rem;border-bottom:1px solid #e5e4e0;display:flex;justify-content:space-between;align-items:center; }
+    .modal-close { background:none;border:none;font-size:1.25rem;color:#9ca3af;cursor:pointer;padding:0.25rem;border-radius:4px;transition:color 0.15s;display:flex;align-items:center; }
+    .modal-close:hover { color:#374151; }
+    .modal-body { padding:1.5rem;overflow-y:auto;flex:1; }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #d1cec8; border-radius: 3px; }
+  </style>
+</head>
+<body class="text-gray-900 antialiased">
+
+  <!-- ════════════════════════════════════════════
+       HEADER
+  ════════════════════════════════════════════ -->
+  <header class="sticky top-0 z-50 bg-[#0f1923]" style="border-bottom:2px solid #dc2626">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div style="display:grid;grid-template-columns:1fr auto 1fr;height:64px;align-items:center">
+
+        <a href="/" class="group" style="display:block;position:relative;height:64px;width:260px;overflow:hidden" draggable="false">
+          <img src="/Logo.svg" alt="US Data Center Projects" class="group-hover:opacity-70" style="position:absolute;width:260px;height:146px;top:-30px;left:0;transition:opacity 0.15s" draggable="false">
+        </a>
+
+        <nav class="hidden md:flex items-center" style="gap:28px">
+          <a href="/" class="text-xs font-medium tracking-widest uppercase text-slate-500 hover:text-white transition-colors duration-150">News</a>
+          <a href="/us-data-center-project-tracker" class="text-xs font-medium tracking-widest uppercase text-slate-500 hover:text-white transition-colors duration-150">Projects</a>
+          <a href="/about" class="text-xs font-semibold tracking-widest uppercase text-white" style="border-bottom:2px solid #dc2626;padding-bottom:3px">About</a>
+        </nav>
+
+        <div class="flex items-center justify-end" style="gap:8px">
+          <button class="open-trial-modal hidden sm:inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-white bg-red-600 hover:bg-red-500 transition-colors duration-150" style="padding:9px 16px">
+            Request Trial <i class="ph ph-arrow-right" style="font-size:11px"></i>
+          </button>
+          <button class="md:hidden text-slate-400 hover:text-white transition-colors" style="padding:10px" aria-label="Menu" aria-expanded="false" aria-controls="mobile-nav">
+            <i class="ph ph-list" style="font-size:22px"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <div id="mobile-nav" class="hidden md:hidden" style="border-top:1px solid rgba(255,255,255,0.07)">
+      <nav class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col" style="padding-top:6px;padding-bottom:16px">
+        <a href="/" class="flex items-center px-2 text-sm font-medium text-slate-400 hover:text-white transition-colors" style="height:48px;gap:12px">
+          <i class="ph ph-newspaper" style="font-size:16px;color:#64748b"></i>News
+        </a>
+        <a href="/us-data-center-project-tracker" class="flex items-center px-2 text-sm font-medium text-slate-400 hover:text-white transition-colors" style="height:48px;gap:12px">
+          <i class="ph ph-database" style="font-size:16px;color:#64748b"></i>Projects
+        </a>
+        <a href="/about" class="flex items-center px-3 text-sm font-semibold text-white" style="height:48px;gap:12px;background:rgba(220,38,38,0.08);border-radius:6px">
+          <i class="ph ph-info" style="font-size:16px;color:#dc2626"></i>About
+        </a>
+        <div style="padding-top:8px">
+          <button class="open-trial-modal w-full flex items-center justify-center gap-2 text-xs font-bold tracking-widest uppercase text-white bg-red-600 hover:bg-red-500 transition-colors" style="padding:14px">
+            Request Trial <i class="ph ph-arrow-right" style="font-size:11px"></i>
+          </button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ════════════════════════════════════════════
+       HERO — DARK EDITORIAL
+  ════════════════════════════════════════════ -->
+  <section class="relative overflow-hidden bg-[#0f1923]" style="padding:6rem 0 5rem">
+    <!-- Dot grid -->
+    <div class="absolute inset-0 z-0" style="background-image:radial-gradient(circle,rgba(255,255,255,0.07) 1px,transparent 1px);background-size:28px 28px"></div>
+    <!-- Grid lines -->
+    <div class="absolute inset-0 z-0" style="background-image:linear-gradient(to right,rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(to bottom,rgba(255,255,255,0.03) 1px,transparent 1px);background-size:80px 80px"></div>
+    <!-- Scan beam -->
+    <div class="scan-beam absolute inset-x-0 h-[200%] z-0" style="background:linear-gradient(to bottom,transparent,rgba(220,38,38,0.05) 50%,rgba(220,38,38,0.09) 51%,rgba(220,38,38,0.05) 52%,transparent)"></div>
+
+    <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6">
+
+      <!-- Masthead label -->
+      <div class="flex items-center gap-3 mb-8 reveal" style="animation-delay:0.05s">
+        <span class="text-[10px] font-mono font-semibold tracking-[0.2em] text-slate-500 uppercase">Est. 2024</span>
+        <span style="display:inline-block;width:32px;height:1px;background:#374151"></span>
+        <span class="flex items-center gap-1.5 text-[10px] font-mono font-semibold tracking-widest text-red-500 uppercase">
+          <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse inline-block"></span>
+          Daily Updates
+        </span>
+      </div>
+
+      <!-- Headline -->
+      <h1 class="font-serif text-white leading-none mb-6 reveal" style="font-size:clamp(2.5rem,6vw,4.25rem);letter-spacing:-0.03em;animation-delay:0.1s">
+        Daily Intelligence On<br>
+        <span style="color:#dc2626">The US Data Center Boom.</span>
+      </h1>
+
+      <!-- Subheadline -->
+      <p class="text-slate-400 leading-relaxed mb-10 reveal" style="font-size:1.05rem;max-width:580px;animation-delay:0.15s">
+        Every permit filed. Every MW planned. Every contractor awarded.<br class="hidden sm:inline">
+        Tracked across all 50 states — verified and published daily.
+      </p>
+
+      <!-- Stat pills -->
+      <div class="flex flex-wrap gap-3 reveal" style="animation-delay:0.2s">
+        <div class="flex items-center gap-2 px-4 py-2.5 rounded-sm" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.09)">
+          <i class="ph ph-buildings text-red-500" style="font-size:15px"></i>
+          <span class="text-sm font-mono font-semibold text-white">2,800+</span>
+          <span class="text-xs text-slate-400">Projects Tracked</span>
+        </div>
+        <div class="flex items-center gap-2 px-4 py-2.5 rounded-sm" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.09)">
+          <i class="ph ph-map-pin text-red-500" style="font-size:15px"></i>
+          <span class="text-sm font-mono font-semibold text-white">50</span>
+          <span class="text-xs text-slate-400">States Covered</span>
+        </div>
+        <div class="flex items-center gap-2 px-4 py-2.5 rounded-sm" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.09)">
+          <i class="ph ph-users-three text-red-500" style="font-size:15px"></i>
+          <span class="text-sm font-mono font-semibold text-white">3,200+</span>
+          <span class="text-xs text-slate-400">Companies Tracked</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════
+       MISSION PULL-QUOTE
+  ════════════════════════════════════════════ -->
+  <section class="relative z-10" style="padding:6rem 0 5rem">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6">
+      <div class="reveal">
+        <p class="text-[11px] font-bold uppercase tracking-widest text-red-600 mb-6">Our Mission</p>
+        <p class="font-serif text-gray-900 leading-snug" style="font-size:clamp(1.6rem,3.5vw,2.5rem);letter-spacing:-0.025em">
+          "The US data center market moves faster than any newsletter can follow.
+          We built the intelligence layer the industry was missing — a living database,
+          updated every day, covering every project that matters."
+        </p>
+        <div class="flex items-center gap-3 mt-8">
+          <span style="display:inline-block;width:24px;height:2px;background:#dc2626"></span>
+          <span class="text-sm text-gray-500 font-medium">US Data Center Projects — Editorial Team</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════
+       WHAT WE TRACK — ASYMMETRIC LAYOUT
+  ════════════════════════════════════════════ -->
+  <section class="py-16 relative z-10 bg-white" style="border-top:1px solid #e9e7e2;border-bottom:1px solid #e9e7e2">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+
+      <p class="text-[11px] font-bold uppercase tracking-widest text-red-600 mb-10 reveal">What We Track</p>
+
+      <div class="grid grid-cols-1 lg:grid-cols-5 gap-5">
+
+        <!-- Primary feature — spans 3 cols -->
+        <div class="feature-card lg:col-span-3 bg-[#0f1923] rounded-lg p-8 relative overflow-hidden reveal" style="animation-delay:0.05s">
+          <!-- Subtle grid texture -->
+          <div class="absolute inset-0 opacity-10" style="background-image:linear-gradient(to right,rgba(255,255,255,0.1) 1px,transparent 1px),linear-gradient(to bottom,rgba(255,255,255,0.1) 1px,transparent 1px);background-size:40px 40px"></div>
+          <div class="relative z-10">
+            <div class="w-10 h-10 flex items-center justify-center bg-red-600 rounded-md mb-6">
+              <i class="ph ph-crane text-white text-xl"></i>
+            </div>
+            <h2 class="font-serif text-white text-2xl mb-4" style="letter-spacing:-0.02em">Construction Pipeline</h2>
+            <p class="text-slate-400 leading-relaxed mb-6 max-w-lg">
+              We track every data center project breaking ground in the United States — from the first permit filing through contractor award, steel erection, and final commissioning. Planning, permitting, bidding, construction, and expansion stages.
+            </p>
+            <div class="grid grid-cols-2 gap-3">
+              <div class="px-3 py-2.5 rounded-sm" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08)">
+                <p class="text-[10px] text-slate-500 uppercase tracking-widest font-mono mb-1">Coverage</p>
+                <p class="text-sm text-white font-semibold">Permit → Commissioning</p>
+              </div>
+              <div class="px-3 py-2.5 rounded-sm" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08)">
+                <p class="text-[10px] text-slate-500 uppercase tracking-widest font-mono mb-1">Update Cadence</p>
+                <p class="text-sm text-white font-semibold">Daily Verified</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Secondary features — spans 2 cols, stacked -->
+        <div class="lg:col-span-2 flex flex-col gap-5">
+
+          <div class="feature-card bg-white border border-gray-200 rounded-lg p-6 flex-1 reveal" style="animation-delay:0.12s">
+            <div class="w-9 h-9 flex items-center justify-center bg-amber-50 rounded-md mb-4">
+              <i class="ph ph-lightning text-amber-600 text-lg"></i>
+            </div>
+            <h3 class="font-serif font-bold text-gray-900 text-base mb-2" style="letter-spacing:-0.01em">Capacity &amp; Power</h3>
+            <p class="text-sm text-gray-500 leading-relaxed">MW planned, energy sources, substation data, utility connections, and cooling technology — per project, per campus.</p>
+          </div>
+
+          <div class="feature-card bg-white border border-gray-200 rounded-lg p-6 flex-1 reveal" style="animation-delay:0.19s">
+            <div class="w-9 h-9 flex items-center justify-center bg-blue-50 rounded-md mb-4">
+              <i class="ph ph-users-three text-blue-600 text-lg"></i>
+            </div>
+            <h3 class="font-serif font-bold text-gray-900 text-base mb-2" style="letter-spacing:-0.01em">Company Intelligence</h3>
+            <p class="text-sm text-gray-500 leading-relaxed">Hyperscalers, developers, EPCs, OEM vendors, and contractors — with verified contacts and bid activity across every state.</p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════
+       SCALE — ANIMATED COUNTERS
+  ════════════════════════════════════════════ -->
+  <section class="py-16 relative z-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="bg-[#0f1923] rounded-lg overflow-hidden reveal">
+        <div class="grid grid-cols-2 lg:grid-cols-4 divide-x divide-y lg:divide-y-0" style="divide-color:rgba(255,255,255,0.07)">
+
+          <div class="px-8 py-10 text-center" style="border-color:rgba(255,255,255,0.07)">
+            <p class="font-mono text-4xl font-bold text-white mb-1" id="count-projects">2,847</p>
+            <p class="text-[11px] text-slate-500 uppercase tracking-widest font-mono">Projects Tracked</p>
+          </div>
+          <div class="px-8 py-10 text-center" style="border-color:rgba(255,255,255,0.07)">
+            <p class="font-mono text-4xl font-bold text-white mb-1" id="count-states">50</p>
+            <p class="text-[11px] text-slate-500 uppercase tracking-widest font-mono">States Covered</p>
+          </div>
+          <div class="px-8 py-10 text-center" style="border-color:rgba(255,255,255,0.07)">
+            <p class="font-mono text-4xl font-bold text-white mb-1" id="count-companies">3,200</p>
+            <p class="text-[11px] text-slate-500 uppercase tracking-widest font-mono">Companies Indexed</p>
+          </div>
+          <div class="px-8 py-10 text-center" style="border-color:rgba(255,255,255,0.07)">
+            <p class="font-mono text-4xl font-bold text-red-500 mb-1">Daily</p>
+            <p class="text-[11px] text-slate-500 uppercase tracking-widest font-mono">Verified Updates</p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════
+       STATES COVERAGE
+  ════════════════════════════════════════════ -->
+  <section class="py-20 relative z-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12 reveal">
+        <div>
+          <p class="text-[11px] font-bold uppercase tracking-widest text-red-600 mb-2">Geographic Reach</p>
+          <h2 class="font-serif text-3xl sm:text-4xl text-gray-900" style="letter-spacing:-0.02em">Every State in the Union</h2>
+          <p class="text-sm text-gray-500 mt-2 max-w-xl leading-relaxed">Our database covers data center construction activity from Virginia's dense Ashburn corridor to Arizona's emerging Phoenix campuses — and every market in between.</p>
+        </div>
+      </div>
+
+      <!-- Northeast -->
+      <div class="mb-8 reveal" style="animation-delay:0.05s">
+        <p class="text-[10px] font-mono font-bold uppercase tracking-widest text-slate-400 mb-3 flex items-center gap-2">
+          <span style="display:inline-block;width:16px;height:1px;background:#dc2626"></span>Northeast
+        </p>
+        <div class="flex flex-wrap gap-2" id="chips-northeast">
+          <span data-state="Connecticut">Connecticut</span>
+          <span data-state="Maine">Maine</span>
+          <span data-state="Massachusetts">Massachusetts</span>
+          <span data-state="New Hampshire">New Hampshire</span>
+          <span data-state="New Jersey">New Jersey</span>
+          <span data-state="New York">New York</span>
+          <span data-state="Pennsylvania">Pennsylvania</span>
+          <span data-state="Rhode Island">Rhode Island</span>
+          <span data-state="Vermont">Vermont</span>
+        </div>
+      </div>
+
+      <!-- Southeast -->
+      <div class="mb-8 reveal" style="animation-delay:0.1s">
+        <p class="text-[10px] font-mono font-bold uppercase tracking-widest text-slate-400 mb-3 flex items-center gap-2">
+          <span style="display:inline-block;width:16px;height:1px;background:#dc2626"></span>Southeast
+        </p>
+        <div class="flex flex-wrap gap-2" id="chips-southeast">
+          <span data-state="Alabama">Alabama</span>
+          <span data-state="Arkansas">Arkansas</span>
+          <span data-state="Delaware">Delaware</span>
+          <span data-state="Florida">Florida</span>
+          <span data-state="Georgia">Georgia</span>
+          <span data-state="Kentucky">Kentucky</span>
+          <span data-state="Louisiana">Louisiana</span>
+          <span data-state="Maryland">Maryland</span>
+          <span data-state="Mississippi">Mississippi</span>
+          <span data-state="North Carolina">North Carolina</span>
+          <span data-state="South Carolina">South Carolina</span>
+          <span data-state="Tennessee">Tennessee</span>
+          <span data-state="Virginia">Virginia</span>
+          <span data-state="Washington D.C.">Washington D.C.</span>
+          <span data-state="West Virginia">West Virginia</span>
+        </div>
+      </div>
+
+      <!-- Midwest -->
+      <div class="mb-8 reveal" style="animation-delay:0.15s">
+        <p class="text-[10px] font-mono font-bold uppercase tracking-widest text-slate-400 mb-3 flex items-center gap-2">
+          <span style="display:inline-block;width:16px;height:1px;background:#dc2626"></span>Midwest
+        </p>
+        <div class="flex flex-wrap gap-2" id="chips-midwest">
+          <span data-state="Illinois">Illinois</span>
+          <span data-state="Indiana">Indiana</span>
+          <span data-state="Iowa">Iowa</span>
+          <span data-state="Kansas">Kansas</span>
+          <span data-state="Michigan">Michigan</span>
+          <span data-state="Minnesota">Minnesota</span>
+          <span data-state="Missouri">Missouri</span>
+          <span data-state="Nebraska">Nebraska</span>
+          <span data-state="North Dakota">North Dakota</span>
+          <span data-state="Ohio">Ohio</span>
+          <span data-state="South Dakota">South Dakota</span>
+          <span data-state="Wisconsin">Wisconsin</span>
+        </div>
+      </div>
+
+      <!-- South / Southwest -->
+      <div class="mb-8 reveal" style="animation-delay:0.2s">
+        <p class="text-[10px] font-mono font-bold uppercase tracking-widest text-slate-400 mb-3 flex items-center gap-2">
+          <span style="display:inline-block;width:16px;height:1px;background:#dc2626"></span>South &amp; Southwest
+        </p>
+        <div class="flex flex-wrap gap-2" id="chips-south">
+          <span data-state="Arizona">Arizona</span>
+          <span data-state="New Mexico">New Mexico</span>
+          <span data-state="Oklahoma">Oklahoma</span>
+          <span data-state="Texas">Texas</span>
+        </div>
+      </div>
+
+      <!-- West -->
+      <div class="reveal" style="animation-delay:0.25s">
+        <p class="text-[10px] font-mono font-bold uppercase tracking-widest text-slate-400 mb-3 flex items-center gap-2">
+          <span style="display:inline-block;width:16px;height:1px;background:#dc2626"></span>West
+        </p>
+        <div class="flex flex-wrap gap-2" id="chips-west">
+          <span data-state="Alaska">Alaska</span>
+          <span data-state="California">California</span>
+          <span data-state="Colorado">Colorado</span>
+          <span data-state="Hawaii">Hawaii</span>
+          <span data-state="Idaho">Idaho</span>
+          <span data-state="Montana">Montana</span>
+          <span data-state="Nevada">Nevada</span>
+          <span data-state="Oregon">Oregon</span>
+          <span data-state="Utah">Utah</span>
+          <span data-state="Washington">Washington</span>
+          <span data-state="Wyoming">Wyoming</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════
+       HOW WE WORK — PROCESS
+  ════════════════════════════════════════════ -->
+  <section class="py-20 relative z-10 bg-white" style="border-top:1px solid #e9e7e2">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+
+      <div class="text-center mb-16 reveal">
+        <p class="text-[11px] font-bold uppercase tracking-widest text-red-600 mb-3">The Process</p>
+        <h2 class="font-serif text-3xl sm:text-4xl text-gray-900" style="letter-spacing:-0.02em">How We Stay Current</h2>
+        <p class="text-sm text-gray-500 mt-3 max-w-lg mx-auto leading-relaxed">Three steps, repeated every day — across every state, every project, every company in our database.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-0 relative">
+
+        <!-- Connecting line (desktop only) -->
+        <div class="hidden md:block absolute top-10 left-[calc(16.67%+16px)] right-[calc(16.67%+16px)]" style="height:1px;background:linear-gradient(to right,transparent,#dc2626 20%,#374151 80%,transparent);opacity:0.25"></div>
+
+        <!-- Step 1 -->
+        <div class="relative flex flex-col items-center text-center px-8 py-6 reveal" style="animation-delay:0.05s">
+          <div class="w-20 h-20 flex items-center justify-center rounded-full bg-[#0f1923] mb-6 relative z-10" style="border:3px solid #1e2d3d">
+            <i class="ph ph-magnifying-glass text-white" style="font-size:28px"></i>
+          </div>
+          <span class="text-[10px] font-mono font-bold text-red-500 uppercase tracking-widest mb-2">Step 01</span>
+          <h3 class="font-serif font-bold text-gray-900 text-lg mb-3" style="letter-spacing:-0.01em">Monitor</h3>
+          <p class="text-sm text-gray-500 leading-relaxed max-w-xs">We continuously scan permit filings, regulatory submissions, contractor bids, press releases, and utility interconnection requests across all 50 states.</p>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="relative flex flex-col items-center text-center px-8 py-6 reveal" style="animation-delay:0.12s">
+          <div class="w-20 h-20 flex items-center justify-center rounded-full bg-red-600 mb-6 relative z-10" style="border:3px solid #b91c1c">
+            <i class="ph ph-check-circle text-white" style="font-size:28px"></i>
+          </div>
+          <span class="text-[10px] font-mono font-bold text-red-500 uppercase tracking-widest mb-2">Step 02</span>
+          <h3 class="font-serif font-bold text-gray-900 text-lg mb-3" style="letter-spacing:-0.01em">Verify</h3>
+          <p class="text-sm text-gray-500 leading-relaxed max-w-xs">Every data point is cross-referenced against multiple primary sources before publication. No rumor, no speculation — only confirmed, documented activity.</p>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="relative flex flex-col items-center text-center px-8 py-6 reveal" style="animation-delay:0.19s">
+          <div class="w-20 h-20 flex items-center justify-center rounded-full bg-[#0f1923] mb-6 relative z-10" style="border:3px solid #1e2d3d">
+            <i class="ph ph-paper-plane-right text-white" style="font-size:28px"></i>
+          </div>
+          <span class="text-[10px] font-mono font-bold text-red-500 uppercase tracking-widest mb-2">Step 03</span>
+          <h3 class="font-serif font-bold text-gray-900 text-lg mb-3" style="letter-spacing:-0.01em">Publish</h3>
+          <p class="text-sm text-gray-500 leading-relaxed max-w-xs">Verified project updates are published to the database daily — with stage changes, MW updates, new contractor bids, and company contact details kept current.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════
+       WHO WE SERVE
+  ════════════════════════════════════════════ -->
+  <section class="py-16 relative z-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-10 reveal">
+        <p class="text-[11px] font-bold uppercase tracking-widest text-red-600 mb-3">Who Uses It</p>
+        <h2 class="font-serif text-3xl sm:text-4xl text-gray-900" style="letter-spacing:-0.02em">Built For The Industry</h2>
+      </div>
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white border border-gray-200 rounded-lg p-5 text-center reveal" style="animation-delay:0.05s">
+          <div class="w-10 h-10 flex items-center justify-center bg-[#0f1923] rounded-lg mx-auto mb-3">
+            <i class="ph ph-hard-hat text-white text-base"></i>
+          </div>
+          <h3 class="font-serif font-bold text-gray-900 text-sm" style="letter-spacing:-0.01em">Developers &amp; EPCs</h3>
+          <p class="text-xs text-gray-400 mt-1.5 leading-relaxed">Pipeline intelligence and competitor tracking</p>
+        </div>
+        <div class="bg-white border border-gray-200 rounded-lg p-5 text-center reveal" style="animation-delay:0.1s">
+          <div class="w-10 h-10 flex items-center justify-center bg-[#0f1923] rounded-lg mx-auto mb-3">
+            <i class="ph ph-factory text-white text-base"></i>
+          </div>
+          <h3 class="font-serif font-bold text-gray-900 text-sm" style="letter-spacing:-0.01em">OEM Vendors</h3>
+          <p class="text-xs text-gray-400 mt-1.5 leading-relaxed">Identify bid opportunities early</p>
+        </div>
+        <div class="bg-white border border-gray-200 rounded-lg p-5 text-center reveal" style="animation-delay:0.15s">
+          <div class="w-10 h-10 flex items-center justify-center bg-[#0f1923] rounded-lg mx-auto mb-3">
+            <i class="ph ph-strategy text-white text-base"></i>
+          </div>
+          <h3 class="font-serif font-bold text-gray-900 text-sm" style="letter-spacing:-0.01em">Consultants &amp; Analysts</h3>
+          <p class="text-xs text-gray-400 mt-1.5 leading-relaxed">Market sizing and due diligence</p>
+        </div>
+        <div class="bg-white border border-gray-200 rounded-lg p-5 text-center reveal" style="animation-delay:0.2s">
+          <div class="w-10 h-10 flex items-center justify-center bg-[#0f1923] rounded-lg mx-auto mb-3">
+            <i class="ph ph-trend-up text-white text-base"></i>
+          </div>
+          <h3 class="font-serif font-bold text-gray-900 text-sm" style="letter-spacing:-0.01em">Investors &amp; Researchers</h3>
+          <p class="text-xs text-gray-400 mt-1.5 leading-relaxed">Capacity signals and pipeline data</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════
+       CTA BAND
+  ════════════════════════════════════════════ -->
+  <section class="py-20 bg-[#0f1923] relative z-10">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center">
+      <p class="text-[11px] font-bold uppercase tracking-widest text-red-400 mb-4">Get Started</p>
+      <h2 class="font-serif text-3xl sm:text-4xl text-white mb-4" style="letter-spacing:-0.02em">Start Tracking the US Pipeline Today</h2>
+      <p class="text-sm text-slate-400 leading-relaxed mb-8 max-w-xl mx-auto">Join investors, developers, and contractors who use our database to stay ahead of the US data center market.</p>
+      <button class="open-trial-modal inline-flex items-center gap-2 px-8 py-3.5 bg-red-600 text-white font-bold text-sm rounded-sm hover:bg-red-500 transition-colors tracking-wide uppercase">
+        Request a Free Trial <i class="ph ph-arrow-right"></i>
+      </button>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════
+       FOOTER
+  ════════════════════════════════════════════ -->
+  <footer class="bg-[#0f1923]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+
+        <div>
+          <div class="mb-3" style="position:relative;height:59px;width:200px;overflow:hidden">
+            <img src="/Logo.svg" alt="US Data Center Projects" style="position:absolute;width:200px;height:113px;top:-27px;left:0" draggable="false">
+          </div>
+          <p class="text-xs text-slate-400 leading-relaxed mb-4">
+            The most comprehensive database of US data center construction projects — tracking 2,800+ developments across all 50 states with daily verified updates.
+          </p>
+          <div class="flex items-center gap-3">
+            <a href="#" class="text-slate-500 hover:text-white transition-colors" aria-label="X / Twitter"><i class="ph ph-x-logo text-lg"></i></a>
+            <a href="#" class="text-slate-500 hover:text-white transition-colors" aria-label="LinkedIn"><i class="ph ph-linkedin-logo text-lg"></i></a>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="text-[11px] font-bold uppercase tracking-widest text-slate-500 mb-3">Browse by State</h3>
+          <div class="grid grid-cols-3 gap-x-3 gap-y-1.5">
+            <a href="/arizona" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Arizona</a>
+            <a href="/california" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">California</a>
+            <a href="/florida" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Florida</a>
+            <a href="/georgia" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Georgia</a>
+            <a href="/illinois" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Illinois</a>
+            <a href="/maryland" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Maryland</a>
+            <a href="/nevada" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Nevada</a>
+            <a href="/new-jersey" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">New Jersey</a>
+            <a href="/new-york" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">New York</a>
+            <a href="/north-carolina" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">N. Carolina</a>
+            <a href="/ohio" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Ohio</a>
+            <a href="/oregon" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Oregon</a>
+            <a href="/texas" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Texas</a>
+            <a href="/utah" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Utah</a>
+            <a href="/virginia" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Virginia</a>
+            <a href="/washington" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Washington</a>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="text-[11px] font-bold uppercase tracking-widest text-slate-500 mb-3">Our Address</h3>
+          <p class="text-xs text-slate-400 leading-relaxed mb-4">
+            <strong class="text-slate-300">T-Hub</strong><br>
+            Plot No 1/C, Sy No 83/1,<br>
+            Raidurgam panmaktha,<br>
+            Hyderabad Knowledge City,<br>
+            Telangana 500081, India
+          </p>
+          <div class="grid grid-cols-2 gap-x-6 gap-y-1.5">
+            <a href="/about" class="text-xs text-slate-400 hover:text-white transition-colors font-medium">About</a>
+            <a href="#" class="text-xs text-slate-500 hover:text-white transition-colors">Advertise</a>
+            <a href="#" class="text-xs text-slate-500 hover:text-white transition-colors">Contact</a>
+            <a href="/sitemap.xml" class="text-xs text-slate-500 hover:text-white transition-colors">Sitemap</a>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="mt-8 pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <p class="text-[11px] text-slate-600">&copy; 2026 US Data Center Projects. All rights reserved.</p>
+        <div class="flex gap-5">
+          <a href="#" class="text-[11px] text-slate-600 hover:text-white transition-colors">Privacy Policy</a>
+          <a href="#" class="text-[11px] text-slate-600 hover:text-white transition-colors">Terms of Use</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ════════════════════════════════════════════
+       TRIAL MODAL
+  ════════════════════════════════════════════ -->
+  <div class="modal-overlay" id="trialModal">
+    <div class="modal-container">
+      <div class="modal-header">
+        <span style="font-family:'Bricolage Grotesque',sans-serif;font-size:1rem;font-weight:700;color:#111">Request a Free Trial</span>
+        <button class="modal-close" id="closeTrialModal"><i class="ph ph-x"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="deftform" data-form-id="8bf3ee99-b3c2-466e-a2aa-c09f0fbd64bb" data-form-width="100%" data-form-align="center" data-form-auto-height="1"></div>
+      </div>
+    </div>
+  </div>
+  <script defer src="https://cdn.deftform.com/embed.js"></script>
+
+  <script>
+    /* ── IntersectionObserver: reveal ── */
+    (function() {
+      var obs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) {
+          if (e.isIntersecting) { e.target.classList.add('revealed'); obs.unobserve(e.target); }
+        });
+      }, { threshold: 0.1 });
+      document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
+    })();
+
+    /* ── State chips: style + staggered entrance ── */
+    (function() {
+      var regionDelays = { northeast:0, southeast:0, midwest:0, south:0, west:0 };
+      ['northeast','southeast','midwest','south','west'].forEach(function(region) {
+        var container = document.getElementById('chips-' + region);
+        if (!container) return;
+        var spans = container.querySelectorAll('[data-state]');
+        spans.forEach(function(span) {
+          span.className = 'state-chip inline-flex items-center px-3 py-1.5 text-xs font-semibold rounded-sm bg-white border border-gray-200 text-gray-700 hover:border-red-300 hover:text-red-600 transition-colors cursor-default';
+          span.style.fontFamily = "'Onest', sans-serif";
+        });
+        var obs = new IntersectionObserver(function(entries) {
+          if (!entries[0].isIntersecting) return;
+          spans.forEach(function(chip, i) {
+            chip.style.animationDelay = (i * 38) + 'ms';
+            chip.classList.add('chipped');
+          });
+          obs.disconnect();
+        }, { threshold: 0.2 });
+        obs.observe(container);
+      });
+    })();
+
+    /* ── Animated counters ── */
+    (function() {
+      var counters = [
+        { id: 'count-projects',  target: 2847, suffix: '' },
+        { id: 'count-states',    target: 50,   suffix: '' },
+        { id: 'count-companies', target: 3200, suffix: '+' }
+      ];
+
+      function animateCounter(el, target, suffix, duration) {
+        var startTime = null;
+        function step(ts) {
+          if (!startTime) startTime = ts;
+          var p = Math.min((ts - startTime) / duration, 1);
+          var eased = 1 - Math.pow(1 - p, 3);
+          el.textContent = Math.floor(eased * target).toLocaleString() + suffix;
+          if (p < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      }
+
+      var fired = false;
+      var trigger = document.getElementById('count-projects');
+      if (trigger) {
+        var obs = new IntersectionObserver(function(entries) {
+          if (entries[0].isIntersecting && !fired) {
+            fired = true;
+            counters.forEach(function(c) {
+              var el = document.getElementById(c.id);
+              if (el) animateCounter(el, c.target, c.suffix, 1600);
+            });
+            obs.disconnect();
+          }
+        }, { threshold: 0.4 });
+        obs.observe(trigger);
+      }
+    })();
+
+    /* ── Modal ── */
+    (function() {
+      var modal = document.getElementById('trialModal');
+      var close = function() { modal.classList.remove('active'); document.body.style.overflow = ''; };
+      document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.open-trial-modal').forEach(function(b) {
+          b.addEventListener('click', function(e) { e.preventDefault(); modal.classList.add('active'); document.body.style.overflow = 'hidden'; });
+        });
+        document.getElementById('closeTrialModal').addEventListener('click', close);
+        modal.addEventListener('click', function(e) { if (e.target === modal) close(); });
+      });
+    })();
+
+    /* ── Mobile nav toggle ── */
+    (function() {
+      var btn = document.querySelector('[aria-label="Menu"]');
+      var nav = document.getElementById('mobile-nav');
+      if (!btn || !nav) return;
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var hidden = nav.classList.toggle('hidden');
+        btn.setAttribute('aria-expanded', String(!hidden));
+        var icon = btn.querySelector('i');
+        if (icon) icon.className = hidden ? 'ph ph-list' : 'ph ph-x';
+        if (icon) icon.style.fontSize = '22px';
+      });
+      document.addEventListener('click', function(e) {
+        if (!nav.classList.contains('hidden') && !nav.contains(e.target) && !btn.contains(e.target)) {
+          nav.classList.add('hidden');
+          btn.setAttribute('aria-expanded', 'false');
+          var icon = btn.querySelector('i');
+          if (icon) { icon.className = 'ph ph-list'; icon.style.fontSize = '22px'; }
+        }
+      });
+    })();
+  </script>
+
+</body>
+</html>

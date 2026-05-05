@@ -164,6 +164,7 @@ async function handleSitemap(request, env) {
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>${origin}/</loc><changefreq>daily</changefreq><priority>1.0</priority></url>
   <url><loc>${origin}/us-data-center-project-tracker</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>${origin}/about</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
 ${stateUrls.join('\n')}
 ${articleUrls.join('\n')}
 </urlset>`;
@@ -201,6 +202,11 @@ export default {
     // Projects tracker
     if (url.pathname === '/us-data-center-project-tracker') {
       return env.ASSETS.fetch(new Request(new URL('/us-data-center-project-tracker.html', request.url).toString()));
+    }
+
+    // About page
+    if (url.pathname === '/about') {
+      return env.ASSETS.fetch(new Request(new URL('/about.html', request.url).toString()));
     }
 
     // Legacy /news → redirect to homepage
