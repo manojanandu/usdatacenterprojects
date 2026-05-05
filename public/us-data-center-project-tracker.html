@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <link rel="icon" type="image/svg+xml" href="/favico.svg">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>US Data Center Project Tracker | Construction & Infrastructure Database</title>
   <meta name="description" content="Track US data center construction projects, capacity expansions, and power infrastructure across all 50 states. Comprehensive project database with daily verified updates.">
@@ -9,6 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Onest:wght@400;500;600;700&family=Martian+Mono:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Onest:wght@400;500;600;700&family=Martian+Mono:wght@400;500&display=swap"></noscript>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
   <script src="https://cdn.tailwindcss.com"></script>
   <script defer src="https://unpkg.com/@phosphor-icons/web"></script>
   <script>
@@ -61,7 +63,9 @@
     .modal-body { padding:1.5rem;overflow-y:auto;flex:1; }
 
     @keyframes slideUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
-    .reveal { opacity:0; animation: slideUp 0.45s cubic-bezier(0.22,1,0.36,1) both; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .reveal { opacity: 0; }
+    .reveal.revealed { animation: slideUp 0.45s cubic-bezier(0.22,1,0.36,1) both; }
 
     /* Scan beam over hero grid */
     @keyframes scan { 0%{transform:translateY(-100%)} 100%{transform:translateY(100%)} }
@@ -70,6 +74,26 @@
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: #d1cec8; border-radius: 3px; }
+
+    /* Tab switching */
+    .dc-tab { display:inline-flex;align-items:center;gap:6px;padding:0 14px;height:100%;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#64748b;border-bottom:2px solid transparent;border-top:none;border-left:none;border-right:none;background:none;cursor:pointer;transition:color 0.15s,border-color 0.15s;white-space:nowrap; }
+    .dc-tab:hover { color:#cbd5e1; }
+    .dc-tab.active { color:#fff;border-bottom-color:#dc2626; }
+    .dc-tab:focus-visible { outline:2px solid #dc2626;outline-offset:-2px; }
+
+    /* View crossfade */
+    .dc-view { opacity:0;pointer-events:none;transition:opacity 0.22s ease; }
+    .dc-view.active { opacity:1;pointer-events:auto; }
+
+    /* Leaflet popup overrides */
+    .dc-popup .leaflet-popup-content-wrapper { border-radius: 6px; box-shadow: 0 8px 24px rgba(0,0,0,0.14); padding: 0; border: 1px solid #e5e4e0; }
+    .dc-popup .leaflet-popup-content { margin: 12px 14px; }
+    .dc-popup .leaflet-popup-tip { background: #fff; }
+    .leaflet-control-zoom a { font-family: 'Onest', sans-serif; }
+    #dc-map .leaflet-control-zoom { border: 1px solid #e5e4e0 !important; border-radius: 6px !important; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important; }
+    #dc-map .leaflet-control-zoom a { background: #fff; color: #374151; border-bottom: 1px solid #e5e4e0 !important; width: 28px; height: 28px; line-height: 28px; font-size: 16px; }
+    #dc-map .leaflet-control-zoom a:hover { background: #f5f4f1; color: #dc2626; }
+    #dc-map .leaflet-control-attribution { font-size: 9px; background: rgba(255,255,255,0.75); }
   </style>
 </head>
 <body class="text-gray-900 antialiased">
@@ -79,10 +103,10 @@
   ════════════════════════════════════════════ -->
   <header class="sticky top-0 z-50 bg-[#0f1923]" style="border-bottom:2px solid #dc2626">
     <div class="max-w-7xl mx-auto px-4 sm:px-6">
-      <div class="flex items-center justify-between" style="height:64px">
+      <div style="display:grid;grid-template-columns:1fr auto 1fr;height:64px;align-items:center">
 
-        <a href="/" class="shrink-0 group" style="display:block;position:relative;height:64px;width:260px;overflow:hidden" draggable="false">
-          <img src="/Logo.svg" alt="US Data Center Projects" class="group-hover:opacity-70" style="position:absolute;width:260px;height:146px;top:-41px;left:0;transition:opacity 0.15s" draggable="false">
+        <a href="/" class="group" style="display:block;position:relative;height:64px;width:260px;overflow:hidden" draggable="false">
+          <img src="/Logo.svg" alt="US Data Center Projects" class="group-hover:opacity-70" style="position:absolute;width:260px;height:146px;top:-30px;left:0;transition:opacity 0.15s" draggable="false">
         </a>
 
         <nav class="hidden md:flex items-center" style="gap:28px">
@@ -90,7 +114,7 @@
           <a href="/us-data-center-project-tracker" class="text-xs font-semibold tracking-widest uppercase text-white" style="border-bottom:2px solid #dc2626;padding-bottom:3px">Projects</a>
         </nav>
 
-        <div class="flex items-center shrink-0" style="gap:8px">
+        <div class="flex items-center justify-end" style="gap:8px">
           <button class="open-trial-modal hidden sm:inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-white bg-red-600 hover:bg-red-500 transition-colors duration-150" style="padding:9px 16px">
             Request Trial <i class="ph ph-arrow-right" style="font-size:11px"></i>
           </button>
@@ -244,70 +268,130 @@
   </section>
 
   <!-- ════════════════════════════════════════════
-       PROJECTS TABLE
+       PROJECTS + MAP (MERGED)
   ════════════════════════════════════════════ -->
   <section id="projects" class="py-16 relative z-10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6">
-      <div class="flex items-center justify-between mb-6 reveal">
+
+      <!-- Section header -->
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6 reveal">
         <div>
           <p class="text-[11px] font-bold uppercase tracking-widest text-red-600 mb-1">Sample Data</p>
-          <h2 class="font-serif text-2xl sm:text-3xl text-gray-900" style="letter-spacing:-0.02em">Recent Project Activity</h2>
+          <h2 class="font-serif text-2xl sm:text-3xl text-gray-900" style="letter-spacing:-0.02em">Data Center Map of United States</h2>
+          <p class="text-sm text-gray-500 mt-2 max-w-xl leading-relaxed">Track active construction projects on the complete data center map of USA — covering hyperscale campuses, colocation facilities, and edge deployments across all 50 states.</p>
         </div>
-        <button class="open-trial-modal hidden sm:flex items-center gap-1.5 px-4 py-2 bg-[#0f1923] text-white text-xs font-bold rounded-sm hover:bg-gray-800 transition-colors tracking-wide uppercase">
+        <button class="open-trial-modal flex-shrink-0 hidden sm:flex items-center gap-1.5 px-4 py-2 bg-[#0f1923] text-white text-xs font-bold rounded-sm hover:bg-gray-800 transition-colors tracking-wide uppercase self-start">
           Get Full Access <i class="ph ph-arrow-right text-xs"></i>
         </button>
       </div>
 
+      <!-- Unified card -->
       <div class="bg-white border border-gray-200 rounded-lg overflow-hidden reveal" style="box-shadow:0 2px 12px rgba(0,0,0,0.05)">
-        <div class="overflow-x-auto">
-          <table class="w-full text-sm text-left border-collapse">
-            <thead>
-              <tr class="bg-[#0f1923]">
-                <th class="px-5 py-3.5 text-[11px] font-bold uppercase tracking-widest text-slate-400 font-mono">Project Name</th>
-                <th class="px-5 py-3.5 text-[11px] font-bold uppercase tracking-widest text-slate-400 font-mono">Location</th>
-                <th class="px-5 py-3.5 text-[11px] font-bold uppercase tracking-widest text-slate-400 font-mono">Capacity</th>
-                <th class="px-5 py-3.5 text-[11px] font-bold uppercase tracking-widest text-slate-400 font-mono">Company</th>
-                <th class="px-5 py-3.5 text-[11px] font-bold uppercase tracking-widest text-slate-400 font-mono">Status</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-100">
-              <tr class="data-row">
-                <td class="px-5 py-4 font-semibold text-gray-900">Loudoun DC-9 Expansion</td>
-                <td class="px-5 py-4 text-gray-500">Ashburn, Virginia</td>
-                <td class="px-5 py-4 font-mono text-gray-700">45 MW</td>
-                <td class="px-5 py-4 text-gray-600">Vantage Data Centers</td>
-                <td class="px-5 py-4"><span class="text-[11px] font-bold uppercase tracking-wide px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">Construction</span></td>
-              </tr>
-              <tr class="data-row">
-                <td class="px-5 py-4 font-semibold text-gray-900">Phoenix Mesa Campus</td>
-                <td class="px-5 py-4 text-gray-500">Mesa, Arizona</td>
-                <td class="px-5 py-4 font-mono text-gray-700">120 MW</td>
-                <td class="px-5 py-4 text-gray-600">CyrusOne</td>
-                <td class="px-5 py-4"><span class="text-[11px] font-bold uppercase tracking-wide px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">Construction</span></td>
-              </tr>
-              <tr class="data-row">
-                <td class="px-5 py-4 font-semibold text-gray-900">Silicon Valley SV-7</td>
-                <td class="px-5 py-4 text-gray-500">Santa Clara, California</td>
-                <td class="px-5 py-4 font-mono text-gray-700">65 MW</td>
-                <td class="px-5 py-4 text-gray-600">Digital Realty</td>
-                <td class="px-5 py-4"><span class="text-[11px] font-bold uppercase tracking-wide px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200">Planning</span></td>
-              </tr>
-              <tr class="data-row">
-                <td class="px-5 py-4 font-semibold text-gray-900">Dallas-Fort Worth DFW-12</td>
-                <td class="px-5 py-4 text-gray-500">Richardson, Texas</td>
-                <td class="px-5 py-4 font-mono text-gray-700">90 MW</td>
-                <td class="px-5 py-4 text-gray-600">QTS Realty Trust</td>
-                <td class="px-5 py-4"><span class="text-[11px] font-bold uppercase tracking-wide px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200">Permitting</span></td>
-              </tr>
-            </tbody>
-          </table>
+
+        <!-- Card header: tabs left, map legend right -->
+        <div class="bg-[#0f1923] flex items-center justify-between pr-4" style="height:46px">
+          <div role="tablist" aria-label="View data as map or table" class="flex items-stretch h-full">
+            <button id="tab-map" role="tab" aria-selected="true" aria-controls="view-map" class="dc-tab active">
+              <i class="ph ph-map-trifold" style="font-size:13px"></i>Map
+            </button>
+            <button id="tab-table" role="tab" aria-selected="false" aria-controls="view-table" class="dc-tab">
+              <i class="ph ph-rows" style="font-size:13px"></i>Table
+            </button>
+          </div>
+          <div id="map-legend" class="items-center gap-3 sm:gap-4" style="display:flex">
+            <div class="flex items-center gap-1.5">
+              <span style="width:7px;height:7px;border-radius:50%;background:#34d399;flex-shrink:0;display:inline-block"></span>
+              <span class="text-[10px] text-slate-400 uppercase tracking-wide font-mono hidden sm:inline">Construction</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span style="width:7px;height:7px;border-radius:50%;background:#fbbf24;flex-shrink:0;display:inline-block"></span>
+              <span class="text-[10px] text-slate-400 uppercase tracking-wide font-mono hidden sm:inline">Permitting</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span style="width:7px;height:7px;border-radius:50%;background:#60a5fa;flex-shrink:0;display:inline-block"></span>
+              <span class="text-[10px] text-slate-400 uppercase tracking-wide font-mono hidden sm:inline">Planning</span>
+            </div>
+          </div>
         </div>
-        <div class="px-5 py-4 bg-[#0f1923] flex items-center justify-between">
-          <p class="text-[11px] text-slate-400">Showing 4 of 2,847 tracked projects. <span class="text-slate-300 font-semibold">Request access for the full database.</span></p>
-          <button class="open-trial-modal text-[11px] font-bold text-red-400 hover:text-red-300 transition-colors uppercase tracking-wide flex items-center gap-1">
-            Get Access <i class="ph ph-arrow-right text-xs"></i>
+
+        <!-- Content area: both views stacked via absolute positioning -->
+        <div style="position:relative;height:460px;overflow:hidden">
+
+          <!-- Table view -->
+          <div id="view-table" role="tabpanel" aria-labelledby="tab-table" class="dc-view" style="position:absolute;inset:0;overflow-x:auto;overflow-y:auto">
+            <table class="w-full text-sm text-left border-collapse">
+              <thead>
+                <tr class="bg-[#0f1923]">
+                  <th class="px-5 py-3.5 text-[11px] font-bold uppercase tracking-widest text-slate-400 font-mono">Project Name</th>
+                  <th class="px-5 py-3.5 text-[11px] font-bold uppercase tracking-widest text-slate-400 font-mono">Location</th>
+                  <th class="px-5 py-3.5 text-[11px] font-bold uppercase tracking-widest text-slate-400 font-mono">Capacity</th>
+                  <th class="px-5 py-3.5 text-[11px] font-bold uppercase tracking-widest text-slate-400 font-mono">Company</th>
+                  <th class="px-5 py-3.5 text-[11px] font-bold uppercase tracking-widest text-slate-400 font-mono">Status</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-100">
+                <tr class="data-row">
+                  <td class="px-5 py-4 font-semibold text-gray-900">Loudoun DC-9 Expansion</td>
+                  <td class="px-5 py-4 text-gray-500">Ashburn, Virginia</td>
+                  <td class="px-5 py-4 font-mono text-gray-700">45 MW</td>
+                  <td class="px-5 py-4 text-gray-600">Vantage Data Centers</td>
+                  <td class="px-5 py-4"><span class="text-[11px] font-bold uppercase tracking-wide px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">Construction</span></td>
+                </tr>
+                <tr class="data-row">
+                  <td class="px-5 py-4 font-semibold text-gray-900">Phoenix Mesa Campus</td>
+                  <td class="px-5 py-4 text-gray-500">Mesa, Arizona</td>
+                  <td class="px-5 py-4 font-mono text-gray-700">120 MW</td>
+                  <td class="px-5 py-4 text-gray-600">CyrusOne</td>
+                  <td class="px-5 py-4"><span class="text-[11px] font-bold uppercase tracking-wide px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">Construction</span></td>
+                </tr>
+                <tr class="data-row">
+                  <td class="px-5 py-4 font-semibold text-gray-900">Silicon Valley SV-7</td>
+                  <td class="px-5 py-4 text-gray-500">Santa Clara, California</td>
+                  <td class="px-5 py-4 font-mono text-gray-700">65 MW</td>
+                  <td class="px-5 py-4 text-gray-600">Digital Realty</td>
+                  <td class="px-5 py-4"><span class="text-[11px] font-bold uppercase tracking-wide px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200">Planning</span></td>
+                </tr>
+                <tr class="data-row">
+                  <td class="px-5 py-4 font-semibold text-gray-900">Dallas-Fort Worth DFW-12</td>
+                  <td class="px-5 py-4 text-gray-500">Richardson, Texas</td>
+                  <td class="px-5 py-4 font-mono text-gray-700">90 MW</td>
+                  <td class="px-5 py-4 text-gray-600">QTS Realty Trust</td>
+                  <td class="px-5 py-4"><span class="text-[11px] font-bold uppercase tracking-wide px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200">Permitting</span></td>
+                </tr>
+              </tbody>
+            </table>
+            <!-- Locked-rows conversion moment -->
+            <div class="px-5 py-8 flex flex-col items-center justify-center gap-2 border-t border-gray-100" style="background:linear-gradient(to bottom,#fafaf9,#f5f4f1)">
+              <i class="ph ph-lock-key" style="font-size:20px;color:#d1d5db"></i>
+              <p class="text-xs text-gray-400 text-center max-w-xs">2,843 more projects available with full access — across all 50 states on the data center map of USA.</p>
+              <button class="open-trial-modal mt-1 text-[11px] font-bold uppercase tracking-wide text-red-500 hover:text-red-600 transition-colors">
+                Request Access →
+              </button>
+            </div>
+          </div>
+
+          <!-- Map view -->
+          <div id="view-map" role="tabpanel" aria-labelledby="tab-map" class="dc-view active" style="position:absolute;inset:0">
+            <div id="dc-map" style="height:460px;width:100%;background:#f0ede8">
+              <div id="dc-map-loader" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:500;pointer-events:none;transition:opacity 0.3s ease">
+                <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+                  <div style="width:18px;height:18px;border:2px solid #e5e4e0;border-top-color:#dc2626;border-radius:50%;animation:spin 0.75s linear infinite"></div>
+                  <span style="font-family:'Martian Mono',monospace;font-size:9px;color:#a1a1aa;letter-spacing:0.06em;text-transform:uppercase">Loading map</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Single unified footer CTA -->
+        <div class="px-5 py-3.5 bg-[#0f1923] flex items-center justify-between">
+          <p class="text-[11px] text-slate-400">Showing 4 of <span id="dc-project-count" class="text-slate-300 font-semibold font-mono">2,847</span> projects — <span class="hidden sm:inline">full database access includes the complete </span>data center map of USA.</p>
+          <button class="open-trial-modal text-[11px] font-bold text-red-400 hover:text-red-300 transition-colors uppercase tracking-wide flex items-center gap-1 flex-shrink-0 ml-4">
+            Get Access <i class="ph ph-arrow-right" style="font-size:10px"></i>
           </button>
         </div>
+
       </div>
     </div>
   </section>
@@ -327,7 +411,7 @@
           <div class="w-12 h-12 flex items-center justify-center bg-[#0f1923] rounded-lg mx-auto mb-4">
             <i class="ph ph-hard-hat text-white text-xl"></i>
           </div>
-          <h4 class="font-serif font-bold text-gray-900 text-sm" style="letter-spacing:-0.01em">Developers & EPCs</h4>
+          <h3 class="font-serif font-bold text-gray-900 text-sm" style="letter-spacing:-0.01em">Developers & EPCs</h3>
           <p class="text-xs text-gray-400 mt-1.5 leading-relaxed">Pipeline intelligence and competitor tracking</p>
         </div>
 
@@ -335,7 +419,7 @@
           <div class="w-12 h-12 flex items-center justify-center bg-[#0f1923] rounded-lg mx-auto mb-4">
             <i class="ph ph-factory text-white text-xl"></i>
           </div>
-          <h4 class="font-serif font-bold text-gray-900 text-sm" style="letter-spacing:-0.01em">OEM Vendors</h4>
+          <h3 class="font-serif font-bold text-gray-900 text-sm" style="letter-spacing:-0.01em">OEM Vendors</h3>
           <p class="text-xs text-gray-400 mt-1.5 leading-relaxed">Identify bid opportunities before they go public</p>
         </div>
 
@@ -343,7 +427,7 @@
           <div class="w-12 h-12 flex items-center justify-center bg-[#0f1923] rounded-lg mx-auto mb-4">
             <i class="ph ph-strategy text-white text-xl"></i>
           </div>
-          <h4 class="font-serif font-bold text-gray-900 text-sm" style="letter-spacing:-0.01em">Consultants & Analysts</h4>
+          <h3 class="font-serif font-bold text-gray-900 text-sm" style="letter-spacing:-0.01em">Consultants & Analysts</h3>
           <p class="text-xs text-gray-400 mt-1.5 leading-relaxed">Market sizing, trend analysis, and due diligence</p>
         </div>
 
@@ -351,7 +435,7 @@
           <div class="w-12 h-12 flex items-center justify-center bg-[#0f1923] rounded-lg mx-auto mb-4">
             <i class="ph ph-trend-up text-white text-xl"></i>
           </div>
-          <h4 class="font-serif font-bold text-gray-900 text-sm" style="letter-spacing:-0.01em">Investors & Researchers</h4>
+          <h3 class="font-serif font-bold text-gray-900 text-sm" style="letter-spacing:-0.01em">Investors & Researchers</h3>
           <p class="text-xs text-gray-400 mt-1.5 leading-relaxed">Capacity growth signals and infrastructure pipeline</p>
         </div>
 
@@ -382,15 +466,8 @@
 
         <!-- About -->
         <div>
-          <div class="flex items-center gap-2 mb-3">
-            <svg width="20" height="20" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="20" y="25" width="60" height="50" rx="4" fill="none" stroke="#e2e8f0" stroke-width="3" stroke-linecap="round"/>
-              <line x1="25" y1="38" x2="75" y2="38" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"/>
-              <line x1="25" y1="50" x2="75" y2="50" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"/>
-              <line x1="25" y1="62" x2="75" y2="62" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"/>
-              <rect x="30" y="75" width="40" height="4" rx="2" fill="#e2e8f0"/>
-            </svg>
-            <span class="text-sm font-bold text-white">US Data Center Projects</span>
+          <div class="mb-3" style="position:relative;height:59px;width:200px;overflow:hidden">
+            <img src="/Logo.svg" alt="US Data Center Projects" style="position:absolute;width:200px;height:113px;top:-27px;left:0" draggable="false">
           </div>
           <p class="text-xs text-slate-400 leading-relaxed mb-4">
             The most comprehensive database of US data center construction projects — tracking 2,800+ developments across all 50 states with daily verified updates.
@@ -403,7 +480,7 @@
 
         <!-- Browse by State -->
         <div>
-          <h4 class="text-[11px] font-bold uppercase tracking-widest text-slate-500 mb-3">Browse by State</h4>
+          <h3 class="text-[11px] font-bold uppercase tracking-widest text-slate-500 mb-3">Browse by State</h3>
           <div class="grid grid-cols-3 gap-x-3 gap-y-1.5">
             <a href="/alabama" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Alabama</a>
             <a href="/alaska" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Alaska</a>
@@ -434,7 +511,7 @@
 
         <!-- Address + Links -->
         <div>
-          <h4 class="text-[11px] font-bold uppercase tracking-widest text-slate-500 mb-3">Our Address</h4>
+          <h3 class="text-[11px] font-bold uppercase tracking-widest text-slate-500 mb-3">Our Address</h3>
           <p class="text-xs text-slate-400 leading-relaxed mb-4">
             <strong class="text-slate-300">T-Hub</strong><br>
             Plot No 1/C, Sy No 83/1,<br>
@@ -477,6 +554,7 @@
       </div>
     </div>
   </div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV/XN/WLs=" crossorigin=""></script>
   <script defer src="https://cdn.deftform.com/embed.js"></script>
   <script>
     (function() {
@@ -490,6 +568,166 @@
     })();
   </script>
   <script>
+    /* ── P0: IntersectionObserver for .reveal elements ── */
+    (function() {
+      var obs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) {
+          if (e.isIntersecting) { e.target.classList.add('revealed'); obs.unobserve(e.target); }
+        });
+      }, { threshold: 0.1 });
+      document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
+    })();
+
+    /* ── Tab switching ── */
+    (function() {
+      var tabs = { table: document.getElementById('tab-table'), map: document.getElementById('tab-map') };
+      var views = { table: document.getElementById('view-table'), map: document.getElementById('view-map') };
+      var legend = document.getElementById('map-legend');
+      var mapInvalidated = false;
+
+      function switchTab(name) {
+        Object.keys(tabs).forEach(function(k) {
+          var active = k === name;
+          tabs[k].classList.toggle('active', active);
+          tabs[k].setAttribute('aria-selected', String(active));
+          views[k].classList.toggle('active', active);
+        });
+        if (legend) legend.style.display = name === 'map' ? 'flex' : 'none';
+        /* invalidate Leaflet on first reveal so tiles fill correctly */
+        if (name === 'map' && window._dcMap && !mapInvalidated) {
+          mapInvalidated = true;
+          setTimeout(function() { window._dcMap.invalidateSize(); }, 60);
+        }
+      }
+
+      tabs.map.addEventListener('click', function() { switchTab('map'); });
+      tabs.table.addEventListener('click', function() { switchTab('table'); });
+      /* Keyboard: arrow-key navigation between tabs (map first, table second) */
+      [tabs.map, tabs.table].forEach(function(btn, idx, arr) {
+        btn.addEventListener('keydown', function(e) {
+          if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+            e.preventDefault();
+            var next = arr[(idx + (e.key === 'ArrowRight' ? 1 : -1) + arr.length) % arr.length];
+            next.focus();
+            next.click();
+          }
+        });
+      });
+    })();
+
+    /* ── Map init with pin-drop animations, loading state, counter ── */
+    (function initDCMap() {
+      if (!document.getElementById('dc-map')) return;
+
+      var projects = [
+        { name: 'Loudoun DC-9 Expansion',   company: 'Vantage Data Centers', lat: 39.0,  lng: -77.47,  mw: '45 MW',  status: 'Construction', color: '#34d399' },
+        { name: 'Phoenix Mesa Campus',       company: 'CyrusOne',             lat: 33.41, lng: -111.83, mw: '120 MW', status: 'Construction', color: '#34d399' },
+        { name: 'Silicon Valley SV-7',       company: 'Digital Realty',       lat: 37.35, lng: -121.95, mw: '65 MW',  status: 'Planning',      color: '#60a5fa' },
+        { name: 'Dallas-Fort Worth DFW-12',  company: 'QTS Realty Trust',     lat: 32.95, lng: -96.73,  mw: '90 MW',  status: 'Permitting',    color: '#fbbf24' }
+      ];
+
+      var map = window._dcMap = L.map('dc-map', {
+        center: [38.5, -96.5],
+        zoom: 4,
+        zoomControl: true,
+        scrollWheelZoom: false,
+        attributionControl: true
+      });
+
+      var tileLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 19
+      }).addTo(map);
+
+      /* Hide loader after first tile batch loads */
+      var loaderDismissed = false;
+      tileLayer.on('load', function() {
+        if (loaderDismissed) return;
+        loaderDismissed = true;
+        var loader = document.getElementById('dc-map-loader');
+        if (loader) {
+          loader.style.opacity = '0';
+          setTimeout(function() { loader.style.display = 'none'; }, 320);
+        }
+      });
+
+      var statusBadge = {
+        'Construction': 'background:#d1fae5;color:#065f46;border:1px solid #a7f3d0',
+        'Permitting':   'background:#fef3c7;color:#92400e;border:1px solid #fde68a',
+        'Planning':     'background:#dbeafe;color:#1e40af;border:1px solid #bfdbfe'
+      };
+
+      var markers = [];
+      projects.forEach(function(p) {
+        var icon = L.divIcon({
+          className: '',
+          html: '<div class="dc-pin" style="width:20px;height:20px;border-radius:50%;background:' + p.color + ';border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,0.25);display:flex;align-items:center;justify-content:center;transform:scale(0);opacity:0"><div style="width:5px;height:5px;border-radius:50%;background:#fff"></div></div>',
+          iconSize: [20, 20],
+          iconAnchor: [10, 10],
+          popupAnchor: [0, -14]
+        });
+
+        var badge = statusBadge[p.status] || '';
+        var popup = '<div style="font-family:Onest,sans-serif;min-width:200px;padding:2px 0">' +
+          '<div style="font-size:13px;font-weight:700;color:#111;margin-bottom:4px">' + p.name + '</div>' +
+          '<div style="font-size:11px;color:#6b7280;margin-bottom:8px">' + p.company + '</div>' +
+          '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">' +
+          '<span style="font-family:\'Martian Mono\',monospace;font-size:11px;font-weight:600;color:#374151;background:#f3f4f6;padding:2px 7px;border-radius:4px;border:1px solid #e5e7eb">' + p.mw + '</span>' +
+          '<span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;padding:2px 8px;border-radius:999px;' + badge + '">' + p.status + '</span>' +
+          '</div></div>';
+
+        var marker = L.marker([p.lat, p.lng], { icon: icon })
+          .addTo(map)
+          .bindPopup(popup, { maxWidth: 260, className: 'dc-popup' });
+        markers.push(marker);
+      });
+
+      /* Map is the default tab — invalidate once to ensure tiles fill */
+      setTimeout(function() { map.invalidateSize(); }, 80);
+
+      /* Pin-drop animation: staggered spring entrance after tiles load */
+      map.whenReady(function() {
+        markers.forEach(function(marker, idx) {
+          setTimeout(function() {
+            var el = marker.getElement();
+            if (!el) return;
+            var pin = el.querySelector('.dc-pin');
+            if (!pin) return;
+            pin.style.transition = 'transform 0.42s cubic-bezier(0.34,1.56,0.64,1), opacity 0.25s ease';
+            pin.style.transform = 'scale(1)';
+            pin.style.opacity = '1';
+          }, 420 + idx * 140);
+        });
+      });
+
+      /* Counter animation for project count in map footer */
+      function animateCounter(el, target, duration) {
+        var startTime = null;
+        function step(ts) {
+          if (!startTime) startTime = ts;
+          var p = Math.min((ts - startTime) / duration, 1);
+          var eased = 1 - Math.pow(1 - p, 3);
+          el.textContent = Math.floor(eased * target).toLocaleString();
+          if (p < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      }
+
+      var counterEl = document.getElementById('dc-project-count');
+      if (counterEl) {
+        var counterFired = false;
+        var counterObs = new IntersectionObserver(function(entries) {
+          if (entries[0].isIntersecting && !counterFired) {
+            counterFired = true;
+            animateCounter(counterEl, 2847, 1400);
+            counterObs.disconnect();
+          }
+        }, { threshold: 0.5 });
+        counterObs.observe(counterEl);
+      }
+    })();
+
     (function() {
       var btn = document.querySelector('[aria-label="Menu"]');
       var nav = document.getElementById('mobile-nav');
