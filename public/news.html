@@ -169,7 +169,8 @@
         </a>
 
         <nav class="hidden md:flex items-center" style="gap:28px">
-          <a href="/" class="text-xs font-semibold tracking-widest uppercase text-white">News</a>
+          <span id="header-breadcrumb" style="display:none;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:#64748b;font-weight:500"></span>
+          <a href="/" class="text-xs font-semibold tracking-widest uppercase text-white" style="border-bottom:2px solid #dc2626;padding-bottom:3px">News</a>
           <a href="/us-data-center-project-tracker" class="text-xs font-medium tracking-widest uppercase text-slate-500 hover:text-white transition-colors duration-150">Projects</a>
         </nav>
 
@@ -187,7 +188,7 @@
 
     <div id="mobile-nav" class="hidden md:hidden" style="border-top:1px solid rgba(255,255,255,0.07)">
       <nav class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col" style="padding-top:6px;padding-bottom:16px">
-        <a href="/" class="flex items-center px-2 text-sm font-semibold text-white" style="height:48px;gap:12px">
+        <a href="/" class="flex items-center px-3 text-sm font-semibold text-white" style="height:48px;gap:12px;background:rgba(220,38,38,0.08);border-radius:6px">
           <i class="ph ph-newspaper" style="font-size:16px;color:#dc2626"></i>News
         </a>
         <a href="/us-data-center-project-tracker" class="flex items-center px-2 text-sm font-medium text-slate-400 hover:text-white transition-colors" style="height:48px;gap:12px">
@@ -877,6 +878,16 @@
         }
       });
     })();
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var a = window.__ARTICLE__;
+      if (a && a.region) {
+        var el = document.getElementById('header-breadcrumb');
+        if (el) { el.textContent = a.region.toUpperCase(); el.style.display = 'inline'; }
+      }
+    });
   </script>
 
 </body>
