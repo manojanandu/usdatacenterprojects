@@ -14,7 +14,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Onest:wght@400;500;600;700&family=Martian+Mono:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Onest:wght@400;500;600;700&family=Martian+Mono:wght@400;500&display=swap"></noscript>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
   <script src="https://cdn.tailwindcss.com"></script>
   <script defer src="https://unpkg.com/@phosphor-icons/web"></script>
   <script>
@@ -89,15 +88,9 @@
     .dc-view { opacity:0;pointer-events:none;transition:opacity 0.22s ease; }
     .dc-view.active { opacity:1;pointer-events:auto; }
 
-    /* Leaflet popup overrides */
-    .dc-popup .leaflet-popup-content-wrapper { border-radius: 6px; box-shadow: 0 8px 24px rgba(0,0,0,0.14); padding: 0; border: 1px solid #e5e4e0; }
-    .dc-popup .leaflet-popup-content { margin: 12px 14px; }
-    .dc-popup .leaflet-popup-tip { background: #fff; }
-    .leaflet-control-zoom a { font-family: 'Onest', sans-serif; }
-    #dc-map .leaflet-control-zoom { border: 1px solid #e5e4e0 !important; border-radius: 6px !important; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important; }
-    #dc-map .leaflet-control-zoom a { background: #fff; color: #374151; border-bottom: 1px solid #e5e4e0 !important; width: 28px; height: 28px; line-height: 28px; font-size: 16px; }
-    #dc-map .leaflet-control-zoom a:hover { background: #f5f4f1; color: #dc2626; }
-    #dc-map .leaflet-control-attribution { font-size: 9px; background: rgba(255,255,255,0.75); }
+    /* SVG heatmap hover */
+    #dc-map svg path.state { cursor: pointer; transition: filter 0.15s ease; }
+    #dc-map svg path.state:hover { filter: brightness(1.3); }
   </style>
 </head>
 <body class="text-gray-900 antialiased">
@@ -372,7 +365,7 @@
 
           <!-- Map view -->
           <div id="view-map" role="tabpanel" aria-labelledby="tab-map" class="dc-view active" style="position:absolute;inset:0">
-            <div id="dc-map" style="height:460px;width:100%;background:#f0ede8">
+            <div id="dc-map" style="height:460px;width:100%;background:#080e17;position:relative;overflow:hidden">
               <div id="dc-map-loader" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:500;pointer-events:none;transition:opacity 0.3s ease">
                 <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
                   <div style="width:18px;height:18px;border:2px solid #e5e4e0;border-top-color:#dc2626;border-radius:50%;animation:spin 0.75s linear infinite"></div>
@@ -550,7 +543,8 @@
       </div>
     </div>
   </div>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
   <script defer src="https://cdn.deftform.com/embed.js"></script>
   <script>
     (function() {
@@ -579,8 +573,6 @@
       var tabs = { table: document.getElementById('tab-table'), map: document.getElementById('tab-map') };
       var views = { table: document.getElementById('view-table'), map: document.getElementById('view-map') };
       var legend = document.getElementById('map-legend');
-      var mapInvalidated = false;
-
       function switchTab(name) {
         Object.keys(tabs).forEach(function(k) {
           var active = k === name;
@@ -589,11 +581,6 @@
           views[k].classList.toggle('active', active);
         });
         if (legend) legend.style.display = name === 'map' ? 'flex' : 'none';
-        /* invalidate Leaflet on first reveal so tiles fill correctly */
-        if (name === 'map' && window._dcMap && !mapInvalidated) {
-          mapInvalidated = true;
-          setTimeout(function() { window._dcMap.invalidateSize(); }, 60);
-        }
       }
 
       tabs.map.addEventListener('click', function() { switchTab('map'); });
@@ -611,109 +598,194 @@
       });
     })();
 
-    /* ── Choropleth heatmap: projects per US state ── */
+    /* ── D3 choropleth heatmap — projects per US state ── */
     (function initDCMap() {
-      if (!document.getElementById('dc-map')) return;
+      var container = document.getElementById('dc-map');
+      if (!container || typeof d3 === 'undefined' || typeof topojson === 'undefined') return;
 
-      /* Representative project counts per state */
-      var stateCounts = {
-        'Virginia': 280, 'Texas': 252, 'California': 240, 'Arizona': 152,
-        'Georgia': 148, 'Illinois': 140, 'Ohio': 128, 'Nevada': 122,
-        'Oregon': 100, 'Washington': 98, 'New York': 95, 'New Jersey': 94,
-        'North Carolina': 88, 'Maryland': 83, 'Massachusetts': 78,
-        'Florida': 75, 'Pennsylvania': 68, 'Colorado': 63, 'Utah': 58,
-        'Missouri': 48, 'Michigan': 44, 'Tennessee': 42, 'Indiana': 38,
-        'Minnesota': 35, 'Wisconsin': 32, 'Nebraska': 28, 'Kansas': 25,
-        'Iowa': 23, 'Oklahoma': 21, 'Connecticut': 19, 'South Carolina': 18,
-        'Kentucky': 16, 'Arkansas': 14, 'Alabama': 12, 'Louisiana': 11,
-        'New Mexico': 9, 'Mississippi': 8, 'Idaho': 7, 'Maine': 5,
-        'New Hampshire': 5, 'Montana': 4, 'Wyoming': 4, 'South Dakota': 3,
-        'North Dakota': 3, 'Vermont': 3, 'Rhode Island': 3, 'Delaware': 3,
-        'West Virginia': 2, 'Hawaii': 2, 'Alaska': 1
+      /* FIPS → {name, slug, count} */
+      var S = {
+        '01':{n:'Alabama',       s:'alabama',       c:12},
+        '02':{n:'Alaska',        s:'alaska',        c:1},
+        '04':{n:'Arizona',       s:'arizona',       c:152},
+        '05':{n:'Arkansas',      s:'arkansas',      c:14},
+        '06':{n:'California',    s:'california',    c:240},
+        '08':{n:'Colorado',      s:'colorado',      c:63},
+        '09':{n:'Connecticut',   s:'connecticut',   c:19},
+        '10':{n:'Delaware',      s:'delaware',      c:3},
+        '12':{n:'Florida',       s:'florida',       c:75},
+        '13':{n:'Georgia',       s:'georgia',       c:148},
+        '15':{n:'Hawaii',        s:'hawaii',        c:2},
+        '16':{n:'Idaho',         s:'idaho',         c:7},
+        '17':{n:'Illinois',      s:'illinois',      c:140},
+        '18':{n:'Indiana',       s:'indiana',       c:38},
+        '19':{n:'Iowa',          s:'iowa',          c:23},
+        '20':{n:'Kansas',        s:'kansas',        c:25},
+        '21':{n:'Kentucky',      s:'kentucky',      c:16},
+        '22':{n:'Louisiana',     s:'louisiana',     c:11},
+        '23':{n:'Maine',         s:'maine',         c:5},
+        '24':{n:'Maryland',      s:'maryland',      c:83},
+        '25':{n:'Massachusetts', s:'massachusetts', c:78},
+        '26':{n:'Michigan',      s:'michigan',      c:44},
+        '27':{n:'Minnesota',     s:'minnesota',     c:35},
+        '28':{n:'Mississippi',   s:'mississippi',   c:8},
+        '29':{n:'Missouri',      s:'missouri',      c:48},
+        '30':{n:'Montana',       s:'montana',       c:4},
+        '31':{n:'Nebraska',      s:'nebraska',      c:28},
+        '32':{n:'Nevada',        s:'nevada',        c:122},
+        '33':{n:'New Hampshire', s:'new-hampshire', c:5},
+        '34':{n:'New Jersey',    s:'new-jersey',    c:94},
+        '35':{n:'New Mexico',    s:'new-mexico',    c:9},
+        '36':{n:'New York',      s:'new-york',      c:95},
+        '37':{n:'North Carolina',s:'north-carolina',c:88},
+        '38':{n:'North Dakota',  s:'north-dakota',  c:3},
+        '39':{n:'Ohio',          s:'ohio',          c:128},
+        '40':{n:'Oklahoma',      s:'oklahoma',      c:21},
+        '41':{n:'Oregon',        s:'oregon',        c:100},
+        '42':{n:'Pennsylvania',  s:'pennsylvania',  c:68},
+        '44':{n:'Rhode Island',  s:'rhode-island',  c:3},
+        '45':{n:'South Carolina',s:'south-carolina',c:18},
+        '46':{n:'South Dakota',  s:'south-dakota',  c:3},
+        '47':{n:'Tennessee',     s:'tennessee',     c:42},
+        '48':{n:'Texas',         s:'texas',         c:252},
+        '49':{n:'Utah',          s:'utah',          c:58},
+        '50':{n:'Vermont',       s:'vermont',       c:3},
+        '51':{n:'Virginia',      s:'virginia',      c:280},
+        '53':{n:'Washington',    s:'washington',    c:98},
+        '54':{n:'West Virginia', s:'west-virginia', c:2},
+        '55':{n:'Wisconsin',     s:'wisconsin',     c:32},
+        '56':{n:'Wyoming',       s:'wyoming',       c:4}
       };
 
-      function getColor(n) {
-        return n > 200 ? '#991b1b'
-             : n > 130 ? '#dc2626'
-             : n > 80  ? '#ef4444'
-             : n > 40  ? '#f87171'
-             : n > 15  ? '#fca5a5'
-             : n > 5   ? '#fecaca'
-             : n > 0   ? '#fee2e2'
-             :            '#f0ede8';
+      /* Heat color: dark navy → deep red → hot red */
+      function heat(c) {
+        return c > 200 ? '#ff6b6b'
+             : c > 130 ? '#ef4444'
+             : c > 80  ? '#dc2626'
+             : c > 40  ? '#b91c1c'
+             : c > 15  ? '#7f1d1d'
+             : c > 5   ? '#3d1525'
+             : c > 0   ? '#1e1f3a'
+             :            '#0e1524';
       }
 
-      function stateSlug(s) { return s.toLowerCase().replace(/\s+/g, '-'); }
+      /* Fixed viewBox so projection is stable regardless of container width */
+      var VW = 960, VH = 500;
 
-      var map = window._dcMap = L.map('dc-map', {
-        center: [38.5, -96.5],
-        zoom: 4,
-        zoomControl: true,
-        scrollWheelZoom: false,
-        attributionControl: true
-      });
+      var svg = d3.select('#dc-map')
+        .append('svg')
+        .attr('width', '100%')
+        .attr('height', '460')
+        .attr('viewBox', '0 0 ' + VW + ' ' + VH)
+        .attr('preserveAspectRatio', 'xMidYMid meet')
+        .style('display', 'block');
 
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-        subdomains: 'abcd',
-        maxZoom: 19
-      }).addTo(map);
+      /* Deep space background */
+      svg.append('rect').attr('width', VW).attr('height', VH).attr('fill', '#080e17');
+
+      /* Subtle grid lines */
+      var defs = svg.append('defs');
+      defs.append('pattern')
+        .attr('id', 'grid').attr('width', 48).attr('height', 48)
+        .attr('patternUnits', 'userSpaceOnUse')
+        .append('path')
+        .attr('d', 'M 48 0 L 0 0 0 48')
+        .attr('fill', 'none').attr('stroke', 'rgba(255,255,255,0.03)').attr('stroke-width', 1);
+      svg.append('rect').attr('width', VW).attr('height', VH).attr('fill', 'url(#grid)');
+
+      var projection = d3.geoAlbersUsa().scale(1200).translate([VW / 2, VH / 2]);
+      var pathGen = d3.geoPath().projection(projection);
 
       /* Floating tooltip */
       var tip = document.createElement('div');
-      tip.style.cssText = 'position:absolute;background:#0f1923;color:#f1f5f9;font-family:Onest,sans-serif;font-size:11px;line-height:1.4;padding:7px 11px;border-radius:5px;pointer-events:none;z-index:900;opacity:0;transition:opacity 0.12s ease;white-space:nowrap;border:1px solid rgba(255,255,255,0.08);box-shadow:0 4px 16px rgba(0,0,0,0.3)';
-      document.getElementById('dc-map').appendChild(tip);
+      tip.style.cssText = 'position:absolute;background:#0c1422;color:#f1f5f9;font-family:Onest,sans-serif;font-size:11px;padding:8px 13px;border-radius:4px;pointer-events:none;z-index:50;opacity:0;transition:opacity 0.1s ease;white-space:nowrap;border:1px solid rgba(220,38,38,0.35);box-shadow:0 0 20px rgba(220,38,38,0.12),0 4px 16px rgba(0,0,0,0.5)';
+      container.appendChild(tip);
 
-      var geojsonLayer;
+      d3.json('https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json')
+        .then(function(us) {
+          var features = topojson.feature(us, us.objects.states).features;
 
-      function styleFeature(f) {
-        var n = stateCounts[f.properties.name] || 0;
-        return { fillColor: getColor(n), weight: 1, opacity: 1, color: '#d6d3cf', fillOpacity: 0.82 };
-      }
+          /* State fills */
+          svg.append('g')
+            .selectAll('path')
+            .data(features)
+            .join('path')
+            .attr('class', 'state')
+            .attr('d', pathGen)
+            .attr('fill', function(d) {
+              var st = S[String(d.id).padStart(2, '0')];
+              return st ? heat(st.c) : '#0e1524';
+            })
+            .attr('stroke', '#0f1d2e')
+            .attr('stroke-width', 0.8)
+            .on('mouseover', function(event, d) {
+              var st = S[String(d.id).padStart(2, '0')];
+              if (!st) return;
+              d3.select(this)
+                .attr('stroke', '#dc2626')
+                .attr('stroke-width', 2)
+                .raise();
+              tip.innerHTML =
+                '<span style="font-weight:700;color:#fff">' + st.n + '</span>' +
+                '<span style="color:#dc2626;font-family:\'Martian Mono\',monospace;font-weight:700;margin-left:10px">' + st.c.toLocaleString() + '</span>' +
+                '<span style="color:#475569;font-size:10px;margin-left:4px">projects</span>';
+              tip.style.opacity = '1';
+            })
+            .on('mousemove', function(event) {
+              var r = container.getBoundingClientRect();
+              var tx = event.clientX - r.left + 14;
+              var ty = event.clientY - r.top  - 46;
+              /* Keep tooltip inside container */
+              if (tx + 200 > r.width) tx = event.clientX - r.left - 220;
+              tip.style.left = tx + 'px';
+              tip.style.top  = ty + 'px';
+            })
+            .on('mouseout', function() {
+              d3.select(this).attr('stroke', '#0f1d2e').attr('stroke-width', 0.8);
+              tip.style.opacity = '0';
+            })
+            .on('click', function(event, d) {
+              var st = S[String(d.id).padStart(2, '0')];
+              if (st) window.location.href = '/' + st.s;
+            });
 
-      function highlight(e) {
-        var l = e.target;
-        l.setStyle({ weight: 2, color: '#dc2626', fillOpacity: 0.95 });
-        l.bringToFront();
-        var name = l.feature.properties.name;
-        var n = stateCounts[name] || 0;
-        tip.innerHTML = '<span style="font-weight:700">' + name + '</span>'
-          + '<span style="color:#94a3b8;margin-left:9px;font-family:\'Martian Mono\',monospace">'
-          + n.toLocaleString() + ' project' + (n !== 1 ? 's' : '') + '</span>';
-        tip.style.opacity = '1';
-      }
+          /* State border mesh (renders crisp borders on top of fills) */
+          svg.append('path')
+            .datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
+            .attr('fill', 'none')
+            .attr('stroke', '#0f1d2e')
+            .attr('stroke-width', 0.8)
+            .attr('d', pathGen);
 
-      function resetHighlight(e) { geojsonLayer.resetStyle(e.target); tip.style.opacity = '0'; }
+          /* State abbreviation labels for significant states */
+          var abbr = {'01':'AL','02':'AK','04':'AZ','05':'AR','06':'CA','08':'CO','09':'CT','10':'DE','12':'FL','13':'GA','15':'HI','16':'ID','17':'IL','18':'IN','19':'IA','20':'KS','21':'KY','22':'LA','23':'ME','24':'MD','25':'MA','26':'MI','27':'MN','28':'MS','29':'MO','30':'MT','31':'NE','32':'NV','33':'NH','34':'NJ','35':'NM','36':'NY','37':'NC','38':'ND','39':'OH','40':'OK','41':'OR','42':'PA','44':'RI','45':'SC','46':'SD','47':'TN','48':'TX','49':'UT','50':'VT','51':'VA','53':'WA','54':'WV','55':'WI','56':'WY'};
+          svg.append('g')
+            .selectAll('text')
+            .data(features.filter(function(d) {
+              var st = S[String(d.id).padStart(2, '0')];
+              return st && st.c >= 15 && pathGen.area(d) > 500;
+            }))
+            .join('text')
+            .attr('x', function(d) { var c = pathGen.centroid(d); return c[0] || 0; })
+            .attr('y', function(d) { var c = pathGen.centroid(d); return (c[1] || 0) + 3; })
+            .text(function(d) { return abbr[String(d.id).padStart(2, '0')] || ''; })
+            .attr('text-anchor', 'middle')
+            .attr('fill', 'rgba(255,255,255,0.45)')
+            .attr('font-size', '8.5')
+            .attr('font-family', 'Martian Mono, monospace')
+            .attr('pointer-events', 'none')
+            .attr('letter-spacing', '0.05em');
 
-      function moveTip(e) {
-        var rect = document.getElementById('dc-map').getBoundingClientRect();
-        tip.style.left = (e.originalEvent.clientX - rect.left + 14) + 'px';
-        tip.style.top  = (e.originalEvent.clientY - rect.top  - 42) + 'px';
-      }
-
-      function clickState(e) {
-        window.location.href = '/' + stateSlug(e.target.feature.properties.name);
-      }
-
-      function onEach(feature, layer) {
-        layer.on({ mouseover: highlight, mouseout: resetHighlight, mousemove: moveTip, click: clickState });
-      }
-
-      fetch('https://raw.githubusercontent.com/PublicaMundi/MappingAPI/master/data/geojson/us-states.json')
-        .then(function(r) { return r.json(); })
-        .then(function(data) {
-          geojsonLayer = L.geoJSON(data, { style: styleFeature, onEachFeature: onEach }).addTo(map);
+          /* Hide loader */
           var loader = document.getElementById('dc-map-loader');
-          if (loader) { loader.style.opacity = '0'; setTimeout(function() { loader.style.display = 'none'; }, 320); }
+          if (loader) { loader.style.opacity = '0'; setTimeout(function() { loader.style.display = 'none'; }, 300); }
         })
         .catch(function() {
           var loader = document.getElementById('dc-map-loader');
           if (loader) loader.style.display = 'none';
         });
 
-      setTimeout(function() { map.invalidateSize(); }, 80);
-
-      /* Counter animation */
+      /* Counter */
       function animateCounter(el, target, duration) {
         var t0 = null;
         function step(ts) {
@@ -724,16 +796,12 @@
         }
         requestAnimationFrame(step);
       }
-
-      var counterEl = document.getElementById('dc-project-count');
-      if (counterEl) {
+      var cEl = document.getElementById('dc-project-count');
+      if (cEl) {
         var fired = false;
-        new IntersectionObserver(function(entries) {
-          if (entries[0].isIntersecting && !fired) {
-            fired = true;
-            animateCounter(counterEl, 2847, 1400);
-          }
-        }, { threshold: 0.5 }).observe(counterEl);
+        new IntersectionObserver(function(e) {
+          if (e[0].isIntersecting && !fired) { fired = true; animateCounter(cEl, 2847, 1400); }
+        }, { threshold: 0.5 }).observe(cEl);
       }
     })();
 
