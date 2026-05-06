@@ -78,19 +78,13 @@
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: #d1cec8; border-radius: 3px; }
 
-    /* Tab switching */
-    .dc-tab { display:inline-flex;align-items:center;gap:6px;padding:0 14px;height:100%;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#64748b;border-bottom:2px solid transparent;border-top:none;border-left:none;border-right:none;background:none;cursor:pointer;transition:color 0.15s,border-color 0.15s;white-space:nowrap; }
-    .dc-tab:hover { color:#cbd5e1; }
-    .dc-tab.active { color:#fff;border-bottom-color:#dc2626; }
-    .dc-tab:focus-visible { outline:2px solid #dc2626;outline-offset:-2px; }
-
-    /* View crossfade */
-    .dc-view { opacity:0;pointer-events:none;transition:opacity 0.22s ease; }
-    .dc-view.active { opacity:1;pointer-events:auto; }
-
-    /* SVG heatmap hover */
-    #dc-map svg path.state { cursor: pointer; transition: filter 0.15s ease; }
-    #dc-map svg path.state:hover { filter: brightness(1.3); }
+    /* Coverage grid layout */
+    .coverage-grid { display:grid;grid-template-columns:1fr 300px;min-height:420px; }
+    @media(max-width:768px) { .coverage-grid { grid-template-columns:1fr; } }
+    .intel-row { transition:background 0.1s ease; }
+    .intel-row:hover { background:rgba(255,255,255,0.02); }
+    #dc-map svg path.state { transition:filter 0.15s ease; }
+    #dc-map svg path.state:hover { filter:brightness(1.2); }
   </style>
 </head>
 <body class="text-gray-900 antialiased">
@@ -269,124 +263,138 @@
   </section>
 
   <!-- ════════════════════════════════════════════
-       PROJECTS + MAP (MERGED)
+       COVERAGE INTELLIGENCE
   ════════════════════════════════════════════ -->
-  <section id="projects" class="py-16 relative z-10">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+  <section id="projects" class="relative z-10" style="background:#07111c">
 
-      <!-- Section header -->
-      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6 reveal">
-        <div>
-          <p class="text-[11px] font-bold uppercase tracking-widest text-red-600 mb-1">Sample Data</p>
-          <h2 class="font-serif text-2xl sm:text-3xl text-gray-900" style="letter-spacing:-0.02em">Data Center Map of United States</h2>
-          <p class="text-sm text-gray-500 mt-2 max-w-xl leading-relaxed">Track active construction projects on the complete data center map of USA — covering hyperscale campuses, colocation facilities, and edge deployments across all 50 states.</p>
-        </div>
-        <button class="open-trial-modal flex-shrink-0 hidden sm:flex items-center gap-1.5 px-4 py-2 bg-[#0f1923] text-white text-xs font-bold rounded-sm hover:bg-gray-800 transition-colors tracking-wide uppercase self-start">
-          Get Full Access <i class="ph ph-arrow-right text-xs"></i>
-        </button>
+    <!-- Top indicator bar -->
+    <div style="background:#040d16;border-bottom:1px solid rgba(255,255,255,0.05);padding:0 1.5rem;height:36px;display:flex;align-items:center;justify-content:space-between">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#dc2626;animation:pulse 2s ease-in-out infinite"></span>
+        <span style="font-family:'Martian Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:0.1em;color:#475569">Coverage Intelligence — All 50 States</span>
       </div>
-
-      <!-- Unified card -->
-      <div class="bg-white border border-gray-200 rounded-lg overflow-hidden reveal" style="box-shadow:0 2px 12px rgba(0,0,0,0.05)">
-
-        <!-- Card header: tabs left, map legend right -->
-        <div class="bg-[#0f1923] flex items-center justify-between pr-4" style="height:46px">
-          <div role="tablist" aria-label="View data as map or table" class="flex items-stretch h-full">
-            <button id="tab-map" role="tab" aria-selected="true" aria-controls="view-map" class="dc-tab active">
-              <i class="ph ph-map-trifold" style="font-size:13px"></i>Map
-            </button>
-            <button id="tab-table" role="tab" aria-selected="false" aria-controls="view-table" class="dc-tab">
-              <i class="ph ph-rows" style="font-size:13px"></i>Table
-            </button>
-          </div>
-          <div id="map-legend" class="items-center gap-2 sm:gap-3" style="display:flex">
-            <span class="text-[9px] text-slate-500 font-mono uppercase tracking-wide hidden sm:inline">Projects/State:</span>
-            <span class="text-[9px] text-slate-500 font-mono">Few</span>
-            <div style="width:64px;height:9px;border-radius:3px;background:linear-gradient(to right,#fee2e2,#fca5a5,#f87171,#ef4444,#dc2626,#991b1b);flex-shrink:0"></div>
-            <span class="text-[9px] text-slate-500 font-mono">Many</span>
-          </div>
-        </div>
-
-        <!-- Content area: both views stacked via absolute positioning -->
-        <div style="position:relative;height:460px;overflow:hidden">
-
-          <!-- Table view -->
-          <div id="view-table" role="tabpanel" aria-labelledby="tab-table" class="dc-view" style="position:absolute;inset:0;overflow-x:auto;overflow-y:auto">
-            <table class="w-full text-sm text-left border-collapse">
-              <thead>
-                <tr class="bg-[#0f1923]">
-                  <th class="px-5 py-3.5 text-[11px] font-bold uppercase tracking-widest text-slate-400 font-mono">Project Name</th>
-                  <th class="px-5 py-3.5 text-[11px] font-bold uppercase tracking-widest text-slate-400 font-mono">Location</th>
-                  <th class="px-5 py-3.5 text-[11px] font-bold uppercase tracking-widest text-slate-400 font-mono">Capacity</th>
-                  <th class="px-5 py-3.5 text-[11px] font-bold uppercase tracking-widest text-slate-400 font-mono">Company</th>
-                  <th class="px-5 py-3.5 text-[11px] font-bold uppercase tracking-widest text-slate-400 font-mono">Status</th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-gray-100">
-                <tr class="data-row">
-                  <td class="px-5 py-4 font-semibold text-gray-900">Loudoun DC-9 Expansion</td>
-                  <td class="px-5 py-4 text-gray-500">Ashburn, Virginia</td>
-                  <td class="px-5 py-4 font-mono text-gray-700">45 MW</td>
-                  <td class="px-5 py-4 text-gray-600">Vantage Data Centers</td>
-                  <td class="px-5 py-4"><span class="text-[11px] font-bold uppercase tracking-wide px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">Construction</span></td>
-                </tr>
-                <tr class="data-row">
-                  <td class="px-5 py-4 font-semibold text-gray-900">Phoenix Mesa Campus</td>
-                  <td class="px-5 py-4 text-gray-500">Mesa, Arizona</td>
-                  <td class="px-5 py-4 font-mono text-gray-700">120 MW</td>
-                  <td class="px-5 py-4 text-gray-600">CyrusOne</td>
-                  <td class="px-5 py-4"><span class="text-[11px] font-bold uppercase tracking-wide px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">Construction</span></td>
-                </tr>
-                <tr class="data-row">
-                  <td class="px-5 py-4 font-semibold text-gray-900">Silicon Valley SV-7</td>
-                  <td class="px-5 py-4 text-gray-500">Santa Clara, California</td>
-                  <td class="px-5 py-4 font-mono text-gray-700">65 MW</td>
-                  <td class="px-5 py-4 text-gray-600">Digital Realty</td>
-                  <td class="px-5 py-4"><span class="text-[11px] font-bold uppercase tracking-wide px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200">Planning</span></td>
-                </tr>
-                <tr class="data-row">
-                  <td class="px-5 py-4 font-semibold text-gray-900">Dallas-Fort Worth DFW-12</td>
-                  <td class="px-5 py-4 text-gray-500">Richardson, Texas</td>
-                  <td class="px-5 py-4 font-mono text-gray-700">90 MW</td>
-                  <td class="px-5 py-4 text-gray-600">QTS Realty Trust</td>
-                  <td class="px-5 py-4"><span class="text-[11px] font-bold uppercase tracking-wide px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200">Permitting</span></td>
-                </tr>
-              </tbody>
-            </table>
-            <!-- Locked-rows conversion moment -->
-            <div class="px-5 py-8 flex flex-col items-center justify-center gap-2 border-t border-gray-100" style="background:linear-gradient(to bottom,#fafaf9,#f5f4f1)">
-              <i class="ph ph-lock-key" style="font-size:20px;color:#d1d5db"></i>
-              <p class="text-xs text-gray-400 text-center max-w-xs">2,843 more projects available with full access — across all 50 states on the data center map of USA.</p>
-              <button class="open-trial-modal mt-1 text-[11px] font-bold uppercase tracking-wide text-red-500 hover:text-red-600 transition-colors">
-                Request Access →
-              </button>
-            </div>
-          </div>
-
-          <!-- Map view -->
-          <div id="view-map" role="tabpanel" aria-labelledby="tab-map" class="dc-view active" style="position:absolute;inset:0">
-            <div id="dc-map" style="height:460px;width:100%;background:#080e17;position:relative;overflow:hidden">
-              <div id="dc-map-loader" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:500;pointer-events:none;transition:opacity 0.3s ease">
-                <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
-                  <div style="width:18px;height:18px;border:2px solid #e5e4e0;border-top-color:#dc2626;border-radius:50%;animation:spin 0.75s linear infinite"></div>
-                  <span style="font-family:'Martian Mono',monospace;font-size:9px;color:#a1a1aa;letter-spacing:0.06em;text-transform:uppercase">Loading map</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-        <!-- Single unified footer CTA -->
-        <div class="px-5 py-3.5 bg-[#0f1923] flex items-center justify-between">
-          <p class="text-[11px] text-slate-400">Showing 4 of <span id="dc-project-count" class="text-slate-300 font-semibold font-mono">2,847</span> projects — <span class="hidden sm:inline">full database access includes the complete </span>data center map of USA.</p>
-          <button class="open-trial-modal text-[11px] font-bold text-red-400 hover:text-red-300 transition-colors uppercase tracking-wide flex items-center gap-1 flex-shrink-0 ml-4">
-            Get Access <i class="ph ph-arrow-right" style="font-size:10px"></i>
-          </button>
-        </div>
-
+      <div style="display:flex;align-items:center;gap:6px">
+        <span style="font-family:'Martian Mono',monospace;font-size:9px;color:#374151">Low</span>
+        <div style="width:44px;height:5px;border-radius:2px;background:linear-gradient(to right,#1e1f3a,#7f1d1d,#dc2626,#ff6b6b)"></div>
+        <span style="font-family:'Martian Mono',monospace;font-size:9px;color:#64748b">High</span>
       </div>
     </div>
+
+    <!-- Main grid: map left, data panel right -->
+    <div class="coverage-grid">
+
+      <!-- Atmospheric map -->
+      <div id="dc-map" style="position:relative;overflow:hidden;background:#07111c;min-height:420px">
+        <div class="scan-beam" style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent,rgba(220,38,38,0.025) 48%,rgba(220,38,38,0.05) 50%,rgba(220,38,38,0.025) 52%,transparent);pointer-events:none;z-index:2"></div>
+        <!-- right edge dissolve into panel -->
+        <div style="position:absolute;top:0;right:0;bottom:0;width:72px;background:linear-gradient(to right,transparent,#07111c);pointer-events:none;z-index:3"></div>
+        <div id="dc-map-loader" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:500;pointer-events:none;transition:opacity 0.3s ease">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+            <div style="width:18px;height:18px;border:2px solid #1e293b;border-top-color:#dc2626;border-radius:50%;animation:spin 0.75s linear infinite"></div>
+            <span style="font-family:'Martian Mono',monospace;font-size:9px;color:#475569;letter-spacing:0.06em;text-transform:uppercase">Loading</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Data panel -->
+      <div style="background:#040d16;border-left:1px solid rgba(255,255,255,0.04);display:flex;flex-direction:column;min-height:420px">
+
+        <!-- Panel heading -->
+        <div style="padding:1.5rem 1.5rem 1rem;border-bottom:1px solid rgba(255,255,255,0.04)">
+          <p style="font-family:'Martian Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:0.12em;color:#dc2626;margin-bottom:6px">Sample Data</p>
+          <h2 style="font-family:'Bricolage Grotesque',sans-serif;font-size:1.1rem;font-weight:700;color:#f1f5f9;line-height:1.3;letter-spacing:-0.01em;margin-bottom:5px">Data Center Map<br>of United States</h2>
+          <p style="font-family:'Onest',sans-serif;font-size:11px;color:#334155;line-height:1.5">Construction projects, capacity expansions &amp; power infrastructure across all 50 states — updated daily.</p>
+        </div>
+
+        <!-- Sample rows with progressive redaction -->
+        <div style="flex:1;position:relative;overflow:hidden">
+
+          <!-- Row 1 — fully visible -->
+          <div class="intel-row" style="padding:0.7rem 1.5rem;border-bottom:1px solid rgba(255,255,255,0.04)">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:3px">
+              <span style="font-family:'Onest',sans-serif;font-size:12px;font-weight:600;color:#e2e8f0">Loudoun DC-9 Expansion</span>
+              <span style="font-family:'Martian Mono',monospace;font-size:9px;font-weight:700;color:#10b981;background:rgba(16,185,129,0.1);padding:2px 6px;border-radius:2px;white-space:nowrap;flex-shrink:0">Active</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-family:'Onest',sans-serif;font-size:10px;color:#475569">Ashburn, VA</span>
+              <span style="font-family:'Martian Mono',monospace;font-size:10px;color:#4b5563">45 MW</span>
+            </div>
+          </div>
+
+          <!-- Row 2 — fully visible -->
+          <div class="intel-row" style="padding:0.7rem 1.5rem;border-bottom:1px solid rgba(255,255,255,0.04)">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:3px">
+              <span style="font-family:'Onest',sans-serif;font-size:12px;font-weight:600;color:#e2e8f0">Phoenix Mesa Campus</span>
+              <span style="font-family:'Martian Mono',monospace;font-size:9px;font-weight:700;color:#10b981;background:rgba(16,185,129,0.1);padding:2px 6px;border-radius:2px;white-space:nowrap;flex-shrink:0">Active</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-family:'Onest',sans-serif;font-size:10px;color:#475569">Mesa, AZ</span>
+              <span style="font-family:'Martian Mono',monospace;font-size:10px;color:#4b5563">120 MW</span>
+            </div>
+          </div>
+
+          <!-- Row 3 — status redacted -->
+          <div class="intel-row" style="padding:0.7rem 1.5rem;border-bottom:1px solid rgba(255,255,255,0.04);opacity:0.55">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:3px">
+              <span style="font-family:'Onest',sans-serif;font-size:12px;font-weight:600;color:#e2e8f0">Silicon Valley SV-7</span>
+              <span style="display:inline-block;width:48px;height:16px;background:rgba(255,255,255,0.07);border-radius:2px"></span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-family:'Onest',sans-serif;font-size:10px;color:#475569">Santa Clara, CA</span>
+              <span style="display:inline-block;width:32px;height:12px;background:rgba(255,255,255,0.05);border-radius:2px"></span>
+            </div>
+          </div>
+
+          <!-- Row 4 — fully redacted -->
+          <div class="intel-row" style="padding:0.7rem 1.5rem;border-bottom:1px solid rgba(255,255,255,0.04);opacity:0.22">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:3px">
+              <span style="display:inline-block;width:120px;height:14px;background:rgba(255,255,255,0.07);border-radius:2px"></span>
+              <span style="display:inline-block;width:44px;height:16px;background:rgba(255,255,255,0.05);border-radius:2px"></span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="display:inline-block;width:80px;height:12px;background:rgba(255,255,255,0.05);border-radius:2px"></span>
+              <span style="display:inline-block;width:28px;height:12px;background:rgba(255,255,255,0.04);border-radius:2px"></span>
+            </div>
+          </div>
+
+          <!-- Fade-to-CTA overlay -->
+          <div style="position:absolute;bottom:0;left:0;right:0;height:200px;background:linear-gradient(to bottom,transparent,#040d16 52%);display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:1.75rem;gap:10px">
+            <div style="display:flex;align-items:center;gap:6px">
+              <i class="ph ph-lock-key" style="font-size:13px;color:#374151"></i>
+              <span style="font-family:'Martian Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:0.08em;color:#374151">2,843 projects locked</span>
+            </div>
+            <button class="open-trial-modal" style="display:inline-flex;align-items:center;gap:8px;background:#dc2626;color:#fff;font-family:'Onest',sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;padding:11px 22px;border:none;cursor:pointer;transition:background 0.15s ease">
+              Request Full Access <i class="ph ph-arrow-right" style="font-size:11px"></i>
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom stats strip -->
+    <div style="background:#040d16;border-top:1px solid rgba(255,255,255,0.04);padding:0.875rem 1.5rem;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:0.875rem 2rem">
+      <div style="display:flex;align-items:center;gap:7px">
+        <span id="dc-project-count" style="font-family:'Martian Mono',monospace;font-size:14px;font-weight:500;color:#f1f5f9">2,847</span>
+        <span style="font-family:'Onest',sans-serif;font-size:11px;color:#475569">Active Projects</span>
+      </div>
+      <div style="width:1px;height:16px;background:rgba(255,255,255,0.06)"></div>
+      <div style="display:flex;align-items:center;gap:7px">
+        <span style="font-family:'Martian Mono',monospace;font-size:14px;font-weight:500;color:#f1f5f9">50</span>
+        <span style="font-family:'Onest',sans-serif;font-size:11px;color:#475569">States Covered</span>
+      </div>
+      <div style="width:1px;height:16px;background:rgba(255,255,255,0.06)"></div>
+      <div style="display:flex;align-items:center;gap:7px">
+        <span style="font-family:'Martian Mono',monospace;font-size:14px;font-weight:500;color:#f1f5f9">3,200+</span>
+        <span style="font-family:'Onest',sans-serif;font-size:11px;color:#475569">Companies Tracked</span>
+      </div>
+      <div style="width:1px;height:16px;background:rgba(255,255,255,0.06)"></div>
+      <div style="display:flex;align-items:center;gap:7px">
+        <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#dc2626;animation:pulse 2s ease-in-out infinite"></span>
+        <span style="font-family:'Onest',sans-serif;font-size:11px;color:#475569">Daily Verified Updates</span>
+      </div>
+    </div>
+
   </section>
 
   <!-- ════════════════════════════════════════════
@@ -568,96 +576,24 @@
       document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
     })();
 
-    /* ── Tab switching ── */
-    (function() {
-      var tabs = { table: document.getElementById('tab-table'), map: document.getElementById('tab-map') };
-      var views = { table: document.getElementById('view-table'), map: document.getElementById('view-map') };
-      var legend = document.getElementById('map-legend');
-      function switchTab(name) {
-        Object.keys(tabs).forEach(function(k) {
-          var active = k === name;
-          tabs[k].classList.toggle('active', active);
-          tabs[k].setAttribute('aria-selected', String(active));
-          views[k].classList.toggle('active', active);
-        });
-        if (legend) legend.style.display = name === 'map' ? 'flex' : 'none';
-      }
-
-      tabs.map.addEventListener('click', function() { switchTab('map'); });
-      tabs.table.addEventListener('click', function() { switchTab('table'); });
-      /* Keyboard: arrow-key navigation between tabs (map first, table second) */
-      [tabs.map, tabs.table].forEach(function(btn, idx, arr) {
-        btn.addEventListener('keydown', function(e) {
-          if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
-            e.preventDefault();
-            var next = arr[(idx + (e.key === 'ArrowRight' ? 1 : -1) + arr.length) % arr.length];
-            next.focus();
-            next.click();
-          }
-        });
-      });
-    })();
-
     /* ── D3 choropleth heatmap — projects per US state ── */
     (function initDCMap() {
       var container = document.getElementById('dc-map');
       if (!container || typeof d3 === 'undefined' || typeof topojson === 'undefined') return;
 
-      /* FIPS → {name, slug, count} */
       var S = {
-        '01':{n:'Alabama',       s:'alabama',       c:12},
-        '02':{n:'Alaska',        s:'alaska',        c:1},
-        '04':{n:'Arizona',       s:'arizona',       c:152},
-        '05':{n:'Arkansas',      s:'arkansas',      c:14},
-        '06':{n:'California',    s:'california',    c:240},
-        '08':{n:'Colorado',      s:'colorado',      c:63},
-        '09':{n:'Connecticut',   s:'connecticut',   c:19},
-        '10':{n:'Delaware',      s:'delaware',      c:3},
-        '12':{n:'Florida',       s:'florida',       c:75},
-        '13':{n:'Georgia',       s:'georgia',       c:148},
-        '15':{n:'Hawaii',        s:'hawaii',        c:2},
-        '16':{n:'Idaho',         s:'idaho',         c:7},
-        '17':{n:'Illinois',      s:'illinois',      c:140},
-        '18':{n:'Indiana',       s:'indiana',       c:38},
-        '19':{n:'Iowa',          s:'iowa',          c:23},
-        '20':{n:'Kansas',        s:'kansas',        c:25},
-        '21':{n:'Kentucky',      s:'kentucky',      c:16},
-        '22':{n:'Louisiana',     s:'louisiana',     c:11},
-        '23':{n:'Maine',         s:'maine',         c:5},
-        '24':{n:'Maryland',      s:'maryland',      c:83},
-        '25':{n:'Massachusetts', s:'massachusetts', c:78},
-        '26':{n:'Michigan',      s:'michigan',      c:44},
-        '27':{n:'Minnesota',     s:'minnesota',     c:35},
-        '28':{n:'Mississippi',   s:'mississippi',   c:8},
-        '29':{n:'Missouri',      s:'missouri',      c:48},
-        '30':{n:'Montana',       s:'montana',       c:4},
-        '31':{n:'Nebraska',      s:'nebraska',      c:28},
-        '32':{n:'Nevada',        s:'nevada',        c:122},
-        '33':{n:'New Hampshire', s:'new-hampshire', c:5},
-        '34':{n:'New Jersey',    s:'new-jersey',    c:94},
-        '35':{n:'New Mexico',    s:'new-mexico',    c:9},
-        '36':{n:'New York',      s:'new-york',      c:95},
-        '37':{n:'North Carolina',s:'north-carolina',c:88},
-        '38':{n:'North Dakota',  s:'north-dakota',  c:3},
-        '39':{n:'Ohio',          s:'ohio',          c:128},
-        '40':{n:'Oklahoma',      s:'oklahoma',      c:21},
-        '41':{n:'Oregon',        s:'oregon',        c:100},
-        '42':{n:'Pennsylvania',  s:'pennsylvania',  c:68},
-        '44':{n:'Rhode Island',  s:'rhode-island',  c:3},
-        '45':{n:'South Carolina',s:'south-carolina',c:18},
-        '46':{n:'South Dakota',  s:'south-dakota',  c:3},
-        '47':{n:'Tennessee',     s:'tennessee',     c:42},
-        '48':{n:'Texas',         s:'texas',         c:252},
-        '49':{n:'Utah',          s:'utah',          c:58},
-        '50':{n:'Vermont',       s:'vermont',       c:3},
-        '51':{n:'Virginia',      s:'virginia',      c:280},
-        '53':{n:'Washington',    s:'washington',    c:98},
-        '54':{n:'West Virginia', s:'west-virginia', c:2},
-        '55':{n:'Wisconsin',     s:'wisconsin',     c:32},
-        '56':{n:'Wyoming',       s:'wyoming',       c:4}
+        '01':{c:12},'02':{c:1},'04':{c:152},'05':{c:14},'06':{c:240},
+        '08':{c:63},'09':{c:19},'10':{c:3},'12':{c:75},'13':{c:148},
+        '15':{c:2},'16':{c:7},'17':{c:140},'18':{c:38},'19':{c:23},
+        '20':{c:25},'21':{c:16},'22':{c:11},'23':{c:5},'24':{c:83},
+        '25':{c:78},'26':{c:44},'27':{c:35},'28':{c:8},'29':{c:48},
+        '30':{c:4},'31':{c:28},'32':{c:122},'33':{c:5},'34':{c:94},
+        '35':{c:9},'36':{c:95},'37':{c:88},'38':{c:3},'39':{c:128},
+        '40':{c:21},'41':{c:100},'42':{c:68},'44':{c:3},'45':{c:18},
+        '46':{c:3},'47':{c:42},'48':{c:252},'49':{c:58},'50':{c:3},
+        '51':{c:280},'53':{c:98},'54':{c:2},'55':{c:32},'56':{c:4}
       };
 
-      /* Heat color: dark navy → deep red → hot red */
       function heat(c) {
         return c > 200 ? '#ff6b6b'
              : c > 130 ? '#ef4444'
@@ -669,43 +605,35 @@
              :            '#0e1524';
       }
 
-      /* Fixed viewBox so projection is stable regardless of container width */
       var VW = 960, VH = 500;
-
       var svg = d3.select('#dc-map')
         .append('svg')
         .attr('width', '100%')
-        .attr('height', '460')
+        .attr('height', '100%')
         .attr('viewBox', '0 0 ' + VW + ' ' + VH)
         .attr('preserveAspectRatio', 'xMidYMid meet')
-        .style('display', 'block');
+        .style('display', 'block')
+        .style('min-height', '420px');
 
-      /* Deep space background */
-      svg.append('rect').attr('width', VW).attr('height', VH).attr('fill', '#080e17');
+      svg.append('rect').attr('width', VW).attr('height', VH).attr('fill', '#07111c');
 
-      /* Subtle grid lines */
       var defs = svg.append('defs');
       defs.append('pattern')
-        .attr('id', 'grid').attr('width', 48).attr('height', 48)
+        .attr('id', 'map-grid').attr('width', 48).attr('height', 48)
         .attr('patternUnits', 'userSpaceOnUse')
         .append('path')
         .attr('d', 'M 48 0 L 0 0 0 48')
-        .attr('fill', 'none').attr('stroke', 'rgba(255,255,255,0.03)').attr('stroke-width', 1);
-      svg.append('rect').attr('width', VW).attr('height', VH).attr('fill', 'url(#grid)');
+        .attr('fill', 'none').attr('stroke', 'rgba(255,255,255,0.022)').attr('stroke-width', 1);
+      svg.append('rect').attr('width', VW).attr('height', VH).attr('fill', 'url(#map-grid)');
 
       var projection = d3.geoAlbersUsa().scale(1200).translate([VW / 2, VH / 2]);
       var pathGen = d3.geoPath().projection(projection);
-
-      /* Floating tooltip */
-      var tip = document.createElement('div');
-      tip.style.cssText = 'position:absolute;background:#0c1422;color:#f1f5f9;font-family:Onest,sans-serif;font-size:11px;padding:8px 13px;border-radius:4px;pointer-events:none;z-index:50;opacity:0;transition:opacity 0.1s ease;white-space:nowrap;border:1px solid rgba(220,38,38,0.35);box-shadow:0 0 20px rgba(220,38,38,0.12),0 4px 16px rgba(0,0,0,0.5)';
-      container.appendChild(tip);
 
       d3.json('https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json')
         .then(function(us) {
           var features = topojson.feature(us, us.objects.states).features;
 
-          /* State fills */
+          /* State fills — decorative, no interaction */
           svg.append('g')
             .selectAll('path')
             .data(features)
@@ -717,66 +645,74 @@
               return st ? heat(st.c) : '#0e1524';
             })
             .attr('stroke', '#0f1d2e')
-            .attr('stroke-width', 0.8)
-            .on('mouseover', function(event, d) {
-              var st = S[String(d.id).padStart(2, '0')];
-              if (!st) return;
-              d3.select(this)
-                .attr('stroke', '#dc2626')
-                .attr('stroke-width', 2)
-                .raise();
-              tip.innerHTML =
-                '<span style="font-weight:700;color:#fff">' + st.n + '</span>' +
-                '<span style="color:#dc2626;font-family:\'Martian Mono\',monospace;font-weight:700;margin-left:10px">' + st.c.toLocaleString() + '</span>' +
-                '<span style="color:#475569;font-size:10px;margin-left:4px">projects</span>';
-              tip.style.opacity = '1';
-            })
-            .on('mousemove', function(event) {
-              var r = container.getBoundingClientRect();
-              var tx = event.clientX - r.left + 14;
-              var ty = event.clientY - r.top  - 46;
-              /* Keep tooltip inside container */
-              if (tx + 200 > r.width) tx = event.clientX - r.left - 220;
-              tip.style.left = tx + 'px';
-              tip.style.top  = ty + 'px';
-            })
-            .on('mouseout', function() {
-              d3.select(this).attr('stroke', '#0f1d2e').attr('stroke-width', 0.8);
-              tip.style.opacity = '0';
-            })
-            .on('click', function(event, d) {
-              var st = S[String(d.id).padStart(2, '0')];
-              if (st) window.location.href = '/' + st.s;
-            });
+            .attr('stroke-width', 0.7);
 
-          /* State border mesh (renders crisp borders on top of fills) */
+          /* Border mesh */
           svg.append('path')
             .datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
             .attr('fill', 'none')
             .attr('stroke', '#0f1d2e')
-            .attr('stroke-width', 0.8)
+            .attr('stroke-width', 0.7)
             .attr('d', pathGen);
 
-          /* State abbreviation labels for significant states */
+          /* State abbreviation labels */
           var abbr = {'01':'AL','02':'AK','04':'AZ','05':'AR','06':'CA','08':'CO','09':'CT','10':'DE','12':'FL','13':'GA','15':'HI','16':'ID','17':'IL','18':'IN','19':'IA','20':'KS','21':'KY','22':'LA','23':'ME','24':'MD','25':'MA','26':'MI','27':'MN','28':'MS','29':'MO','30':'MT','31':'NE','32':'NV','33':'NH','34':'NJ','35':'NM','36':'NY','37':'NC','38':'ND','39':'OH','40':'OK','41':'OR','42':'PA','44':'RI','45':'SC','46':'SD','47':'TN','48':'TX','49':'UT','50':'VT','51':'VA','53':'WA','54':'WV','55':'WI','56':'WY'};
           svg.append('g')
             .selectAll('text')
             .data(features.filter(function(d) {
               var st = S[String(d.id).padStart(2, '0')];
-              return st && st.c >= 15 && pathGen.area(d) > 500;
+              return st && st.c >= 20 && pathGen.area(d) > 600;
             }))
             .join('text')
             .attr('x', function(d) { var c = pathGen.centroid(d); return c[0] || 0; })
             .attr('y', function(d) { var c = pathGen.centroid(d); return (c[1] || 0) + 3; })
             .text(function(d) { return abbr[String(d.id).padStart(2, '0')] || ''; })
             .attr('text-anchor', 'middle')
-            .attr('fill', 'rgba(255,255,255,0.45)')
-            .attr('font-size', '8.5')
+            .attr('fill', 'rgba(255,255,255,0.3)')
+            .attr('font-size', '8')
             .attr('font-family', 'Martian Mono, monospace')
             .attr('pointer-events', 'none')
             .attr('letter-spacing', '0.05em');
 
-          /* Hide loader */
+          /* Hotspot pulse rings — top 5 states by count */
+          var hotspots = ['51','48','06','17','04']; /* VA, TX, CA, IL, AZ */
+          var pulseG = svg.append('g');
+          features.forEach(function(d) {
+            var fips = String(d.id).padStart(2, '0');
+            var hi = hotspots.indexOf(fips);
+            if (hi === -1) return;
+            var c = pathGen.centroid(d);
+            if (!c || isNaN(c[0]) || isNaN(c[1])) return;
+            var delay = (hi * 0.55) + 's';
+
+            /* Outer animated ring */
+            var ring = pulseG.append('circle')
+              .attr('cx', c[0]).attr('cy', c[1]).attr('r', 4)
+              .attr('fill', 'none').attr('stroke', '#dc2626').attr('stroke-width', 1);
+            ring.append('animate')
+              .attr('attributeName', 'r').attr('from', '4').attr('to', '26')
+              .attr('dur', '2.8s').attr('begin', delay).attr('repeatCount', 'indefinite');
+            ring.append('animate')
+              .attr('attributeName', 'opacity').attr('from', '0.75').attr('to', '0')
+              .attr('dur', '2.8s').attr('begin', delay).attr('repeatCount', 'indefinite');
+
+            /* Second ring, offset phase */
+            var ring2 = pulseG.append('circle')
+              .attr('cx', c[0]).attr('cy', c[1]).attr('r', 4)
+              .attr('fill', 'none').attr('stroke', '#dc2626').attr('stroke-width', 0.6);
+            ring2.append('animate')
+              .attr('attributeName', 'r').attr('from', '4').attr('to', '18')
+              .attr('dur', '2.8s').attr('begin', (hi * 0.55 + 1.4) + 's').attr('repeatCount', 'indefinite');
+            ring2.append('animate')
+              .attr('attributeName', 'opacity').attr('from', '0.5').attr('to', '0')
+              .attr('dur', '2.8s').attr('begin', (hi * 0.55 + 1.4) + 's').attr('repeatCount', 'indefinite');
+
+            /* Center dot */
+            pulseG.append('circle')
+              .attr('cx', c[0]).attr('cy', c[1]).attr('r', 2.5)
+              .attr('fill', '#dc2626').attr('opacity', 0.9).attr('pointer-events', 'none');
+          });
+
           var loader = document.getElementById('dc-map-loader');
           if (loader) { loader.style.opacity = '0'; setTimeout(function() { loader.style.display = 'none'; }, 300); }
         })
@@ -785,7 +721,7 @@
           if (loader) loader.style.display = 'none';
         });
 
-      /* Counter */
+      /* Counter animation */
       function animateCounter(el, target, duration) {
         var t0 = null;
         function step(ts) {
