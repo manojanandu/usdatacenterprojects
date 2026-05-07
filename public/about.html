@@ -2,38 +2,28 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon/android-chrome-192x192.png">
   <link rel="icon" type="image/x-icon" href="/favicon/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
   <link rel="manifest" href="/favicon/site.webmanifest">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About Us | US Data Center Projects — Daily Intelligence on the US Data Center Boom</title>
-  <meta name="description" content="US Data Center Projects tracks daily news, construction activity, and project data across all 50 states. Built for developers, EPCs, investors, and vendors operating in the US data center industry.">
-  <meta name="keywords" content="about us data center projects, US data center intelligence, data center news tracker, data center construction database">
+  <title>About Us | US Data Center Projects</title>
+  <meta name="description" content="US Data Center Projects covers data center construction news across all 50 states. We track permits, projects, and industry developments published daily.">
+  <meta name="keywords" content="about us data center projects, US data center news, data center news tracker, data center construction news">
   <link rel="canonical" href="https://usdatacenterprojects.com/about">
   <meta property="og:title" content="About | US Data Center Projects">
-  <meta property="og:description" content="Daily intelligence on the US data center boom — tracking 2,800+ projects across all 50 states.">
+  <meta property="og:description" content="We cover data center construction news across all 50 states. Permits, projects, and industry updates published daily.">
   <meta property="og:type" content="website">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Onest:wght@400;500;600;700&family=Martian+Mono:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Onest:wght@400;500;600;700&family=Martian+Mono:wght@400;500&display=swap"></noscript>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script defer src="https://unpkg.com/@phosphor-icons/web"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Onest', 'sans-serif'],
-            serif: ['Bricolage Grotesque', 'sans-serif'],
-            mono: ['Martian Mono', 'monospace']
-          }
-        }
-      }
-    }
-  </script>
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="dns-prefetch" href="https://share.deftform.com">
+  <link rel="dns-prefetch" href="https://cdn.deftform.com">
   <style>
     * { box-sizing: border-box; }
     body { font-family: 'Onest', sans-serif; background: #f5f4f1; }
@@ -82,7 +72,7 @@
     .modal-container { background:#fff;width:90%;max-width:580px;max-height:90vh;border-radius:8px;box-shadow:0 20px 60px rgba(0,0,0,0.2);transform:translateY(16px);transition:transform 0.25s ease;overflow:hidden;display:flex;flex-direction:column; }
     .modal-overlay.active .modal-container { transform:translateY(0); }
     .modal-header { padding:1.25rem 1.5rem;border-bottom:1px solid #e5e4e0;display:flex;justify-content:space-between;align-items:center; }
-    .modal-close { background:none;border:none;font-size:1.25rem;color:#9ca3af;cursor:pointer;padding:0.25rem;border-radius:4px;transition:color 0.15s;display:flex;align-items:center; }
+    .modal-close { background:none;border:none;font-size:1.25rem;color:#4b5563;cursor:pointer;padding:0.25rem;border-radius:4px;transition:color 0.15s;display:flex;align-items:center; }
     .modal-close:hover { color:#374151; }
     .modal-body { padding:1.5rem;overflow-y:auto;flex:1; }
 
@@ -105,8 +95,8 @@
         </a>
 
         <nav class="hidden md:flex items-center" style="gap:28px">
-          <a href="/" class="text-xs font-medium tracking-widest uppercase text-slate-500 hover:text-white transition-colors duration-150">News</a>
-          <a href="/us-data-center-project-tracker" class="text-xs font-medium tracking-widest uppercase text-slate-500 hover:text-white transition-colors duration-150">Projects</a>
+          <a href="/" class="text-xs font-medium tracking-widest uppercase text-slate-400 hover:text-white transition-colors duration-150">News</a>
+          <a href="/us-data-center-project-tracker" class="text-xs font-medium tracking-widest uppercase text-slate-400 hover:text-white transition-colors duration-150">Projects</a>
           <a href="/about" class="text-xs font-semibold tracking-widest uppercase text-white" style="border-bottom:2px solid #dc2626;padding-bottom:3px">About</a>
         </nav>
 
@@ -115,7 +105,8 @@
             Request Trial <i class="ph ph-arrow-right" style="font-size:11px"></i>
           </button>
           <button class="md:hidden text-slate-400 hover:text-white transition-colors" style="padding:10px" aria-label="Menu" aria-expanded="false" aria-controls="mobile-nav">
-            <i class="ph ph-list" style="font-size:22px"></i>
+            <svg class="menu-open" width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="2" y1="6" x2="20" y2="6"/><line x1="2" y1="11" x2="20" y2="11"/><line x1="2" y1="16" x2="20" y2="16"/></svg>
+            <svg class="menu-close" width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="display:none"><line x1="4" y1="4" x2="18" y2="18"/><line x1="18" y1="4" x2="4" y2="18"/></svg>
           </button>
         </div>
 
@@ -125,10 +116,10 @@
     <div id="mobile-nav" class="hidden md:hidden" style="border-top:1px solid rgba(255,255,255,0.07)">
       <nav class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col" style="padding-top:6px;padding-bottom:16px">
         <a href="/" class="flex items-center px-2 text-sm font-medium text-slate-400 hover:text-white transition-colors" style="height:48px;gap:12px">
-          <i class="ph ph-newspaper" style="font-size:16px;color:#64748b"></i>News
+          <i class="ph ph-newspaper" style="font-size:16px;color:#94a3b8"></i>News
         </a>
         <a href="/us-data-center-project-tracker" class="flex items-center px-2 text-sm font-medium text-slate-400 hover:text-white transition-colors" style="height:48px;gap:12px">
-          <i class="ph ph-database" style="font-size:16px;color:#64748b"></i>Projects
+          <i class="ph ph-database" style="font-size:16px;color:#94a3b8"></i>Projects
         </a>
         <a href="/about" class="flex items-center px-3 text-sm font-semibold text-white" style="height:48px;gap:12px;background:rgba(220,38,38,0.08);border-radius:6px">
           <i class="ph ph-info" style="font-size:16px;color:#dc2626"></i>About
@@ -157,7 +148,7 @@
 
       <!-- Masthead label -->
       <div class="flex items-center gap-3 mb-8 reveal" style="animation-delay:0.05s">
-        <span class="text-[10px] font-mono font-semibold tracking-[0.2em] text-slate-500 uppercase">Est. 2026</span>
+        <span class="text-[10px] font-mono font-semibold tracking-[0.2em] text-slate-400 uppercase">Est. 2026</span>
         <span style="display:inline-block;width:32px;height:1px;background:#374151"></span>
         <span class="flex items-center gap-1.5 text-[10px] font-mono font-semibold tracking-widest text-red-500 uppercase">
           <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse inline-block"></span>
@@ -167,14 +158,14 @@
 
       <!-- Headline -->
       <h1 class="font-serif text-white leading-none mb-6 reveal" style="font-size:clamp(2.5rem,6vw,4.25rem);letter-spacing:-0.03em;animation-delay:0.1s">
-        Daily Intelligence On<br>
-        <span style="color:#dc2626">The US Data Center Boom.</span>
+        Data Center News Across<br>
+        <span style="color:#dc2626">The United States.</span>
       </h1>
 
       <!-- Subheadline -->
       <p class="text-slate-400 leading-relaxed mb-10 reveal" style="font-size:1.05rem;max-width:580px;animation-delay:0.15s">
-        Every permit filed. Every MW planned. Every contractor awarded.<br class="hidden sm:inline">
-        Tracked across all 50 states — verified and published daily.
+        We cover data center construction news across all 50 states.<br class="hidden sm:inline">
+        Permits, projects, and industry updates, published every day.
       </p>
 
       <!-- Stat pills -->
@@ -207,9 +198,9 @@
       <div class="reveal">
         <p class="text-[11px] font-bold uppercase tracking-widest text-red-600 mb-6">Our Mission</p>
         <p class="font-serif text-gray-900 leading-snug" style="font-size:clamp(1.6rem,3.5vw,2.5rem);letter-spacing:-0.025em">
-          "The US data center market moves faster than any newsletter can follow.
-          We built the intelligence layer the industry was missing — a living database,
-          updated every day, covering every project that matters."
+          "The US data center industry moves fast. We cover every permit filed,
+          every project announced, and every contractor awarded across all 50 states.
+          News and updates on the US data center market, published every day."
         </p>
         <div class="flex items-center gap-3 mt-8">
           <span style="display:inline-block;width:24px;height:2px;background:#dc2626"></span>
@@ -243,11 +234,11 @@
             </p>
             <div class="grid grid-cols-2 gap-3">
               <div class="px-3 py-2.5 rounded-sm" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08)">
-                <p class="text-[10px] text-slate-500 uppercase tracking-widest font-mono mb-1">Coverage</p>
+                <p class="text-[10px] text-slate-400 uppercase tracking-widest font-mono mb-1">Coverage</p>
                 <p class="text-sm text-white font-semibold">Permit → Commissioning</p>
               </div>
               <div class="px-3 py-2.5 rounded-sm" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08)">
-                <p class="text-[10px] text-slate-500 uppercase tracking-widest font-mono mb-1">Update Cadence</p>
+                <p class="text-[10px] text-slate-400 uppercase tracking-widest font-mono mb-1">Update Cadence</p>
                 <p class="text-sm text-white font-semibold">Daily Verified</p>
               </div>
             </div>
@@ -288,19 +279,19 @@
 
           <div class="px-8 py-10 text-center" style="border-color:rgba(255,255,255,0.07)">
             <p class="font-mono text-4xl font-bold text-white mb-1" id="count-projects">2,847</p>
-            <p class="text-[11px] text-slate-500 uppercase tracking-widest font-mono">Projects Tracked</p>
+            <p class="text-[11px] text-slate-400 uppercase tracking-widest font-mono">Projects Tracked</p>
           </div>
           <div class="px-8 py-10 text-center" style="border-color:rgba(255,255,255,0.07)">
             <p class="font-mono text-4xl font-bold text-white mb-1" id="count-states">50</p>
-            <p class="text-[11px] text-slate-500 uppercase tracking-widest font-mono">States Covered</p>
+            <p class="text-[11px] text-slate-400 uppercase tracking-widest font-mono">States Covered</p>
           </div>
           <div class="px-8 py-10 text-center" style="border-color:rgba(255,255,255,0.07)">
             <p class="font-mono text-4xl font-bold text-white mb-1" id="count-companies">3,200</p>
-            <p class="text-[11px] text-slate-500 uppercase tracking-widest font-mono">Companies Indexed</p>
+            <p class="text-[11px] text-slate-400 uppercase tracking-widest font-mono">Companies Indexed</p>
           </div>
           <div class="px-8 py-10 text-center" style="border-color:rgba(255,255,255,0.07)">
             <p class="font-mono text-4xl font-bold text-red-500 mb-1">Daily</p>
-            <p class="text-[11px] text-slate-500 uppercase tracking-widest font-mono">Verified Updates</p>
+            <p class="text-[11px] text-slate-400 uppercase tracking-widest font-mono">Verified Updates</p>
           </div>
 
         </div>
@@ -318,7 +309,7 @@
         <div>
           <p class="text-[11px] font-bold uppercase tracking-widest text-red-600 mb-2">Geographic Reach</p>
           <h2 class="font-serif text-3xl sm:text-4xl text-gray-900" style="letter-spacing:-0.02em">Every State in the Union</h2>
-          <p class="text-sm text-gray-500 mt-2 max-w-xl leading-relaxed">Our database covers data center construction activity from Virginia's dense Ashburn corridor to Arizona's emerging Phoenix campuses — and every market in between.</p>
+          <p class="text-sm text-gray-500 mt-2 max-w-xl leading-relaxed">Our coverage spans data center construction news from Virginia's Ashburn corridor to Arizona's Phoenix campuses, and every market in between.</p>
         </div>
       </div>
 
@@ -487,28 +478,28 @@
             <i class="ph ph-hard-hat text-white text-base"></i>
           </div>
           <h3 class="font-serif font-bold text-gray-900 text-sm" style="letter-spacing:-0.01em">Developers &amp; EPCs</h3>
-          <p class="text-xs text-gray-400 mt-1.5 leading-relaxed">Pipeline intelligence and competitor tracking</p>
+          <p class="text-xs text-gray-600 mt-1.5 leading-relaxed">Pipeline intelligence and competitor tracking</p>
         </div>
         <div class="bg-white border border-gray-200 rounded-lg p-5 text-center reveal" style="animation-delay:0.1s">
           <div class="w-10 h-10 flex items-center justify-center bg-[#0f1923] rounded-lg mx-auto mb-3">
             <i class="ph ph-factory text-white text-base"></i>
           </div>
           <h3 class="font-serif font-bold text-gray-900 text-sm" style="letter-spacing:-0.01em">OEM Vendors</h3>
-          <p class="text-xs text-gray-400 mt-1.5 leading-relaxed">Identify bid opportunities early</p>
+          <p class="text-xs text-gray-600 mt-1.5 leading-relaxed">Identify bid opportunities early</p>
         </div>
         <div class="bg-white border border-gray-200 rounded-lg p-5 text-center reveal" style="animation-delay:0.15s">
           <div class="w-10 h-10 flex items-center justify-center bg-[#0f1923] rounded-lg mx-auto mb-3">
             <i class="ph ph-strategy text-white text-base"></i>
           </div>
           <h3 class="font-serif font-bold text-gray-900 text-sm" style="letter-spacing:-0.01em">Consultants &amp; Analysts</h3>
-          <p class="text-xs text-gray-400 mt-1.5 leading-relaxed">Market sizing and due diligence</p>
+          <p class="text-xs text-gray-600 mt-1.5 leading-relaxed">Market sizing and due diligence</p>
         </div>
         <div class="bg-white border border-gray-200 rounded-lg p-5 text-center reveal" style="animation-delay:0.2s">
           <div class="w-10 h-10 flex items-center justify-center bg-[#0f1923] rounded-lg mx-auto mb-3">
             <i class="ph ph-trend-up text-white text-base"></i>
           </div>
           <h3 class="font-serif font-bold text-gray-900 text-sm" style="letter-spacing:-0.01em">Investors &amp; Researchers</h3>
-          <p class="text-xs text-gray-400 mt-1.5 leading-relaxed">Capacity signals and pipeline data</p>
+          <p class="text-xs text-gray-600 mt-1.5 leading-relaxed">Capacity signals and pipeline data</p>
         </div>
       </div>
     </div>
@@ -540,34 +531,34 @@
             <img src="/Logo.svg" alt="US Data Center Projects" style="position:absolute;width:200px;height:113px;top:-27px;left:0" draggable="false">
           </div>
           <p class="text-xs text-slate-400 leading-relaxed mb-4">
-            The most comprehensive database of US data center construction projects — tracking 2,800+ developments across all 50 states with daily verified updates.
+            Covering data center construction news and project updates across all 50 states, published daily.
           </p>
         </div>
 
         <div>
-          <h3 class="text-[11px] font-bold uppercase tracking-widest text-slate-500 mb-3">Browse by State</h3>
+          <h3 class="text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-3">Browse by State</h3>
           <div class="grid grid-cols-3 gap-x-3 gap-y-1.5">
-            <a href="/arizona" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Arizona</a>
-            <a href="/california" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">California</a>
-            <a href="/florida" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Florida</a>
-            <a href="/georgia" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Georgia</a>
-            <a href="/illinois" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Illinois</a>
-            <a href="/maryland" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Maryland</a>
-            <a href="/nevada" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Nevada</a>
-            <a href="/new-jersey" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">New Jersey</a>
-            <a href="/new-york" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">New York</a>
-            <a href="/north-carolina" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">N. Carolina</a>
-            <a href="/ohio" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Ohio</a>
-            <a href="/oregon" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Oregon</a>
-            <a href="/texas" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Texas</a>
-            <a href="/utah" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Utah</a>
-            <a href="/virginia" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Virginia</a>
-            <a href="/washington" class="text-[11px] text-slate-500 hover:text-red-400 transition-colors truncate">Washington</a>
+            <a href="/arizona" class="text-[11px] text-slate-400 hover:text-red-400 transition-colors truncate">Arizona</a>
+            <a href="/california" class="text-[11px] text-slate-400 hover:text-red-400 transition-colors truncate">California</a>
+            <a href="/florida" class="text-[11px] text-slate-400 hover:text-red-400 transition-colors truncate">Florida</a>
+            <a href="/georgia" class="text-[11px] text-slate-400 hover:text-red-400 transition-colors truncate">Georgia</a>
+            <a href="/illinois" class="text-[11px] text-slate-400 hover:text-red-400 transition-colors truncate">Illinois</a>
+            <a href="/maryland" class="text-[11px] text-slate-400 hover:text-red-400 transition-colors truncate">Maryland</a>
+            <a href="/nevada" class="text-[11px] text-slate-400 hover:text-red-400 transition-colors truncate">Nevada</a>
+            <a href="/new-jersey" class="text-[11px] text-slate-400 hover:text-red-400 transition-colors truncate">New Jersey</a>
+            <a href="/new-york" class="text-[11px] text-slate-400 hover:text-red-400 transition-colors truncate">New York</a>
+            <a href="/north-carolina" class="text-[11px] text-slate-400 hover:text-red-400 transition-colors truncate">N. Carolina</a>
+            <a href="/ohio" class="text-[11px] text-slate-400 hover:text-red-400 transition-colors truncate">Ohio</a>
+            <a href="/oregon" class="text-[11px] text-slate-400 hover:text-red-400 transition-colors truncate">Oregon</a>
+            <a href="/texas" class="text-[11px] text-slate-400 hover:text-red-400 transition-colors truncate">Texas</a>
+            <a href="/utah" class="text-[11px] text-slate-400 hover:text-red-400 transition-colors truncate">Utah</a>
+            <a href="/virginia" class="text-[11px] text-slate-400 hover:text-red-400 transition-colors truncate">Virginia</a>
+            <a href="/washington" class="text-[11px] text-slate-400 hover:text-red-400 transition-colors truncate">Washington</a>
           </div>
         </div>
 
         <div>
-          <h3 class="text-[11px] font-bold uppercase tracking-widest text-slate-500 mb-3">Our Address</h3>
+          <h3 class="text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-3">Our Address</h3>
           <p class="text-xs text-slate-400 leading-relaxed mb-4">
             <strong class="text-slate-300">T-Hub</strong><br>
             Plot No 1/C, Sy No 83/1,<br>
@@ -577,19 +568,19 @@
           </p>
           <div class="grid grid-cols-2 gap-x-6 gap-y-1.5">
             <a href="/about" class="text-xs text-slate-400 hover:text-white transition-colors font-medium">About</a>
-            <a href="#" class="text-xs text-slate-500 hover:text-white transition-colors">Advertise</a>
-            <a href="#" class="text-xs text-slate-500 hover:text-white transition-colors">Contact</a>
-            <a href="/sitemap.xml" class="text-xs text-slate-500 hover:text-white transition-colors">Sitemap</a>
+            <a href="#" class="text-xs text-slate-400 hover:text-white transition-colors">Advertise</a>
+            <a href="#" class="text-xs text-slate-400 hover:text-white transition-colors">Contact</a>
+            <a href="/sitemap.xml" class="text-xs text-slate-400 hover:text-white transition-colors">Sitemap</a>
           </div>
         </div>
 
       </div>
 
       <div class="mt-8 pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
-        <p class="text-[11px] text-slate-600">&copy; 2026 US Data Center Projects. All rights reserved.</p>
+        <p class="text-[11px] text-slate-400">&copy; 2026 US Data Center Projects. All rights reserved.</p>
         <div class="flex gap-5">
-          <a href="#" class="text-[11px] text-slate-600 hover:text-white transition-colors">Privacy Policy</a>
-          <a href="#" class="text-[11px] text-slate-600 hover:text-white transition-colors">Terms of Use</a>
+          <a href="#" class="text-[11px] text-slate-400 hover:text-white transition-colors">Privacy Policy</a>
+          <a href="#" class="text-[11px] text-slate-400 hover:text-white transition-colors">Terms of Use</a>
         </div>
       </div>
     </div>
@@ -602,15 +593,13 @@
     <div class="modal-container">
       <div class="modal-header">
         <span style="font-family:'Bricolage Grotesque',sans-serif;font-size:1rem;font-weight:700;color:#111">Request a Free Trial</span>
-        <button class="modal-close" id="closeTrialModal"><i class="ph ph-x"></i></button>
+        <button class="modal-close" id="closeTrialModal"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="3" x2="13" y2="13"/><line x1="13" y1="3" x2="3" y2="13"/></svg></button>
       </div>
       <div class="modal-body">
         <div class="deftform" data-form-id="8bf3ee99-b3c2-466e-a2aa-c09f0fbd64bb" data-form-width="100%" data-form-align="center" data-form-auto-height="1"></div>
       </div>
     </div>
   </div>
-  <script defer src="https://cdn.deftform.com/embed.js"></script>
-
   <script>
     /* ── IntersectionObserver: reveal ── */
     (function() {
@@ -687,8 +676,9 @@
       var modal = document.getElementById('trialModal');
       var close = function() { modal.classList.remove('active'); document.body.style.overflow = ''; };
       document.addEventListener('DOMContentLoaded', function() {
+        var _formLoaded = false;
         document.querySelectorAll('.open-trial-modal').forEach(function(b) {
-          b.addEventListener('click', function(e) { e.preventDefault(); modal.classList.add('active'); document.body.style.overflow = 'hidden'; });
+          b.addEventListener('click', function(e) { e.preventDefault(); modal.classList.add('active'); document.body.style.overflow = 'hidden'; if (!_formLoaded) { _formLoaded = true; var s = document.createElement('script'); s.src = 'https://cdn.deftform.com/embed.js'; document.head.appendChild(s); } });
         });
         document.getElementById('closeTrialModal').addEventListener('click', close);
         modal.addEventListener('click', function(e) { if (e.target === modal) close(); });
@@ -704,20 +694,20 @@
         e.stopPropagation();
         var hidden = nav.classList.toggle('hidden');
         btn.setAttribute('aria-expanded', String(!hidden));
-        var icon = btn.querySelector('i');
-        if (icon) icon.className = hidden ? 'ph ph-list' : 'ph ph-x';
-        if (icon) icon.style.fontSize = '22px';
+        btn.querySelector('.menu-open').style.display = hidden ? '' : 'none';
+        btn.querySelector('.menu-close').style.display = hidden ? 'none' : '';
       });
       document.addEventListener('click', function(e) {
         if (!nav.classList.contains('hidden') && !nav.contains(e.target) && !btn.contains(e.target)) {
           nav.classList.add('hidden');
           btn.setAttribute('aria-expanded', 'false');
-          var icon = btn.querySelector('i');
-          if (icon) { icon.className = 'ph ph-list'; icon.style.fontSize = '22px'; }
+          btn.querySelector('.menu-open').style.display = '';
+          btn.querySelector('.menu-close').style.display = 'none';
         }
       });
     })();
   </script>
+  <script>window.addEventListener('load',function(){var s=document.createElement('script');s.src='https://unpkg.com/@phosphor-icons/web';document.head.appendChild(s);});</script>
 
 </body>
 </html>

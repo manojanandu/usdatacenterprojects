@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon/android-chrome-192x192.png">
   <link rel="icon" type="image/x-icon" href="/favicon/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
@@ -14,21 +16,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Onest:wght@400;500;600;700&family=Martian+Mono:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Onest:wght@400;500;600;700&family=Martian+Mono:wght@400;500&display=swap"></noscript>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script defer src="https://unpkg.com/@phosphor-icons/web"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Onest', 'sans-serif'],
-            serif: ['Bricolage Grotesque', 'sans-serif'],
-            mono: ['Martian Mono', 'monospace']
-          }
-        }
-      }
-    }
-  </script>
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="dns-prefetch" href="https://share.deftform.com">
+  <link rel="dns-prefetch" href="https://cdn.deftform.com">
+  <link rel="preconnect" href="https://imagedelivery.net" crossorigin>
   <style>
     * { box-sizing: border-box; }
     body { font-family: 'Onest', sans-serif; background: #f5f4f1; }
@@ -74,7 +65,7 @@
     .modal-container { background:#fff;width:90%;max-width:580px;max-height:90vh;border-radius:8px;box-shadow:0 20px 60px rgba(0,0,0,0.2);transform:translateY(16px);transition:transform 0.25s ease;overflow:hidden;display:flex;flex-direction:column; }
     .modal-overlay.active .modal-container { transform:translateY(0); }
     .modal-header { padding:1.25rem 1.5rem;border-bottom:1px solid #e5e4e0;display:flex;justify-content:space-between;align-items:center; }
-    .modal-close { background:none;border:none;font-size:1.25rem;color:#9ca3af;cursor:pointer;padding:0.25rem;border-radius:4px;transition:color 0.15s;display:flex;align-items:center; }
+    .modal-close { background:none;border:none;font-size:1.25rem;color:#4b5563;cursor:pointer;padding:0.25rem;border-radius:4px;transition:color 0.15s;display:flex;align-items:center; }
     .modal-close:hover { color:#374151; }
     .modal-body { padding:1.5rem;overflow-y:auto;flex:1; }
 
@@ -96,17 +87,18 @@
           <img src="/Logo.svg" alt="US Data Center Projects" class="group-hover:opacity-70" style="position:absolute;width:260px;height:146px;top:-30px;left:0;transition:opacity 0.15s" draggable="false">
         </a>
         <nav class="hidden md:flex items-center" style="gap:28px">
-          <span id="header-breadcrumb" style="display:none;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:#64748b;font-weight:500"></span>
-          <a href="/" class="text-xs font-medium tracking-widest uppercase text-slate-500 hover:text-white transition-colors duration-150">News</a>
+          <span id="header-breadcrumb" style="display:none;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:#94a3b8;font-weight:500"></span>
+          <a href="/" class="text-xs font-medium tracking-widest uppercase text-slate-400 hover:text-white transition-colors duration-150">News</a>
           <a href="/us-data-center-project-tracker" class="text-xs font-semibold tracking-widest uppercase text-white" style="border-bottom:2px solid #dc2626;padding-bottom:3px">Projects</a>
-          <a href="/about" class="text-xs font-medium tracking-widest uppercase text-slate-500 hover:text-white transition-colors duration-150">About</a>
+          <a href="/about" class="text-xs font-medium tracking-widest uppercase text-slate-400 hover:text-white transition-colors duration-150">About</a>
         </nav>
         <div class="flex items-center justify-end" style="gap:8px">
           <button class="open-trial-modal hidden sm:inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-white bg-red-600 hover:bg-red-500 transition-colors duration-150" style="padding:9px 16px">
-            Request Trial <i class="ph ph-arrow-right" style="font-size:11px"></i>
+            Request Trial <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="8" x2="13" y2="8"/><polyline points="9,4 13,8 9,12"/></svg>
           </button>
           <button class="md:hidden text-slate-400 hover:text-white transition-colors" style="padding:10px" aria-label="Menu" aria-expanded="false" aria-controls="mobile-nav">
-            <i class="ph ph-list" style="font-size:22px"></i>
+            <svg class="menu-open" width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="2" y1="6" x2="20" y2="6"/><line x1="2" y1="11" x2="20" y2="11"/><line x1="2" y1="16" x2="20" y2="16"/></svg>
+            <svg class="menu-close" width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="display:none"><line x1="4" y1="4" x2="18" y2="18"/><line x1="18" y1="4" x2="4" y2="18"/></svg>
           </button>
         </div>
       </div>
@@ -115,17 +107,17 @@
     <div id="mobile-nav" class="hidden md:hidden" style="border-top:1px solid rgba(255,255,255,0.07)">
       <nav class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col" style="padding-top:6px;padding-bottom:16px">
         <a href="/" class="flex items-center px-2 text-sm font-medium text-slate-400 hover:text-white transition-colors" style="height:48px;gap:12px">
-          <i class="ph ph-newspaper" style="font-size:16px;color:#64748b"></i>News
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="12" height="13" rx="1"/><line x1="5" y1="6" x2="11" y2="6"/><line x1="5" y1="9" x2="11" y2="9"/><line x1="5" y1="12" x2="9" y2="12"/></svg>News
         </a>
         <a href="/us-data-center-project-tracker" class="flex items-center px-3 text-sm font-semibold text-white" style="height:48px;gap:12px;background:rgba(220,38,38,0.08);border-radius:6px">
-          <i class="ph ph-database" style="font-size:16px;color:#dc2626"></i>Projects
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#dc2626" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="8" cy="4" rx="5" ry="2"/><path d="M3 4v3c0 1.1 2.24 2 5 2s5-.9 5-2V4"/><path d="M3 7v4c0 1.1 2.24 2 5 2s5-.9 5-2V7"/></svg>Projects
         </a>
         <a href="/about" class="flex items-center px-2 text-sm font-medium text-slate-400 hover:text-white transition-colors" style="height:48px;gap:12px">
-          <i class="ph ph-info" style="font-size:16px;color:#64748b"></i>About
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="8" r="6"/><line x1="8" y1="7" x2="8" y2="11"/><circle cx="8" cy="5" r=".5" fill="#94a3b8"/></svg>About
         </a>
         <div style="padding-top:8px">
           <button class="open-trial-modal w-full flex items-center justify-center gap-2 text-xs font-bold tracking-widest uppercase text-white bg-red-600 hover:bg-red-500 transition-colors" style="padding:14px">
-            Request Trial <i class="ph ph-arrow-right" style="font-size:11px"></i>
+            Request Trial <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="8" x2="13" y2="8"/><polyline points="9,4 13,8 9,12"/></svg>
           </button>
         </div>
       </nav>
@@ -137,22 +129,22 @@
   <div class="bg-white border-b border-gray-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-5">
       <!-- Breadcrumb -->
-      <div class="flex items-center gap-1.5 text-[11px] text-gray-400 mb-3">
+      <div class="flex items-center gap-1.5 text-[11px] text-gray-600 mb-3">
         <a href="/" class="hover:text-red-600 transition-colors">News</a>
-        <i class="ph ph-caret-right text-xs"></i>
+        <svg width="8" height="8" viewBox="0 0 8 8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2,1 6,4 2,7"/></svg>
         <span id="breadcrumb-state" class="text-gray-600 font-medium">State</span>
       </div>
       <div class="flex items-start justify-between gap-4">
         <div>
           <div class="flex items-center gap-2.5 mb-1">
-            <i class="ph ph-map-pin text-red-600 text-lg"></i>
+            <svg width="20" height="20" viewBox="0 0 16 16" fill="none" stroke="#dc2626" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 1a5 5 0 0 0-5 5c0 4.5 5 9 5 9s5-4.5 5-9a5 5 0 0 0-5-5z"/></svg>
             <h1 id="state-heading" class="font-serif text-2xl sm:text-3xl text-gray-900">Loading…</h1>
           </div>
           <p class="text-sm text-gray-500">Data center construction news and project updates</p>
         </div>
         <div class="text-right shrink-0">
           <div id="article-count" class="text-2xl font-mono font-bold text-gray-900">—</div>
-          <div class="text-[10px] uppercase tracking-widest text-gray-400 mt-0.5">Stories</div>
+          <div class="text-[10px] uppercase tracking-widest text-gray-600 mt-0.5">Stories</div>
         </div>
       </div>
     </div>
@@ -182,7 +174,7 @@
         </div>
         <div id="state-rows" class="widget bg-white rounded-lg overflow-hidden divide-y divide-gray-100 hidden"></div>
 
-        <div id="state-empty" class="hidden text-center py-16 text-gray-400 text-sm">
+        <div id="state-empty" class="hidden text-center py-16 text-gray-600 text-sm">
           No stories published for this state yet.
         </div>
       </div>
@@ -193,17 +185,17 @@
           <div class="h-[3px] bg-red-600"></div>
           <div class="p-4">
             <div class="flex items-center gap-1.5 mb-3">
-              <i class="ph ph-database text-red-400 text-sm"></i>
+              <svg class="text-red-400" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="8" cy="4" rx="5" ry="2"/><path d="M3 4v3c0 1.1 2.24 2 5 2s5-.9 5-2V4"/><path d="M3 7v4c0 1.1 2.24 2 5 2s5-.9 5-2V7"/></svg>
               <span class="text-[10px] font-bold uppercase tracking-widest text-red-400">Project Intelligence</span>
             </div>
             <h3 class="font-serif text-[1.05rem] text-white leading-snug mb-2">
               More Than Headlines — Full Project Data
             </h3>
             <p class="text-[11px] text-slate-400 leading-relaxed mb-4">
-              Permit filings, contractor bids, MW capacity, and company contacts for every project we cover.
+              Project timelines, stage tracking, MW capacity, and company contacts for every project we cover.
             </p>
             <button class="open-trial-modal flex items-center justify-center gap-1.5 w-full px-3 py-2.5 bg-red-600 text-white text-xs font-bold rounded-sm hover:bg-red-500 transition-colors tracking-wide uppercase">
-              Request a Free Trial <i class="ph ph-arrow-right text-xs"></i>
+              Request a Free Trial <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="8" x2="13" y2="8"/><polyline points="9,4 13,8 9,12"/></svg>
             </button>
           </div>
         </div>
@@ -217,11 +209,11 @@
   <footer id="newsletter" class="mt-12 bg-[#0f1923]">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-10">
       <div class="mt-8 pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
-        <p class="text-[11px] text-slate-600">&copy; 2026 US Data Center Projects. All rights reserved.</p>
+        <p class="text-[11px] text-slate-400">&copy; 2026 US Data Center Projects. All rights reserved.</p>
         <div class="flex gap-5">
-          <a href="/" class="text-[11px] text-slate-600 hover:text-white transition-colors">News</a>
-          <a href="/us-data-center-project-tracker" class="text-[11px] text-slate-600 hover:text-white transition-colors">Projects</a>
-          <a href="/sitemap.xml" class="text-[11px] text-slate-600 hover:text-white transition-colors">Sitemap</a>
+          <a href="/" class="text-[11px] text-slate-400 hover:text-white transition-colors">News</a>
+          <a href="/us-data-center-project-tracker" class="text-[11px] text-slate-400 hover:text-white transition-colors">Projects</a>
+          <a href="/sitemap.xml" class="text-[11px] text-slate-400 hover:text-white transition-colors">Sitemap</a>
         </div>
       </div>
     </div>
@@ -231,6 +223,11 @@
     function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
     function stateToSlug(s) { return s.toLowerCase().replace(/\.\s*/g,'').replace(/\s+/g,'-'); }
+
+    function cfImg(url) { return url || ''; }
+
+    const ICO_PIN_RED  = `<svg width=".85em" height=".85em" viewBox="0 0 16 16" fill="none" stroke="#f87171" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 1a5 5 0 0 0-5 5c0 4.5 5 9 5 9s5-4.5 5-9a5 5 0 0 0-5-5z"/></svg>`;
+    const ICO_CAL_BLUE = `<svg width=".85em" height=".85em" viewBox="0 0 16 16" fill="none" stroke="#93c5fd" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="12" height="11" rx="1"/><line x1="5" y1="1" x2="5" y2="4"/><line x1="11" y1="1" x2="11" y2="4"/><line x1="2" y1="7" x2="14" y2="7"/></svg>`;
 
     function timeAgo(iso) {
       try {
@@ -282,18 +279,18 @@
 
       document.getElementById('state-hero').innerHTML = `
         <a href="${heroUrl}" class="hero-card bg-white rounded-lg overflow-hidden mb-5 cursor-pointer group hover:shadow-lg transition-all reveal block no-underline" style="animation-delay:0.05s">
-          ${hero.image?.full ? `<div class="img-hero-wrap"><img src="${esc(hero.image.full)}" alt="${esc(hero.title)}" class="img-hero" loading="eager"></div>` : ''}
+          ${hero.image?.full ? `<div class="img-hero-wrap"><img src="${esc(cfImg(hero.image.full, 800))}" alt="${esc(hero.title)}" class="img-hero" loading="eager" width="800" height="450"></div>` : ''}
           <div class="p-5">
             <div class="flex flex-wrap items-center gap-2 mb-3">
               ${badgeHtml(hero.subCategory)}
               ${hero.trending ? '<span class="bg-amber-50 text-amber-700 border border-amber-200 text-[9px] font-bold px-1.5 py-0.5 rounded-sm uppercase">Trending</span>' : ''}
-              <span class="text-xs text-gray-400">${minRead(hero.wordCount)} &middot; <span class="text-gray-600 font-medium">${timeAgo(hero.createdAt)}</span></span>
+              <span class="text-xs text-gray-600">${minRead(hero.wordCount)} &middot; <span class="text-gray-600 font-medium">${timeAgo(hero.createdAt)}</span></span>
             </div>
             <h2 class="font-serif text-xl sm:text-[1.6rem] text-gray-900 leading-tight mb-2.5 group-hover:text-red-700 transition-colors">${esc(hero.title)}</h2>
             <p class="text-sm text-gray-500 leading-relaxed">${esc(excerpt(hero.description))}</p>
             <div class="flex flex-wrap items-center gap-4 mt-4 pt-4 border-t border-gray-100">
-              <span class="text-xs text-gray-400 flex items-center gap-1.5"><i class="ph ph-map-pin text-red-400"></i> ${esc(state)}</span>
-              <span class="text-xs text-gray-400 flex items-center gap-1.5"><i class="ph ph-calendar text-blue-400"></i> ${formatDate(hero.createdAt)}</span>
+              <span class="text-xs text-gray-600 flex items-center gap-1.5">${ICO_PIN_RED} ${esc(state)}</span>
+              <span class="text-xs text-gray-600 flex items-center gap-1.5">${ICO_CAL_BLUE} ${formatDate(hero.createdAt)}</span>
             </div>
           </div>
         </a>`;
@@ -302,13 +299,13 @@
       articles.slice(1).forEach(a => {
         const url = `/${stateSlug}/${a.pageURL}`;
         const thumbHtml = a.image?.thumbnail
-          ? `<img src="${esc(a.image.thumbnail)}" alt="" class="img-thumb" loading="lazy">`
-          : `<i class="ph ph-arrow-up-right text-base text-gray-300 group-hover:text-red-400 transition-colors shrink-0 mt-0.5"></i>`;
+          ? `<img src="${esc(cfImg(a.image.thumbnail, 200))}" alt="" class="img-thumb" loading="lazy" width="200" height="134">`
+          : '';
         rowsHtml += `<a href="${url}" class="story-row py-4 px-4 hover:bg-gray-50 cursor-pointer group flex items-start gap-3 no-underline block">
           <div class="flex-1 min-w-0">
             <div class="flex flex-wrap items-center gap-2 mb-1.5">
               ${badgeHtml(a.subCategory)}
-              <span class="text-[11px] text-gray-400">${timeAgo(a.createdAt)}</span>
+              <span class="text-[11px] text-gray-600">${timeAgo(a.createdAt)}</span>
             </div>
             <h4 class="text-sm font-semibold text-gray-900 leading-snug group-hover:text-red-700 transition-colors">${esc(a.title)}</h4>
             <p class="text-[12px] text-gray-500 mt-1 leading-relaxed hidden sm:block">${esc(excerpt(a.description))}</p>
@@ -332,20 +329,20 @@
     <div class="modal-container">
       <div class="modal-header">
         <span style="font-family:'Bricolage Grotesque',sans-serif;font-size:1rem;font-weight:700;color:#111">Request a Free Trial</span>
-        <button class="modal-close" id="closeTrialModal"><i class="ph ph-x"></i></button>
+        <button class="modal-close" id="closeTrialModal"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="3" x2="13" y2="13"/><line x1="13" y1="3" x2="3" y2="13"/></svg></button>
       </div>
       <div class="modal-body">
         <div class="deftform" data-form-id="8bf3ee99-b3c2-466e-a2aa-c09f0fbd64bb" data-form-width="100%" data-form-align="center" data-form-auto-height="1"></div>
       </div>
     </div>
   </div>
-  <script defer src="https://cdn.deftform.com/embed.js"></script>
   <script>
     (function() {
       const modal = document.getElementById('trialModal');
       const close = () => { modal.classList.remove('active'); document.body.style.overflow = ''; };
       document.addEventListener('DOMContentLoaded', () => {
-        document.querySelectorAll('.open-trial-modal').forEach(b => b.addEventListener('click', e => { e.preventDefault(); modal.classList.add('active'); document.body.style.overflow = 'hidden'; }));
+        let _formLoaded = false;
+        document.querySelectorAll('.open-trial-modal').forEach(b => b.addEventListener('click', e => { e.preventDefault(); modal.classList.add('active'); document.body.style.overflow = 'hidden'; if (!_formLoaded) { _formLoaded = true; const s = document.createElement('script'); s.src = 'https://cdn.deftform.com/embed.js'; document.head.appendChild(s); } }));
         document.getElementById('closeTrialModal').addEventListener('click', close);
         modal.addEventListener('click', e => { if (e.target === modal) close(); });
       });
@@ -360,15 +357,15 @@
         e.stopPropagation();
         var hidden = nav.classList.toggle('hidden');
         btn.setAttribute('aria-expanded', String(!hidden));
-        var icon = btn.querySelector('i');
-        if (icon) icon.className = hidden ? 'ph ph-list text-xl' : 'ph ph-x text-xl';
+        btn.querySelector('.menu-open').style.display = hidden ? '' : 'none';
+        btn.querySelector('.menu-close').style.display = hidden ? 'none' : '';
       });
       document.addEventListener('click', function(e) {
         if (!nav.classList.contains('hidden') && !nav.contains(e.target) && !btn.contains(e.target)) {
           nav.classList.add('hidden');
           btn.setAttribute('aria-expanded', 'false');
-          var icon = btn.querySelector('i');
-          if (icon) icon.className = 'ph ph-list text-xl';
+          btn.querySelector('.menu-open').style.display = '';
+          btn.querySelector('.menu-close').style.display = 'none';
         }
       });
     })();
