@@ -6,5 +6,9 @@
   "assets": {
     "directory": "./public",
     "binding": "ASSETS"
-  }
+  },
+  "routes": [
+    { "pattern": "usdatacenterprojects.com/*", "zone_name": "usdatacenterprojects.com" },
+    { "pattern": "www.usdatacenterprojects.com/*", "zone_name": "usdatacenterprojects.com" }
+  ]
 }
