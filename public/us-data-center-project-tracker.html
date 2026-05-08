@@ -146,17 +146,17 @@
     <div class="scan-beam absolute inset-x-0 h-[200%] z-0" style="background:linear-gradient(to bottom,transparent,rgba(220,38,38,0.04) 50%,rgba(220,38,38,0.08) 51%,rgba(220,38,38,0.04) 52%,transparent)"></div>
 
     <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center">
-      <div class="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-red-600 bg-red-50 border border-red-100 px-3 py-1 rounded-full mb-6">
+      <div class="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-red-600 bg-red-50 border border-red-100 px-3 py-1 rounded-full mb-6 reveal" style="animation-delay:0.05s">
         <span class="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse inline-block"></span>
         Daily Verified Updates
       </div>
-      <h1 class="font-serif text-4xl sm:text-5xl lg:text-[3.5rem] text-gray-900 leading-tight mb-5" style="letter-spacing:-0.025em">
+      <h1 class="font-serif text-4xl sm:text-5xl lg:text-[3.5rem] text-gray-900 leading-tight mb-5 reveal" style="letter-spacing:-0.025em;animation-delay:0.1s">
         The Complete Database of<br>US Data Center Projects
       </h1>
-      <p class="text-lg text-gray-500 leading-relaxed max-w-2xl mx-auto mb-8">
+      <p class="text-lg text-gray-500 leading-relaxed max-w-2xl mx-auto mb-8 reveal" style="animation-delay:0.15s">
         Track construction projects, capacity expansions, and power infrastructure developments across all 50 states — with permit filings, contractor bids, MW specs, and company contacts.
       </p>
-      <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-3 reveal" style="animation-delay:0.2s">
         <button class="open-trial-modal flex items-center gap-2 px-6 py-3 bg-red-600 text-white font-bold text-sm rounded-sm hover:bg-red-500 transition-colors tracking-wide uppercase">
           Request a Free Trial <i class="ph ph-arrow-right"></i>
         </button>
@@ -548,6 +548,8 @@
       </div>
     </div>
   </div>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
   <script>
     (function() {
       const modal = document.getElementById('trialModal');
@@ -571,8 +573,8 @@
       document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
     })();
 
-    /* ── D3 choropleth heatmap — lazy-loaded when map enters viewport ── */
-    function initDCMap() {
+    /* ── D3 choropleth heatmap — projects per US state ── */
+    (function initDCMap() {
       var container = document.getElementById('dc-map');
       if (!container || typeof d3 === 'undefined' || typeof topojson === 'undefined') return;
 
@@ -734,27 +736,6 @@
           if (e[0].isIntersecting && !fired) { fired = true; animateCounter(cEl, 2847, 1400); }
         }, { threshold: 0.5 }).observe(cEl);
       }
-    }
-
-    /* Lazy-load D3 + TopoJSON only when map section enters viewport */
-    (function() {
-      var mapEl = document.getElementById('dc-map');
-      if (!mapEl) return;
-      var mapLoaded = false;
-      new IntersectionObserver(function(entries) {
-        if (entries[0].isIntersecting && !mapLoaded) {
-          mapLoaded = true;
-          var s1 = document.createElement('script');
-          s1.src = 'https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js';
-          s1.onload = function() {
-            var s2 = document.createElement('script');
-            s2.src = 'https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js';
-            s2.onload = initDCMap;
-            document.head.appendChild(s2);
-          };
-          document.head.appendChild(s1);
-        }
-      }, { rootMargin: '300px' }).observe(mapEl);
     })();
 
     (function() {
@@ -778,8 +759,7 @@
       });
     })();
   </script>
-  <link rel="preload" as="style" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2/src/regular/style.css" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2/src/regular/style.css"></noscript>
+  <script>window.addEventListener('load',function(){var s=document.createElement('script');s.src='https://unpkg.com/@phosphor-icons/web';document.head.appendChild(s);});</script>
 
 </body>
 </html>
