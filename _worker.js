@@ -1,4 +1,4 @@
-const US_STATES = [
+﻿const US_STATES = [
   "Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut",
   "Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa",
   "Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan",
@@ -45,11 +45,28 @@ async function fetchArticles(env) {
   return data;
 }
 
+// Module-level CSS cache — survives across requests within the same Worker instance
+let _cssCache = null;
+
 async function getTemplate(name, request, env) {
   const url = new URL(`/${name}`, request.url);
   const res = await env.ASSETS.fetch(new Request(url.toString()));
   if (!res.ok) throw new Error(`Template ${name} not found`);
-  return res.text();
+  let html = await res.text();
+
+  // Inline /styles.css to eliminate the critical request chain
+  if (html.includes('href="/styles.css"')) {
+    if (_cssCache === null) {
+      const cssUrl = new URL('/styles.css', request.url);
+      const cssRes = await env.ASSETS.fetch(new Request(cssUrl.toString()));
+      _cssCache = cssRes.ok ? await cssRes.text() : '';
+    }
+    if (_cssCache) {
+      html = html.replace('<link rel="stylesheet" href="/styles.css">', `<style>${_cssCache}</style>`);
+    }
+  }
+
+  return html;
 }
 
 function injectHead(html, { title, description, canonical, keywords = '', ogType = 'website', jsonLd = '' }) {
@@ -83,8 +100,13 @@ async function handleArticle(stateSlug, pageURL, request, env) {
   let html = await getTemplate('news.html', request, env);
   const origin = new URL(request.url).origin;
   const canonical = `${origin}/${stateSlug}/${pageURL}`;
-  const metaTitle = (article.meta?.title || article.title) + ' | US Data Center Projects';
+  const metaTitle = article.meta?.title || article.title;
   const metaDesc = article.meta?.description || '';
+
+  if (article.image?.full) {
+    html = html.replace('</head>',
+      `  <link rel="preload" as="image" href="${escAttr(article.image.full)}" fetchpriority="high">\n</head>`);
+  }
 
   html = injectHead(html, {
     title: metaTitle,
@@ -95,20 +117,70 @@ async function handleArticle(stateSlug, pageURL, request, env) {
     jsonLd: JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'NewsArticle',
+      mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
       headline: article.title,
       description: metaDesc,
       datePublished: article.createdAt,
+      dateModified: article.updatedAt || article.createdAt,
+      url: canonical,
       keywords: Array.isArray(article.tags) ? article.tags.join(', ') : '',
-      publisher: { '@type': 'Organization', name: 'US Data Center Projects' }
+      author: {
+        '@type': 'Organization',
+        name: 'US Data Center Projects',
+        url: 'https://usdatacenterprojects.com'
+      },
+      publisher: {
+        '@type': 'Organization',
+        name: 'US Data Center Projects',
+        url: 'https://usdatacenterprojects.com',
+        logo: {
+          '@type': 'ImageObject',
+          url: 'https://usdatacenterprojects.com/Logo.svg',
+          width: 260,
+          height: 60
+        }
+      },
+      ...(article.image?.full ? {
+        image: {
+          '@type': 'ImageObject',
+          url: article.image.full,
+          width: 1200,
+          height: 675
+        }
+      } : {})
     })
   });
 
-  html = html.replace('</body>', `<script>window.__ARTICLE__=${safeJson(article)};</script>\n</body>`);
+  const recent = (data.articles || [])
+    .filter(a => a.pageURL !== article.pageURL)
+    .slice(0, 5);
+
+  html = html.replace('</body>', `<script>window.__ARTICLE__=${safeJson(article)};window.__RECENT__=${safeJson(recent)};</script>\n</body>`);
 
   return new Response(html, {
     headers: {
       'Content-Type': 'text/html;charset=UTF-8',
       'Cache-Control': 'public, max-age=3600, s-maxage=3600'
+    }
+  });
+}
+
+async function handleHome(request, env) {
+  const data = await fetchArticles(env);
+  let html = await getTemplate('data-center-news.html', request, env);
+
+  // Preload the hero (first article) LCP image before JS runs
+  const heroImgFull = data.articles?.[0]?.image?.full;
+  if (heroImgFull) {
+    html = html.replace('</head>',
+      `  <link rel="preload" as="image" href="${escAttr(heroImgFull)}" fetchpriority="high">\n</head>`);
+  }
+
+  html = html.replace('</body>', `<script>window.__NEWS_DATA__=${safeJson(data)};</script>\n</body>`);
+  return new Response(html, {
+    headers: {
+      'Content-Type': 'text/html;charset=UTF-8',
+      'Cache-Control': 'public, max-age=300, s-maxage=300'
     }
   });
 }
@@ -125,13 +197,15 @@ async function handleState(stateSlug, request, env) {
   let html = await getTemplate('state.html', request, env);
   const origin = new URL(request.url).origin;
   const canonical = `${origin}/${stateSlug}`;
-  const metaTitle = `${state} Data Center News & Projects | US Data Center Projects`;
-  const metaDesc = `Latest data center construction news, project updates, and developments across ${state}. Track ${state}'s full data center pipeline.`;
+  const metaTitle = `${state} Data Center News | Projects, Permits & Construction Updates`;
+  const metaDesc = `Latest data center construction news and project intelligence for ${state} — permit filings, contractor activity, MW capacity, and developer updates. Track every active data center project in ${state}.`;
+  const metaKeywords = `${state} data center news, ${state} data center projects, ${state} data center construction, data center permits ${state}`;
 
   html = injectHead(html, {
     title: metaTitle,
     description: metaDesc,
     canonical,
+    keywords: metaKeywords,
     ogType: 'website'
   });
 
@@ -142,6 +216,91 @@ async function handleState(stateSlug, request, env) {
       'Content-Type': 'text/html;charset=UTF-8',
       'Cache-Control': 'public, max-age=1800, s-maxage=1800'
     }
+  });
+}
+
+function escXml(str) {
+  return String(str || '')
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&apos;');
+}
+
+async function handleNewsSitemap(request, env) {
+  const data = await fetchArticles(env);
+  const origin = new URL(request.url).origin;
+  const twoDaysAgo = Date.now() - 48 * 60 * 60 * 1000;
+
+  const items = (data.articles || [])
+    .filter(a => a.createdAt && new Date(a.createdAt).getTime() >= twoDaysAgo)
+    .map(a => {
+      const slug = stateToSlug(a.region || '');
+      const pubDate = a.createdAt || '';
+      return `  <url>
+    <loc>${origin}/${slug}/${a.pageURL}</loc>
+    <news:news>
+      <news:publication>
+        <news:name>US Data Center Projects</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>${escXml(pubDate)}</news:publication_date>
+      <news:title>${escXml(a.meta?.title || a.title)}</news:title>
+    </news:news>
+  </url>`;
+    });
+
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
+${items.join('\n')}
+</urlset>`;
+
+  return new Response(xml, {
+    headers: { 'Content-Type': 'application/xml', 'Cache-Control': 'public, max-age=300' }
+  });
+}
+
+async function handleRSS(request, env) {
+  const data = await fetchArticles(env);
+  const origin = new URL(request.url).origin;
+
+  const articles = (data.articles || [])
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    .slice(0, 50);
+
+  const items = articles.map(a => {
+    const slug = stateToSlug(a.region || '');
+    const link = `${origin}/${slug}/${a.pageURL}`;
+    const pubDate = a.createdAt ? new Date(a.createdAt).toUTCString() : '';
+    const description = (a.meta?.description || a.description || '').slice(0, 300);
+    return `    <item>
+      <title>${escXml(a.meta?.title || a.title)}</title>
+      <link>${link}</link>
+      <guid isPermaLink="true">${link}</guid>
+      <pubDate>${pubDate}</pubDate>
+      <description>${escXml(description)}</description>
+      ${a.region ? `<category>${escXml(a.region)}</category>` : ''}
+    </item>`;
+  });
+
+  const lastBuildDate = articles[0]?.createdAt
+    ? new Date(articles[0].createdAt).toUTCString()
+    : new Date().toUTCString();
+
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>US Data Center Projects</title>
+    <link>${origin}</link>
+    <description>Breaking news and daily intelligence on US data center construction across all 50 states.</description>
+    <language>en-us</language>
+    <lastBuildDate>${lastBuildDate}</lastBuildDate>
+    <atom:link href="${origin}/rss.xml" rel="self" type="application/rss+xml"/>
+${items.join('\n')}
+  </channel>
+</rss>`;
+
+  return new Response(xml, {
+    headers: { 'Content-Type': 'application/rss+xml;charset=UTF-8', 'Cache-Control': 'public, max-age=300' }
   });
 }
 
@@ -182,31 +341,29 @@ export default {
       return handleSitemap(request, env);
     }
 
-    // Proxy news API — keeps credentials server-side
-    if (url.pathname === '/api/news') {
-      try {
-        const data = await fetchArticles(env);
-        return new Response(JSON.stringify(data), {
-          headers: { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=300' }
-        });
-      } catch (err) {
-        return new Response(JSON.stringify({ error: err.message }), { status: 502, headers: { 'Content-Type': 'application/json' } });
-      }
+    if (url.pathname === '/news-sitemap.xml') {
+      return handleNewsSitemap(request, env);
+    }
+
+    if (url.pathname === '/rss.xml') {
+      return handleRSS(request, env);
     }
 
     // Root → news hub (homepage)
     if (url.pathname === '/' || url.pathname === '') {
-      return env.ASSETS.fetch(new Request(new URL('/data-center-news.html', request.url).toString()));
+      return handleHome(request, env);
     }
 
     // Projects tracker
     if (url.pathname === '/us-data-center-project-tracker') {
-      return env.ASSETS.fetch(new Request(new URL('/us-data-center-project-tracker.html', request.url).toString()));
+      const html = await getTemplate('us-data-center-project-tracker.html', request, env);
+      return new Response(html, { headers: { 'Content-Type': 'text/html;charset=UTF-8', 'Cache-Control': 'public, max-age=3600' } });
     }
 
     // About page
     if (url.pathname === '/about') {
-      return env.ASSETS.fetch(new Request(new URL('/about.html', request.url).toString()));
+      const html = await getTemplate('about.html', request, env);
+      return new Response(html, { headers: { 'Content-Type': 'text/html;charset=UTF-8', 'Cache-Control': 'public, max-age=3600' } });
     }
 
     // Legacy /news → redirect to homepage
